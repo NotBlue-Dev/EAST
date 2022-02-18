@@ -19,7 +19,12 @@ class OBS {
     }
 
     connect() {
-        this.obsClient.connect({ address: '127.0.0.1:4444', password: 'toor' })
+        this.obsClient.connect({ address: '127.0.0.1:4444', password: 'toor' }).catch(err => {
+            console.log('obs not running ?');
+            setTimeout(() => {
+                this.connect()
+            }, 5000);
+        });
     }
 
     initialize() {

@@ -11,7 +11,9 @@
   "dependencies": {
     "axios": "^0.26.0",
     "cheerio": "^1.0.0-rc.10",
+    "express": "^4.17.3",
     "node-fetch": "^2.6.7",
-    "obs-websocket-js": "^4.0.3"
+    "obs-websocket-js": "^4.0.3",
+    "socket.io": "^4.4.1"
   }
 }
