@@ -25,6 +25,10 @@ class OBS {
                 this.connect()
             }, 5000);
         });
+    }  
+
+    send(channel, arg) {
+        this.obsClient.send(channel, arg).catch((error) => {console.log(error)});
     }
 
     initialize() {

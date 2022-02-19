@@ -10,20 +10,24 @@ class wait {
     waiting() {
         let date = new Date()
         let nextMatch = this.stat.times[0]
-        let time = (nextMatch.getTime() - date.getTime()) / 1000
+        let time = Math.round((nextMatch.getTime() - date.getTime()) / 1000)
         
-        function sendTimer(ws) {
+        function sendTimer(ws,client) {
             let minutes = Math.floor(time / 60);
             let seconds = Math.round(time - minutes * 60);
             ws.sendEvent('countDownTimer', {"m":minutes,"s":seconds});
             time--
-            if (time === 0) {
-                ws.sendEvent('startLive');
+            console.log(time)
+            if (time < 1) {
+                client.send('SetCurrentScene', {'scene-name': 'Starting'})
                 clearInterval(matchCountDown);
             }
         }
         let ws = this.ws
-        let matchCountDown = setInterval(function() {sendTimer(ws)}, 1000)
+        let client = this.client
+        let matchCountDown = setInterval(function() {sendTimer(ws,client)}, 1000)
+
+        this.client.send('SetCurrentScene', {'scene-name': 'Waiting'})
     }
 }
 

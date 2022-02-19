@@ -1,20 +1,23 @@
 
 const fetch = require('node-fetch');
 const GameData = require("./gameData");
-const wait = require("./scenes/wait");
+const Score = require("./event/score");
+const roundTime = require("./event/roundTime");
+const Posses = require('./event/possession');
+const overlayManager = require('./event/overlayManager');
 
 class Api {
-    constructor(client, ip) {
+    constructor(client, ip, ws) {
         this.client = client
         this.ip = ip
-        this.scenes = []
-    }
-
-    playId() {
-        fetch(`http://${this.ip}:6721/session`).then(resp => resp.json()).then(json => {
-            const gameData = new GameData(json)
-            this.playerTeamLength = gameData.playerTeamLength
-        }).catch(error => {console.log('error')})
+        this.ws = ws
+        this.scenes = [
+            new roundTime(this.ws),
+            new Score(this.ws),
+            new Posses(this.ws),
+            new overlayManager(this.ws, this.client)
+        ]
+        // emit round time here
     }
 
     request() {
@@ -48,7 +51,6 @@ class Api {
             }
 
             setTimeout(() => {
-                this.playId()
                 this.request()
             }, 5000);
         })
