@@ -1,0 +1,29 @@
+{
+    "vrml": {
+        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2"
+    },
+    "echoArena": {
+        "ip": "127.0.0.1",
+        "port": 6721,
+        "autoConnect": false
+    },
+    "obs": {
+        "ip": "127.0.0.1",
+        "port": 4444,
+        "password": "toor",
+        "autoConnect": false
+    },
+    "overlayWs": {
+        "port": 4545,
+        "autoLaunch": false,
+        "overlays": [
+            {"path": "/wait", "template": "wait"},
+            {"path": "/starting", "template": "starting"},
+            {"path": "/roundStart", "template": "roundStart"},
+            {"path": "/roundWin", "template": "roundWin"},
+            {"path": "/betwenRound", "template": "betwenRound"},
+            {"path": "/game", "template": "game"},
+            {"path": "/ot",   "template": "overTime"}
+        ]
+    }
+}

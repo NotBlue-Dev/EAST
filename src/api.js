@@ -7,21 +7,20 @@ const Posses = require('./event/possession');
 const overlayManager = require('./event/overlayManager');
 
 class Api {
-    constructor(client, ip, ws) {
-        this.client = client
+    constructor({ip, port}, obsClient, overlayWs) {
         this.ip = ip
-        this.ws = ws
+        this.port = port
         this.scenes = [
-            new roundTime(this.ws),
-            new Score(this.ws),
-            new Posses(this.ws),
-            new overlayManager(this.ws, this.client)
+            new roundTime(overlayWs),
+            new Score(overlayWs),
+            new Posses(overlayWs),
+            new overlayManager(overlayWs, obsClient)
         ]
         // emit round time here
     }
 
     request() {
-        fetch(`http://${this.ip}:6721/session`).then(resp => resp.json()).then(json => {
+        fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
             const gameData = new GameData(json)
             
             if (!gameData.isInMatch() || this.state === false) {

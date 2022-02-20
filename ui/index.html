@@ -6,21 +6,23 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <link href="style.css" rel="stylesheet">
-    <title>Hello World!</title>
+    <title>Echo Arena Overlay</title>
   </head>
   <body>
     <div>
-      <label for="echo-api-url">Echo Api url</label><input type="text" id="echo-api-url" />
-      <label for="echo-api-autoconnect"><input type="checkbox" id="echo-api-autoconnect" /> Auto-connect</label>
-      <button id="echo-api-connect">Connect</button>
+      <label for="echo-arena-url">Echo Arena url</label><input type="text" id="echo-arena-url" /><input type="text" id="echo-arena-port" />
+      <label for="echo-arena-autoconnect"><input type="checkbox" id="echo-arena-autoconnect" /> Auto-connect</label>
+      <button id="echo-arena-connect">Connect</button>
     </div>
     <div>
-      <label for="obs-websocket-url">OBS websocket url</label><input type="text" id="obs-websocket-url" />
+      <label for="obs-websocket-url">OBS websocket url</label><input type="text" id="obs-websocket-url" /><input type="text" id="obs-websocket-port" />
+      <label for="obs-websocket-password">Password</label><input type="password" id="obs-websocket-password" />
       <label for="obs-websocket-autoconnect"><input type="checkbox" id="obs-websocket-autoconnect" /> Auto-connect</label>
       <button id="obs-websocket-connect">Connect</button>
     </div>
     <div>
       <label for="overlay-port">Overlays port</label><input type="text" id="overlay-port" value="4545" />
+      <label for="overlay-autolaunch"><input type="checkbox" id="overlay-autolaunch" /> Auto-launch</label>
       <button id="launch-overlay-server">Launch overlay server</button>
     </div>
   </body>

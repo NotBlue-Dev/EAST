@@ -1,7 +1,7 @@
 
 class wait {
-    constructor(client,stat, ws) {
-        this.client = client
+    constructor(obsClient,stat, ws) {
+        this.obsClient = obsClient
         this.stat = stat
         this.ws = ws
         this.waiting.bind(this)()
@@ -24,10 +24,9 @@ class wait {
             }
         }
         let ws = this.ws
-        let client = this.client
-        let matchCountDown = setInterval(function() {sendTimer(ws,client)}, 1000)
+        let matchCountDown = setInterval(function() {sendTimer(ws,this.obsClient)}, 1000)
 
-        this.client.send('SetCurrentScene', {'scene-name': 'Waiting'})
+        this.obsClient.send('SetCurrentScene', {'scene-name': 'Waiting'})
     }
 }
 

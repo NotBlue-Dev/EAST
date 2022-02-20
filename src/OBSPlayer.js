@@ -1,35 +1,90 @@
-const api = require('./api')
+const ConfigLoader = require('./ConfigLoader')
+const OBSClient = require('./OBSClient')
+const OverlayWS = require('./ws/OverlayWS')
+const Api = require('./Api')
 const wait = require('./event/wait')
 const fetch = require('node-fetch');
-const cheerio = require("cheerio");
-const axios = require('axios');
 
 class OBSPlayer {
-    constructor(client, OverlayWS, ip, team) {
-        this.client = client
-        this.overlayWS = OverlayWS
-        this.team = team
-        this.ip = ip
+    constructor(rootPath, eventEmitter) {
+        this.configLoader = new ConfigLoader(rootPath)
+        this.globalConfig = this.configLoader.load();
+        this.eventEmitter = eventEmitter
+        this.eventEmitter.send('config.loaded', this.globalConfig)
+
+        this.obsClient = new OBSClient()
+        this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
+
+        this.config = this.globalConfig.echoArena
+        this.vrmlBaseUrl = 'https://api.vrmasterleague.com'
         this.infoState = false
         this.Allinfo = {
             "teams":[],
             "times":[],
             "week":null
         }
-        this.getInfo()
+
+        this.connectVrml(this.globalConfig.vrml.teamId)
         this.obsConnectionState = false
-        this.api = new api(this.client,this.ip,this.overlayWS)
         this.initializeListeners()
     }
 
     initializeListeners() {
+        this.eventEmitter.on('echoArena.connect', (args, event) => {
+            this.connectEchoArena(args).then(() => {
+                event.reply('echoArena.connected', args)
+                this.globalConfig.echoArena = {
+                    ...args,
+                    ...this.globalConfig.echoArena,
+                }
+                this.configLoader.save(this.globalConfig)
+            }).catch((error) => {
+                event.reply('echoArena.connectionFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+
+        this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
+            this.connectObsWebsocket(args).then(() => {
+                event.reply('obsWebsocket.connected', args)
+                this.globalConfig.obs = {
+                    ...args,
+                    ...this.globalConfig.obs,
+                }
+                this.configLoader.save(this.globalConfig)
+            }).catch((error) => {
+                event.reply('obsWebsocket.connectionFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+
+        this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
+            this.overlayWS.startServer(args.port).then(() => {
+                event.reply('overlayWs.listening', args)
+                this.globalConfig.overlay = {
+                    ...args,
+                    ...this.globalConfig.overlay
+                }
+                this.configLoader.save(this.globalConfig)
+            }).catch((error) => {
+                event.reply('overlayWs.launchFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+
         this.overlayWS.listenEvent('get-week', this.getWeek.bind(this))
         this.overlayWS.listenEvent('get-winner', this.getWinner.bind(this))
         this.overlayWS.listenEvent('get-teams-data', this.getTeamsData.bind(this))
     }
 
     getWinner() {
-        fetch(`http://${this.ip}:6721/session`).then(resp => resp.json()).then(json => {
+        fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
             let blue = json.blue_points;
             let orange = json.orange_points;
             let winner = null
@@ -62,14 +117,13 @@ class OBSPlayer {
         this.overlayWS.sendEvent('teams-data',this.Allinfo.teams)
     }
 
-    launch() {
-        this.client
+    connectObsWebsocket(args) {
+        return this.obsClient
             .onConnected((name) => {
                 if(this.obsConnectionState !== true) {
                     this.obsConnectionState = true
                     console.log('Connected')
                     setTimeout(() => {
-                        this.startRequest()
                         this.overlayWS.sendEvent('get-teams-data')
                         this.overlayWS.sendEvent('get-week')
                     }, 1000);
@@ -80,12 +134,12 @@ class OBSPlayer {
                 console.log('Disconnected')
                 }
             )
-        .connect()
+        .connect(args)
     }
 
     setColor() {
         const getColors = new Promise((resolve,reject) => {
-            fetch(`http://${this.ip}:6721/session`).then(resp => resp.json()).then(json => {
+            fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
                 let PlayersBlue = []
                 let PlayersOrange = []
                 let ARoster = this.Allinfo.teams[0].rosters
@@ -121,10 +175,10 @@ class OBSPlayer {
         return getColors
     }
 
-    async getInfo() {
+    async connectVrml(team) {
         // get current matches info
         const getData = new Promise((resolve,reject) => {
-            fetch(`https://api.vrmasterleague.com/Teams/${this.team}/Matches/Upcoming`).then(resp => resp.json()).then(json => {
+            fetch(`${this.vrmlBaseUrl}/Teams/${team}/Matches/Upcoming`).then(resp => resp.json()).then(json => {
                 try {this.Allinfo.week = json[0].week} catch {}
                 json.forEach(element => {
                     let dt = new Date(element.dateScheduledUTC)
@@ -167,7 +221,7 @@ class OBSPlayer {
             let u = 0
             const getPlayers = new Promise((resolve,reject) => {
                 this.Allinfo.teams.forEach(element => {
-                    fetch(`https://api.vrmasterleague.com/Teams/${element.link}`).then(resp => resp.json()).then(json => {
+                    fetch(`${this.vrmlBaseUrl}/Teams/${element.link}`).then(resp => resp.json()).then(json => {
                         json.team.players.forEach(player => {
                             element.rosters.push(player.playerName.toLowerCase())
                         });
@@ -176,25 +230,25 @@ class OBSPlayer {
                     })
                 });
             });
-            getPlayers.then(() => {
-                this.setColor().then(() => {
-                    this.launch()
-                    // just for testing :
-                    this.Allinfo.times = [new Date(new Date().getTime() + 2*6000)]
-                    console.log(this.Allinfo.times)
-                    // end
-                    return;
-                }).catch(error => {console.log(error)})
-            }).catch(error => {console.log(error)})
+            getPlayers.catch(error => {console.log(error)})
         }).catch(error => {console.log(error)})
 
     }
 
-    startRequest() {
+    connectEchoArena(config) {
         if (this.obsConnectionState && this.infoState) {
-            this.api.state = true;
-            this.api.request()
-            new wait(this.client, this.Allinfo, this.overlayWS)
+            const echoArenaApi = new Api(config, this.obsClient, this.overlayWs)
+            this.setColor().then(() => {
+                // just for testing :
+                this.Allinfo.times = [new Date(new Date().getTime() + 2*6000)]
+                console.log(this.Allinfo.times)
+                // end
+                return;
+            }).catch(error => {console.log(error)})
+
+            echoArenaApi.state = true;
+            echoArenaApi.request()
+            new wait(this.obsClient, this.Allinfo, this.overlayWS)
         }
     }
 
