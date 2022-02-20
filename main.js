@@ -36,8 +36,8 @@ const start = (webContents) => {
     new libOBS.OBSPlayer(
         new libOBS.OBSClient(),
         new libOBS.OverlayWS(config.overlayWs, overlayEventEmitter, __dirname),
-        '192.168.1.77',
-        '8R4Ws4hivnTpPMkIMVrmcg2'
+        '127.0.0.1',
+        'Ump8RAT5HYFXgHE1WLU9Eg2'
         // '192.168.1.77'
     )
 }
