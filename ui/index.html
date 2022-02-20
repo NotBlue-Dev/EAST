@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link href="style.css" rel="stylesheet">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <div>
+      <label for="echo-api-url">Echo Api url</label><input type="text" id="echo-api-url" />
+      <label for="echo-api-autoconnect"><input type="checkbox" id="echo-api-autoconnect" /> Auto-connect</label>
+      <button id="echo-api-connect">Connect</button>
+    </div>
+    <div>
+      <label for="obs-websocket-url">OBS websocket url</label><input type="text" id="obs-websocket-url" />
+      <label for="obs-websocket-autoconnect"><input type="checkbox" id="obs-websocket-autoconnect" /> Auto-connect</label>
+      <button id="obs-websocket-connect">Connect</button>
+    </div>
+    <div>
+      <label for="overlay-port">Overlays port</label><input type="text" id="overlay-port" value="4545" />
+      <button id="launch-overlay-server">Launch overlay server</button>
+    </div>
+  </body>
+</html>

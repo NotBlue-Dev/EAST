@@ -1,0 +1,15 @@
+body {
+    background-color: #002b36;
+    color: #fdf6e3
+}
+
+input {
+    background-color: #93a1a1;
+    border: 1px solid #657b83;
+    padding: 5px;
+    color: #002b36;
+}
+
+input.valid {
+    background-color: #859900;
+}
