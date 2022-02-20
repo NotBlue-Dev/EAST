@@ -1,47 +1,80 @@
 const libOBS = require('./index')
-const express = require('express');
-const app = express();
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const port = 4545
+const dev = false
+const config = {
+    overlayWs : {
+        port: 4545,
+        overlays: [
+            {path: '/wait', template: 'wait'},
+            {path: '/starting', template: 'starting'},
+            {path: '/roundStart', template: 'roundStart'},
+            {path: '/roundWin', template: 'roundWin'},
+            {path: '/betwenRound', template: 'betwenRound'},
+            {path: '/game', template: 'game'},
+            {path: '/ot',   template: 'overTime'},
+        ]
+    }
+}
 
-app.use(express.static(__dirname + "/public"));
+const start = (webContents) => {
+    const overlayEventEmitter = {
+        send: (channel, args) => {
+            if ((typeof webContents.send) === 'function') {
+              webContents.send(channel, args)
+            } else {
+              console.log('can not send event')
+            }
+        },
+        on: (channel, callable) => {
+            ipcMain.on(channel, function (event, arg) {
+              callable(arg, event)
+            })
+        }
+    }
 
-app.get('/wait', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/wait/index.html'))
-});
-
-app.get('/starting', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/starting/index.html'))
-});
-
-app.get('/roundStart', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/roundStart/index.html'))
-});
-
-app.get('/roundWin', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/roundWin/index.html'))
-});
-
-app.get('/betwenRound', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/betwenRound/index.html'))
-});
-
-app.get('/game', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/game/index.html'))
-});
-
-app.get('/ot', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/overTime/index.html'))
-});
-
-// to do config loader
-const lib = 
     new libOBS.OBSPlayer(
-    new libOBS.OBSClient(),
-    new libOBS.OverlayWS(app, port),
-    '192.168.1.77',
-    '8R4Ws4hivnTpPMkIMVrmcg2'
-    // '192.168.1.77'
-)
+        new libOBS.OBSClient(),
+        new libOBS.OverlayWS(config.overlayWs, overlayEventEmitter, __dirname),
+        '127.0.0.1',
+        'Ump8RAT5HYFXgHE1WLU9Eg2'
+        // '192.168.1.77'
+    )
+}
+
+const createWindow = () => {
+  const mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'ui/preload.js')
+    }
+  })
+
+  ipcMain.on('config.setted', (event, data) => {
+    console.log('setted')
+    event.reply('config.validated', {
+      echoApiUrl: true
+    })
+  })
+
+  mainWindow.loadFile('ui/index.html').then(() => {
+    dev && mainWindow.webContents.openDevTools()
+    start(mainWindow.webContents)
+  })
+  .catch((err) => console.error(err))
+}
+
+app.whenReady().then(() => {
+  createWindow()
+  // to do config loader 
+    app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit()
+})
 
 // faire visu + regler bug img dupliquée
