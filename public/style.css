@@ -1,3 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
 body {
     color: white;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#overlayWait {
+    width: 100%;
+    margin-top: 56px;
+}
+#teamAWait {
+    position: absolute;
+    top: 361px;
+    left: 246px;
+    width: 20%;
+}
+#teamBWait {
+    position: absolute;
+    top: 361px;
+    left: 1288px;
+    width: 20%;
+}
+#weekWait {
+    left: 1188px;
+    margin-top: 9px;
+    position: absolute;
+    text-align: center;
+    top: 90%;
+    font-weight: 600;
+    font-size: 27;
+}
+#timerWait {
+    left: 0;
+    line-height: 200px;
+    margin-top: -90px;
+    position: absolute;
+    text-align: center;
+    top: 58%;
+    width: 100%;
+    font-weight: 600;
+    font-size: 39;
+}
+
+#overlayStart {
+    margin-top: 39px;
+    position: absolute;
+}
+
+.nameBar {
+    display: flex;
+    position: relative;
+    justify-content: space-evenly;
+    gap: 148px;
+    top: 562px;
+}
+
+#weekStart {
+    font-size: 54px;
+    font-weight: 600;
+    top: 323px;
+    position: relative;
+    left: 1469px;
+}
+
+#teamNameA{
+    font-size: 25px;
+    font-weight: 700;
+
+}
+
+#teamNameB {
+    font-size: 25px;
+    font-weight: 700;
+
+}
+
+#rankBStart {
+    position: relative;
+    top: 696px;
+    left: -238px;
+    width: 3%;
+}
+
+#rankAStart {
+    position: relative;
+    top: 696px;
+    left: 1504px;
+    width: 3%;
+
+}
+
+#teamBStart {
+    position: relative;
+    top: 840px;
+    left: 1544px;
+    width: 9%;
+}
+
+#teamAStart {
+    position: relative;
+    top: 840px;
+    left: 44px;
+    width: 9%;
+}
+
+#nbA {
+    position: relative;
+    font-size: 25px;
+    font-weight: 700;
+    top: 880px;
+    left: -375px;
+    width: 9%;
+}
+
+.contain {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 521px;
+    gap: 219px;
+    position: relative;
+}
+
+.contain a{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+#nbB {
+    position: relative;
+    font-size: 25px;
+    font-weight: 700;
+    top: 880px;
+    left: 1248px;
+    width: 9%;
+}
+
+#containerA {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+}
+
+#containerB {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
 }
