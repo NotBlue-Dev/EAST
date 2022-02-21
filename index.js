@@ -1,9 +1,13 @@
-const OBSClient = require('./src/obs-js/connection')
+const OBSClient = require('./src/OBSClient')
 const OBSPlayer = require('./src/OBSPlayer')
 const OverlayWS = require('./src/ws/OverlayWS')
+const ConfigLoader = require('./src/ConfigLoader')
+const Api = require('./src/api')
 
 module.exports = {
-    OBSClient: OBSClient,
-    OBSPlayer: OBSPlayer,
-    OverlayWS:OverlayWS
+    OBSClient,
+    OBSPlayer,
+    OverlayWS,
+    ConfigLoader,
+    Api,
 }
