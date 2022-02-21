@@ -20,7 +20,7 @@ class overlayManager {
     // after each overlay, show playing
 
     handle(gameData) {
-        this.client.obsClient.send('GetSceneList').then((data) => {
+        this.client.obsWebSocket.send('GetSceneList').then((data) => {
             data.scenes.forEach(scene => {
                 if (scene.name === 'Waiting') {
                     return;
@@ -35,28 +35,33 @@ class overlayManager {
                 break;
         
             case 'round_over':
-                if(!this.round_over) {
-                    this.round_over = true
-                    // show roundWin
-                    this.ws.sendEvent('round',gameData.round)
-                    this.ws.sendEvent('get-winner')
-                    this.client.send('SetCurrentScene', {'scene-name': 'Round Result'})
-                    // then betwenn round
-                    setTimeout(() => {
-                        this.round[gameData.round].blue = gameData.bluepoints
-                        this.round[gameData.round].orange = gameData.orangepoints
-                        this.ws.sendEvent('points',this.round)
-                        this.client.send('SetCurrentScene', {'scene-name': 'Round Betwen'})
-                    }, 5000);
-                }
-                // at the end of the between round
+                // quand OT, round over déclencher puis OT déclencher donc on wait pour check que c'est pas OT
                 setTimeout(() => {
-                    this.round_start = false
-                    this.starting = false
-                    // show playing
-                    this.client.send('SetCurrentScene', {'scene-name': 'Echo'})
-                }, 60000);
-                this.ot = false
+                    if(!this.round_over && !this.ot) {
+                        this.round_over = true
+                        // show roundWin
+                        this.ws.sendEvent('round',gameData.round)
+                        this.ws.sendEvent('get-winner')
+                        this.client.send('SetCurrentScene', {'scene-name': 'Round Result'})
+                        // then betwenn round
+                        setTimeout(() => {
+                            this.round[gameData.round].blue = gameData.bluepoints
+                            this.round[gameData.round].orange = gameData.orangepoints
+                            this.ws.sendEvent('points',this.round)
+                            this.client.send('SetCurrentScene', {'scene-name': 'Round Betwen'})
+                        }, 5000);
+
+                        // at the end of the between round
+                        setTimeout(() => {
+                            this.round_start = false
+                            this.starting = false
+                            // show playing
+                            console.log('end betwen round')
+                            this.client.send('SetCurrentScene', {'scene-name': 'Echo'})
+                        }, 90000);
+                    }
+                }, 50);
+                this.ot = false  
                 break;
 
             case 'sudden_death':

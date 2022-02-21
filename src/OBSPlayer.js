@@ -14,6 +14,7 @@ class OBSPlayer {
 
         this.obsClient = new OBSClient()
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
+        this.scenes = []
 
         this.config = this.globalConfig.echoArena
         this.vrmlBaseUrl = 'https://api.vrmasterleague.com'
@@ -126,20 +127,26 @@ class OBSPlayer {
                     setTimeout(() => {
                         this.overlayWS.sendEvent('get-teams-data')
                         this.overlayWS.sendEvent('get-week')
+                        this.obsClient.send('GetSceneList').then((scenesData) => {
+                            this.eventEmitter.send('scenes.loaded', {
+                                scenes: scenesData.scenes.map(scene => scene.name)
+                            })
+                        })
+                        // récupérer les scènes dispos
                     }, 1000);
                 }
             })
             .onDisconnected((message) => {
                 this.obsConnectionState = false
-                console.log('Disconnected')
-                }
-            )
+                console.log('Disconnected', message)
+            })
         .connect(args)
     }
 
     setColor() {
-        const getColors = new Promise((resolve,reject) => {
+        return new Promise((resolve,reject) => {
             fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
+                
                 let PlayersBlue = []
                 let PlayersOrange = []
                 let ARoster = this.Allinfo.teams[0].rosters
@@ -170,9 +177,8 @@ class OBSPlayer {
                 }
                 resolve()
             // this.overlayWS.sendEvent('round',json.total_round_count)
-            }).catch(error => {console.log(error)})
+            }).catch(error => {console.log(error), reject()})
         });
-        return getColors
     }
 
     async connectVrml(team) {
@@ -189,7 +195,9 @@ class OBSPlayer {
                         this.Allinfo.times.push(dt);
                     }
                 });
-    
+                
+                if(this.Allinfo.times.length === 0) console.log('no matches found'), reject()
+
                 for(let i = 0; i<this.Allinfo.times.length; i++) {
                     if(this.Allinfo.times[i] !== 'TBD') {
                         this.Allinfo.teams.push({
@@ -226,7 +234,7 @@ class OBSPlayer {
                             element.rosters.push(player.playerName.toLowerCase())
                         });
                         u++
-                        if(u >= 2) resolve('done')
+                        if(u >= 2) resolve('done'), this.infoState = true
                     })
                 });
             });
@@ -236,20 +244,22 @@ class OBSPlayer {
     }
 
     connectEchoArena(config) {
-        if (this.obsConnectionState && this.infoState) {
-            const echoArenaApi = new Api(config, this.obsClient, this.overlayWs)
-            this.setColor().then(() => {
-                // just for testing :
-                this.Allinfo.times = [new Date(new Date().getTime() + 2*6000)]
-                console.log(this.Allinfo.times)
-                // end
-                return;
-            }).catch(error => {console.log(error)})
-
-            echoArenaApi.state = true;
-            echoArenaApi.request()
-            new wait(this.obsClient, this.Allinfo, this.overlayWS)
-        }
+        return new Promise((resolve,reject) => {
+            
+            if (this.obsConnectionState) {
+                const echoArenaApi = new Api(config, this.obsClient, this.overlayWS)
+                this.setColor().then(() => {
+                    // just for testing :
+                    this.Allinfo.times = [new Date(new Date().getTime() + 2*6000)]
+                    console.log(this.Allinfo.times)
+                    // end
+                    echoArenaApi.state = true;
+                    echoArenaApi.request()
+                    new wait(this.obsClient, this.Allinfo, this.overlayWS)
+                    resolve()
+                }).catch(error => {console.log(error), reject()})
+            }
+        })
     }
 
 }

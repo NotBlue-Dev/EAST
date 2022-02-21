@@ -26,7 +26,7 @@ class OBSClient {
     }  
 
     send(channel, arg) {
-        this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
+        return this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
     }
 
     initialize() {

@@ -83,5 +83,15 @@ window.addEventListener('DOMContentLoaded', () => {
       })
     }
   })
+
+  ipcRenderer.on('scenes.loaded', (event, data) => {
+    const sceneSelect = document.getElementById('scenes')
+    data.scenes.map((scene) => {
+      const opt = document.createElement('option');
+      opt.value = scene;
+      opt.innerHTML = scene;
+      sceneSelect.appendChild(opt);
+    })
+  })
 })
   

@@ -5,11 +5,12 @@ socket.on('week', (arg) => {
 })
 
 socket.on('teams-data', (arg) => {
-    arg[0].forEach(element => {
-        const img = document.createElement("img");
-        img.src = `https://vrmasterleague.com/${element.logo}`;
-        document.body.appendChild(img);
-    });
+    // arg[0].forEach(element => {
+    //     const img = document.createElement("img");
+    //     img.src = `https://vrmasterleague.com/${element.logo}`;
+    //     document.body.appendChild(img);
+    // });
+    console.log(arg)
 });
 
 socket.on('points', (arg) => {

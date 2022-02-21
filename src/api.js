@@ -12,7 +12,7 @@ class Api {
         this.port = port
         this.scenes = [
             new roundTime(overlayWs),
-            new Score(overlayWs),
+            new Score(overlayWs, obsClient),
             new Posses(overlayWs),
             new overlayManager(overlayWs, obsClient)
         ]
