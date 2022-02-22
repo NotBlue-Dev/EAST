@@ -51,16 +51,14 @@ body {
 .nameBar {
     display: flex;
     position: relative;
-    justify-content: space-evenly;
-    top: 562px;
+    top: 534px;
     justify-content: center;
-    gap: 593px;
 }
 
 #weekStart {
     font-size: 54px;
     font-weight: 600;
-    top: 323px;
+    top: 296px;
     position: relative;
     left: 1469px;
 }
@@ -106,18 +104,8 @@ body {
     width: 9%;
 }
 
-#nbA {
-    position: relative;
-    font-size: 25px;
-    font-weight: 700;
-    top: 880px;
-    left: -375px;
-    width: 9%;
-}
-
 .contain {
-    margin-top: 516px;
-    gap: 652px;
+    margin-top: 488px;
     position: relative;
 }
 
@@ -127,13 +115,26 @@ body {
     margin-bottom: 20px;
 }
 
-#nbB {
-    position: relative;
+.place {
+    display: flex;
+    top: 848px;
     font-size: 25px;
     font-weight: 700;
-    top: 880px;
-    left: 1248px;
-    width: 9%;
+    position: relative;
+}
+
+#nbA {
+    position: relative;
+    margin-left: 71px;
+    width: 5%;
+    text-align-last: center;
+}
+
+#nbB {
+    position: absolute;
+    margin-left: 1752px;
+    width: 5%;
+    text-align: center;
 }
 
 #containerA {
@@ -152,4 +153,20 @@ body {
     margin-left: 310px;
     width: 501px;
     top: 0;
+}
+
+.containNameStart {
+    position: relative;
+    align-items: center;
+    width: 455px;
+    margin-left: 809px;
+    text-align: center;
+}
+
+.containNameStartB {
+    position: absolute;
+    align-items: center;
+    width: 455px;
+    margin-right: 795px;
+    text-align: center;
 }

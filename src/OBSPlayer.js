@@ -206,6 +206,7 @@ class OBSPlayer {
                             "logo":json[i].homeTeam.teamLogo,
                             "link":json[i].homeTeam.teamID,
                             "rosters":[],
+                            "place":null,
                             "color":null
                         })
     
@@ -215,6 +216,7 @@ class OBSPlayer {
                             "logo":json[i].awayTeam.teamLogo,
                             "link":json[i].awayTeam.teamID,
                             "rosters":[],
+                            "place":null,
                             "color":null
                         })
                         resolve('done')
@@ -233,6 +235,7 @@ class OBSPlayer {
                         json.team.players.forEach(player => {
                             element.rosters.push(player.playerName.toLowerCase())
                         });
+                        element.place = json.team.rank
                         u++
                         if(u >= 2) resolve('done'), this.infoState = true
                     })
