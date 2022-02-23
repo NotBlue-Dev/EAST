@@ -1,19 +1,43 @@
 let socket = io();
 
-window.addEventListener("DOMContentLoaded", (event) => {
-    const imgA = document.getElementById('teamAStart')
+window.addEventListener("load", (event) => {
 
-    const imgB = document.getElementById('teamBStart')
+    // ADD SOCKET LISTENING TO CUSTOM COLOR AND DO THIS WITH THE RIGHT COLORS
+    let customMain = null
+    let customScd = null
 
-    const week = document.getElementById('weekStart')
+    let listMain = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('MainColor')
+    for (let item of listMain) {
+        if(customMain !== null) {
+            item.style.fill = customMain
+        }
+    }
+
+    let listScd = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('ScdColor')
+    for (let item of listScd) {
+        if(item !== null) {
+            item.style.fill = customScd
+        }
+    }
+
+
+
+
+    let svg = document.querySelector(".svgClass").getSVGDocument()
+
+    const imgA = svg.getElementById('teamA')
+
+    const imgB = svg.getElementById('teamB')
+
+    const week = svg.getElementById('WEEK_')
 
     const nameA = document.getElementById('teamNameA')
 
     const nameB = document.getElementById('teamNameB')   
     
-    const rankA = document.getElementById('rankAStart')  
+    const rankA = svg.getElementById('rankA')  
 
-    const rankB = document.getElementById('rankBStart')  
+    const rankB = svg.getElementById('rankB')  
 
     const divA = document.getElementById('nbA')  
 
@@ -32,10 +56,10 @@ window.addEventListener("DOMContentLoaded", (event) => {
         nameB.innerHTML = arg[1].name
         divA.innerHTML = `${arg[0].place}th`
         divB.innerHTML = `${arg[1].place}th`
-        rankA.src = `https://vrmasterleague.com/${arg[0].rank}`
-        rankB.src = `https://vrmasterleague.com/${arg[0].rank}`
-        imgA.src = `https://vrmasterleague.com/${arg[0].logo}`
-        imgB.src = `https://vrmasterleague.com/${arg[1].logo}`
+        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
+        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
         arg[0].rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player

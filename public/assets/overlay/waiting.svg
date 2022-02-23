@@ -9,7 +9,7 @@
   </defs>
   <g id="Component_17_1" data-name="Component 17 – 1">
     <g id="Component_18_1" data-name="Component 18 – 1">
-      <rect id="Rectangle_1" data-name="Rectangle 1" width="1920" height="582" transform="translate(0 201)" fill="#3f5163" opacity="0.42"/>
+      <rect id="Rectangle_1" data-name="Rectangle 1" class="MainColor" width="1920" height="582" transform="translate(0 201)" fill="#3f5163" opacity="0.42"/>
       <text id="VS" transform="translate(878 533)" fill="#fff" font-size="116" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="0" y="0">VS</tspan></text>
       <rect id="output-onlinepngtools" width="158" height="131" transform="translate(719 836)" fill="url(#pattern)"/>
       <rect id="echo_arena_store_logo" width="899" height="144" transform="translate(511)" fill="url(#pattern-2)" style="mix-blend-mode: color-dodge;isolation: isolate"/>
