@@ -6,43 +6,6 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-#overlayWait {
-    width: 100%;
-    margin-top: 56px;
-}
-#teamAWait {
-    position: absolute;
-    top: 361px;
-    left: 246px;
-    width: 20%;
-}
-#teamBWait {
-    position: absolute;
-    top: 361px;
-    left: 1288px;
-    width: 20%;
-}
-#weekWait {
-    left: 1188px;
-    margin-top: 9px;
-    position: absolute;
-    text-align: center;
-    top: 90%;
-    font-weight: 600;
-    font-size: 27;
-}
-#timerWait {
-    left: 0;
-    line-height: 200px;
-    margin-top: -90px;
-    position: absolute;
-    text-align: center;
-    top: 58%;
-    width: 100%;
-    font-weight: 600;
-    font-size: 39;
-}
-
 #overlayStart {
     margin-top: 39px;
     position: absolute;
