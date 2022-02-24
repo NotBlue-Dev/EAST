@@ -19,10 +19,7 @@ window.addEventListener("load", (event) => {
             item.style.fill = customScd
         }
     }
-
-
-
-
+    
     let svg = document.querySelector(".svgClass").getSVGDocument()
 
     const imgA = svg.getElementById('teamA')
@@ -58,8 +55,8 @@ window.addEventListener("load", (event) => {
         divB.innerHTML = `${arg[1].place}th`
         rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
         rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
         arg[0].rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player

@@ -4,9 +4,22 @@
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
       <script src="http://localhost:4545/game/renderer.js"></script>
+      <link rel="stylesheet" href="/game/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Game
+      <div class="background">
+         <object class="svgClass" type="image/svg+xml" data="/assets/overlay/top.svg" >
+         </object>
+      </div>
+
+      <a class="teamA txt">NOTHINGTOLOSE</a>
+      <a class="teamB txt">GRAVITY</a>
+
+      <div class="content">
+         <a id="blue">5</a>
+         <a id="orange">11</a>
+         <a id="timing">5:45</a>
+      </div>
    </body>
 </html>

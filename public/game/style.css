@@ -1,0 +1,48 @@
+.background {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 49px;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 49px;
+}
+
+.div {
+
+}
+
+.background a {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+object {
+    margin-left: 29px;
+    margin-right: 29px;
+}
+
+.txt {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 49px;
+}
+
+.teamA {
+
+}
+
+.teamB {
+    
+}

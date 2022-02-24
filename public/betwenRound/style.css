@@ -1,0 +1,133 @@
+
+
+object {
+    margin-top: 39px;
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+}
+
+.content {
+    position: relative;
+}
+
+
+.nameBar {
+    display: flex;
+    position: relative;
+    top: 37.2vw;
+    justify-content: center;
+}
+
+#teamNameA{
+    font-size: 1.2vw;
+    font-weight: 700;
+
+}
+
+#teamNameB {
+    font-size: 1.2vw;
+    font-weight: 700;
+
+}
+
+.mainColorFill {
+    fill:red !important
+}
+
+.contain {
+    margin-top: 37.8vw;
+    position: relative;
+}
+
+.contain a{
+    font-size: 1.2vw;
+    font-weight: 600;
+    margin-top: 0.57vw;
+    margin-bottom: 0.55vw;
+}
+
+.place {
+    display: flex;
+    top: 53.9vw;
+    font-size: 1.2vw;
+    font-weight: 700;
+    position: relative;
+}
+
+#nbA {
+    position: relative;
+    margin-left: 3.8vw;
+    width: 5%;
+    text-align-last: center;
+}
+
+#nbB {
+    position: absolute;
+    margin-left: 91.3vw;
+    width: 5%;
+    text-align: center;
+}
+
+#containerA {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+
+    margin-left: 42.2vw;
+
+}
+
+#containerB {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    align-items: center;
+    width: 15vw;
+    top: 0;
+    margin-left: 21.5vw;
+    top: 0;
+}
+
+.containNameStart {
+    position: relative;
+    align-items: center;
+    width: 455px;
+    margin-left: 42.2vw;
+    text-align: center;
+}
+
+.containNameStartB {
+    position: absolute;
+    align-items: center;
+    width: 455px;
+    margin-right: 42vw;
+    text-align: center;
+}
+
+.item a {
+    width: 20%;
+    text-align: center;
+}
+
+.item {
+    display: flex;
+    width: 96%;
+    justify-content: space-around;
+}
+
+.containScore {
+    position: absolute;
+    top: 43.53vw;
+    left: 45.75vw;
+    display: flex;
+    flex-direction: column;
+    gap: 55px;
+    font-size: 20px;
+    font-weight: 600;
+    width: 8.6%;
+    align-items: center;
+}

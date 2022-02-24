@@ -31,8 +31,8 @@ window.addEventListener("load", (event) => {
     
     socket.on('teams-data', (arg) => {
         console.log(arg)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
     });
     
     socket.emit('get-teams-data')
