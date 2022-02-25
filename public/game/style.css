@@ -13,11 +13,32 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 49px;
+    margin-top: 3vw;
 }
 
-.div {
+#blue {
+    font-size: 50px;
+    width: 4vw;
+    position: relative;
+    left: -4.21vw;
+    text-align: center;
+    font-weight: 600;
+}
 
+#orange {
+    font-size: 50px;
+    width: 4vw;
+    position: relative;
+    left: 4.21vw;
+    text-align: center;
+    font-weight: 600;
+}
+
+#timing {
+    font-size: 30px !important;
+    font-weight: 600;
+    top: -7px;
+    position: relative;
 }
 
 .background a {
@@ -31,18 +52,21 @@ object {
 }
 
 .txt {
-    position: absolute;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 49px;
+    font-size: 24px;
+    font-weight: 700;
 }
 
-.teamA {
-
+.divA {
+    position: relative;
+    top: 4vw;
+    left: 10.5vw;
+    text-align: right;
+    width: 20%;
 }
 
-.teamB {
-    
+.divB {
+    position: relative;
+    top: 2.5vw;
+    left: 69.5vw;
+    width: 20%;
 }
