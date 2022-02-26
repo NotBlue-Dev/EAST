@@ -21,10 +21,11 @@ const start = (webContents) => {
         }
     }
 
-    new OBSPlayer(
+    const player = new OBSPlayer(
         __dirname,
         overlayEventEmitter
     )
+    player.start()
 }
 
 const createWindow = () => {

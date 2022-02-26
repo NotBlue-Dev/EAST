@@ -31,6 +31,7 @@ class OBSPlayer {
 
     async start() {
         try {
+            await this.loadTeamList()
             await this.connectVrml(this.globalConfig.vrml.teamId)
         } catch (err) {
             console.error(err.message)
@@ -189,6 +190,17 @@ class OBSPlayer {
             // this.overlayWS.sendEvent('round',json.total_round_count)
             }).catch(error => {console.log(error), reject()})
         });
+    }
+
+    async loadTeamList(region) {
+        const json = await this.vrmlClient.getTeams()
+        const teams = json.filter(team => team.isActive).map((team) => {
+            return {
+                name: team.teamName,
+                id: team.teamID,
+            }
+        }).sort((a, b) => a.name.localeCompare(b.name))
+        this.eventEmitter.send('vrml.teamListLoaded', {teams})
     }
 
     async connectVrml(team) {

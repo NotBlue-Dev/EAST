@@ -93,5 +93,15 @@ window.addEventListener('DOMContentLoaded', () => {
       sceneSelect.appendChild(opt);
     })
   })
+
+  ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
+    const teamSelect = document.getElementById('teams')
+    data.teams.map((team) => {
+      const opt = document.createElement('option');
+      opt.value = team.id;
+      opt.innerHTML = team.name;
+      teamSelect.appendChild(opt);
+    })
+  })
 })
   
