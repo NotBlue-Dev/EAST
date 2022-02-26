@@ -36,8 +36,15 @@ class Score {
                     })
                 }, this.delay*1000);
             }
-
-            this.ws.sendEvent('score-change', {"blue":this.bluePoints,"orange":this.orangePoints});
+            this.data = {
+                speed:Math.ceil(gameData.lastscore.disc_speed),
+                dist:Math.ceil(gameData.distance_thrown),
+                team:gameData.team,
+                ammout:gameData.point_amount,
+                scorer:gameData.person_scored,
+                assist:gameData.assist_scored
+            }
+            this.ws.sendEvent('score-change', {"blue":this.bluePoints,"orange":this.orangePoints, "data":this.data});
         }
     }
 }
