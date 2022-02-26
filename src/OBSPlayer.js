@@ -4,6 +4,7 @@ const OverlayWS = require('./ws/OverlayWS')
 const Api = require('./Api')
 const wait = require('./event/wait')
 const fetch = require('node-fetch');
+const VRMLClient = require('./VRMLClient')
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -17,7 +18,7 @@ class OBSPlayer {
         this.scenes = []
 
         this.config = this.globalConfig.echoArena
-        this.vrmlBaseUrl = 'https://api.vrmasterleague.com'
+        this.vrmlClient = new VRMLClient()
         this.infoState = false
         this.Allinfo = {
             "teams":[],
@@ -25,7 +26,16 @@ class OBSPlayer {
             "week":null
         }
 
-        this.connectVrml(this.globalConfig.vrml.teamId)
+        
+    }
+
+    async start() {
+        try {
+            await this.connectVrml(this.globalConfig.vrml.teamId)
+        } catch (err) {
+            console.error(err.message)
+        }
+
         this.obsConnectionState = false
         this.initializeListeners()
     }
@@ -182,67 +192,66 @@ class OBSPlayer {
     }
 
     async connectVrml(team) {
-        // get current matches info
-        const getData = new Promise((resolve,reject) => {
-            fetch(`${this.vrmlBaseUrl}/Teams/${team}/Matches/Upcoming`).then(resp => resp.json()).then(json => {
-                try {this.Allinfo.week = json[0].week} catch {}
-                json.forEach(element => {
-                    let dt = new Date(element.dateScheduledUTC)
-                    if(dt.getTime() == new Date("2022-02-14 13:00").getTime()) {
-                        this.Allinfo.times.push('TBD');
-                    } else {
-                        dt.setHours(dt.getHours()+2);
-                        this.Allinfo.times.push(dt);
-                    }
-                });
-                
-                if(this.Allinfo.times.length === 0) console.log('no matches found'), reject()
+        console.log('vrml')
+        const json = await this.vrmlClient.getTeamUpcomingMatches(team)
+        try {
+            this.Allinfo.week = json[0].week
+        } catch {}
+        json.forEach(element => {
+            let dt = new Date(element.dateScheduledUTC)
+            if(dt.getTime() == new Date("2022-02-14 13:00").getTime()) {
+                this.Allinfo.times.push('TBD');
+            } else {
+                dt.setHours(dt.getHours()+2);
+                this.Allinfo.times.push(dt);
+            }
+        });
 
-                for(let i = 0; i<this.Allinfo.times.length; i++) {
-                    if(this.Allinfo.times[i] !== 'TBD') {
-                        this.Allinfo.teams.push({
-                            "name":json[i].homeTeam.teamName,
-                            "rank":json[i].homeTeam.divisionLogo,
-                            "logo":json[i].homeTeam.teamLogo,
-                            "link":json[i].homeTeam.teamID,
-                            "rosters":[],
-                            "color":null
-                        })
-    
-                        this.Allinfo.teams.push({
-                            "name":json[i].awayTeam.teamName,
-                            "rank":json[i].awayTeam.divisionLogo,
-                            "logo":json[i].awayTeam.teamLogo,
-                            "link":json[i].awayTeam.teamID,
-                            "rosters":[],
-                            "color":null
-                        })
-                        resolve('done')
-                        return;
-                    }
-                }
-            })
-        })
+        if(this.Allinfo.times.length === 0) {
+            throw new Error('no matches found')
+        }
 
-        getData.then(() => {
-            // get rosters
-            let u = 0
-            const getPlayers = new Promise((resolve,reject) => {
-                this.Allinfo.teams.forEach(element => {
-                    fetch(`${this.vrmlBaseUrl}/Teams/${element.link}`).then(resp => resp.json()).then(json => {
-                        json.team.players.forEach(player => {
-                            element.rosters.push(player.playerName.toLowerCase())
-                        });
-                        u++
-                        if(u >= 2) resolve('done'), this.infoState = true
-                    })
-                });
-            });
-            getPlayers.catch(error => {console.log(error)})
-        }).catch(error => {console.log(error)})
+        for(let i = 0; i<this.Allinfo.times.length; i++) {
+            if(this.Allinfo.times[i] !== 'TBD') {
+                this.Allinfo.teams.push({
+                    "name":json[i].homeTeam.teamName,
+                    "rank":json[i].homeTeam.divisionLogo,
+                    "logo":json[i].homeTeam.teamLogo,
+                    "link":json[i].homeTeam.teamID,
+                    "rosters":[],
+                    "color":null
+                })
 
+                this.Allinfo.teams.push({
+                    "name":json[i].awayTeam.teamName,
+                    "rank":json[i].awayTeam.divisionLogo,
+                    "logo":json[i].awayTeam.teamLogo,
+                    "link":json[i].awayTeam.teamID,
+                    "rosters":[],
+                    "color":null
+                })
+
+                await getPlayers()
+                return;
+            }
+        }
     }
-
+    
+    async getPlayers() {
+        let u = 0
+        for (let u = 0; u < this.Allinfo.teams.length; u++) {
+            const element = this.Allinfo.teams[u]
+            const json = await this.vrmlClient.getTeam(element.link)
+            json.team.players.map(player => {
+                element.rosters.push(player.playerName.toLowerCase())
+            });
+            if(u >= 2) {
+                this.infoState = true
+                return
+            }
+        }
+    }
+        
     connectEchoArena(config) {
         return new Promise((resolve,reject) => {
             

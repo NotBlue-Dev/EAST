@@ -15,7 +15,12 @@ class RoundOver {
 
             this.rounds[gameData.round].blue = gameData.bluepoints
             this.rounds[gameData.round].orange = gameData.orangepoints
-            eventEmitter.send('roundOver',this.rounds)
+            const winner = (gameData.bluepoints == gameData.orangepoints) ? null : (gameData.bluepoints > gameData.orangepoints) ? 'blue' : 'orange'
+
+            eventEmitter.send('roundOver', {
+                rounds: this.rounds,
+                winner
+            })
         }
     }
 }
