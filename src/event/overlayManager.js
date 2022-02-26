@@ -30,10 +30,12 @@ class overlayManager {
 
         switch (gameData.status) {
 
+            // RoundStart.js
             case 'pre_match':
                 this.round_start = false
                 break;
         
+            // RoundOver.js
             case 'round_over':
                 // quand OT, round over déclencher puis OT déclencher donc on wait pour check que c'est pas OT
                 setTimeout(() => {
@@ -64,6 +66,7 @@ class overlayManager {
                 this.ot = false  
                 break;
 
+            // Overtime.js
             case 'sudden_death':
                 if(!this.ot) {
                     this.ot = true
@@ -75,6 +78,7 @@ class overlayManager {
                 }
                 break;
 
+            // RoundStart.js
             case 'round_start':
                 if ((gameData.round != this.roundlast || gameData.round == 0) && !this.round_start ) {
                     this.round_start = true
