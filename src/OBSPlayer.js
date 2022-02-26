@@ -46,8 +46,8 @@ class OBSPlayer {
             this.connectEchoArena(args).then(() => {
                 event.reply('echoArena.connected', args)
                 this.globalConfig.echoArena = {
-                    ...args,
                     ...this.globalConfig.echoArena,
+                    ...args,
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
@@ -62,8 +62,8 @@ class OBSPlayer {
             this.connectObsWebsocket(args).then(() => {
                 event.reply('obsWebsocket.connected', args)
                 this.globalConfig.obs = {
-                    ...args,
                     ...this.globalConfig.obs,
+                    ...args,
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
@@ -78,8 +78,8 @@ class OBSPlayer {
             this.overlayWS.startServer(args.port).then(() => {
                 event.reply('overlayWs.listening', args)
                 this.globalConfig.overlay = {
-                    ...args,
-                    ...this.globalConfig.overlay
+                    ...this.globalConfig.overlay,
+                    ...args
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
@@ -88,6 +88,17 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.on('vrml.teamSelected', (args, event) => {
+            console.log('su')
+            // connectVrml
+            event.reply('vrml.teamChanged', args)
+            this.globalConfig.vrml = {
+                ...this.globalConfig.vrml,
+                ...args,
+            }
+            this.configLoader.save(this.globalConfig)
         })
 
         this.overlayWS.listenEvent('get-week', this.getWeek.bind(this))
@@ -200,7 +211,10 @@ class OBSPlayer {
                 id: team.teamID,
             }
         }).sort((a, b) => a.name.localeCompare(b.name))
-        this.eventEmitter.send('vrml.teamListLoaded', {teams})
+        this.eventEmitter.send('vrml.teamListLoaded', {
+            teams,
+            teamId: this.globalConfig.vrml.teamId
+        })
     }
 
     async connectVrml(team) {
