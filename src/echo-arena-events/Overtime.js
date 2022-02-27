@@ -16,3 +16,5 @@ class Overtime {
         }
     }
 }
+
+module.exports = Overtime

@@ -3,7 +3,7 @@ body {
     color: #fdf6e3
 }
 
-div {
+div.block {
     border: 1px solid #586e75;
     padding: 5px;
     margin: 5px;
@@ -18,4 +18,8 @@ input {
 
 input.valid {
     background-color: #859900;
+}
+
+.hidden {
+    display: none;
 }

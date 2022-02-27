@@ -10,28 +10,28 @@ class EchoArena {
         this.fails = 0
     }
 
-    listen() {
-        this.testConnection().then(() => {
-            this.request()
-        })
+    async listen() {
+        await this.testConnection()
+        await this.request()
     }
 
     async testConnection() {
-        fetch(`http://${this.ip}:${this.port}/session`).then(() => {
+        try {
+            await fetch(`http://${this.ip}:${this.port}/session`)
             this.eventEmitter.send('connected')
-            return
-        }).catch(error => {
+            return true
+        } catch(error) {
             if (error.response) {
                 this.eventEmitter.send('connected')
-                return
+                return true
             } else {
                 this.eventEmitter.send('failed')
                 throw new Error();
             }
-        })
+        }
     }
 
-    request() {
+    async request() {
         fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
             const gameData = new GameData(json)
 

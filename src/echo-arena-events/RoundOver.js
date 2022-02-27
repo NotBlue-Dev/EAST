@@ -24,3 +24,5 @@ class RoundOver {
         }
     }
 }
+
+module.exports = RoundOver

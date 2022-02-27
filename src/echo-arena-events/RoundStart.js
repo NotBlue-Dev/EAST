@@ -25,3 +25,5 @@ class RoundStart {
         }
     }
 }
+
+module.exports = RoundStart

@@ -5,6 +5,7 @@ const Api = require('./Api')
 const wait = require('./event/wait')
 const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
+const EchoArena = require('./EchoArena')
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -16,6 +17,7 @@ class OBSPlayer {
         this.obsClient = new OBSClient()
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
         this.scenes = []
+        this.echoArena = null
 
         this.config = this.globalConfig.echoArena
         this.vrmlClient = new VRMLClient()
@@ -32,7 +34,7 @@ class OBSPlayer {
     async start() {
         try {
             await this.loadTeamList()
-            await this.connectVrml(this.globalConfig.vrml.teamId)
+            //await this.connectVrml(this.globalConfig.vrml.teamId)
         } catch (err) {
             console.error(err.message)
         }
@@ -44,14 +46,14 @@ class OBSPlayer {
     initializeListeners() {
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
-                event.reply('echoArena.connected', args)
+                this.eventEmitter.send('echoArena.connected', args)
                 this.globalConfig.echoArena = {
                     ...this.globalConfig.echoArena,
                     ...args,
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
-                event.reply('echoArena.connectionFailed', {
+                this.eventEmitter.send('echoArena.connectionFailed', {
                     args,
                     error
                 })
@@ -60,14 +62,14 @@ class OBSPlayer {
 
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
-                event.reply('obsWebsocket.connected', args)
+                this.eventEmitter.send('obsWebsocket.connected', args)
                 this.globalConfig.obs = {
                     ...this.globalConfig.obs,
                     ...args,
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
-                event.reply('obsWebsocket.connectionFailed', {
+                this.eventEmitter.send('obsWebsocket.connectionFailed', {
                     args,
                     error
                 })
@@ -76,14 +78,15 @@ class OBSPlayer {
 
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
-                event.reply('overlayWs.listening', args)
+                this.eventEmitter.add({on: this.overlayWS.listenEvent, send: this.overlayWS.sendEvent})
+                this.eventEmitter.send('overlayWs.listening', args)
                 this.globalConfig.overlay = {
                     ...this.globalConfig.overlay,
                     ...args
                 }
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
-                event.reply('overlayWs.launchFailed', {
+                this.eventEmitter.send('overlayWs.launchFailed', {
                     args,
                     error
                 })
@@ -91,14 +94,22 @@ class OBSPlayer {
         })
 
         this.eventEmitter.on('vrml.teamSelected', (args, event) => {
-            console.log('su')
-            // connectVrml
-            event.reply('vrml.teamChanged', args)
+            this.eventEmitter.send('vrml.teamChanged', args)
             this.globalConfig.vrml = {
                 ...this.globalConfig.vrml,
                 ...args,
             }
             this.configLoader.save(this.globalConfig)
+        })
+
+        this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
+            this.getMatchDataFromTeam(args.teamId).then((match) => {
+                this.eventEmitter.send('vrml.matchDataLoaded', match)
+            }).catch(error => {
+                this.eventEmitter.send('vrml.matchDataNotFound', {
+                    teamId: args.teamId
+                })
+            })
         })
 
         this.overlayWS.listenEvent('get-week', this.getWeek.bind(this))
@@ -217,8 +228,7 @@ class OBSPlayer {
         })
     }
 
-    async connectVrml(team) {
-        console.log('vrml')
+    async getMatchDataFromTeam(team) {
         const json = await this.vrmlClient.getTeamUpcomingMatches(team)
         try {
             this.Allinfo.week = json[0].week
@@ -238,28 +248,36 @@ class OBSPlayer {
         }
 
         for(let i = 0; i<this.Allinfo.times.length; i++) {
-            if(this.Allinfo.times[i] !== 'TBD') {
-                this.Allinfo.teams.push({
-                    "name":json[i].homeTeam.teamName,
-                    "rank":json[i].homeTeam.divisionLogo,
-                    "logo":json[i].homeTeam.teamLogo,
-                    "link":json[i].homeTeam.teamID,
-                    "rosters":[],
-                    "color":null
-                })
-
-                this.Allinfo.teams.push({
-                    "name":json[i].awayTeam.teamName,
-                    "rank":json[i].awayTeam.divisionLogo,
-                    "logo":json[i].awayTeam.teamLogo,
-                    "link":json[i].awayTeam.teamID,
-                    "rosters":[],
-                    "color":null
-                })
-
-                await getPlayers()
-                return;
+            if(this.Allinfo.times[i] === 'TBD') {
+                continue
             }
+
+            this.Allinfo.teams.push({
+                name: json[i].homeTeam.teamName,
+                rank: json[i].homeTeam.divisionLogo,
+                logo: json[i].homeTeam.teamLogo,
+                link: json[i].homeTeam.teamID,
+                rosters: [],
+                color: null
+            })
+
+            this.Allinfo.teams.push({
+                name: json[i].awayTeam.teamName,
+                rank: json[i].awayTeam.divisionLogo,
+                logo: json[i].awayTeam.teamLogo,
+                link: json[i].awayTeam.teamID,
+                rosters: [],
+                color: null
+            })
+
+            await getPlayers()
+            return {
+                time: this.Allinfo.times[i],
+                teams: {
+                    home: this.Allinfo.teams[0],
+                    away: this.Allinfo.teams[1],
+                }
+            };
         }
     }
     
@@ -280,8 +298,11 @@ class OBSPlayer {
         
     connectEchoArena(config) {
         return new Promise((resolve,reject) => {
-            
+            this.echoArena = new EchoArena(config, this.eventEmitter)
+            this.echoArena.listen()
+
             if (this.obsConnectionState) {
+            
                 const echoArenaApi = new Api(config, this.obsClient, this.overlayWS)
                 this.setColor().then(() => {
                     // just for testing :
