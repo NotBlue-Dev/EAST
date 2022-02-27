@@ -15,6 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('echoArena.connected', () => {
     echoArenaConnectButton.disabled = true
+    log(`Echo Arena connected`)
   })
 
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url')
@@ -33,6 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true
+    log(`OBS Websocket connected`)
   })
 
   const overlayPortInput = document.getElementById('overlay-port')
@@ -47,6 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('overlayWs.listening', (event, args) => {
     launchOverlayServerButton.disabled = true
+    log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
   ipcRenderer.on('config.loaded', (event, data) => {
@@ -92,6 +95,62 @@ window.addEventListener('DOMContentLoaded', () => {
       opt.innerHTML = scene;
       sceneSelect.appendChild(opt);
     })
+    log('OBS Scenes loaded')
   })
+
+  ipcRenderer.on('overlayWs.launchFailed', (event, data) => {
+    log(`Overlay server launch failed (${data.error.message})`)
+  })
+
+  initVrmlMatchMode(document)
 })
-  
+
+
+const initVrmlMatchMode = (document) => {
+  const matchDataBlock = document.getElementById('matchData')
+  const isVrmlMatchInput = document.getElementById('vrmlMatch')
+  const teamSelect = document.getElementById('teams')
+  isVrmlMatchInput.addEventListener('change', (event) => {
+    const value = event.target.checked
+    if (!value) {
+      matchDataBlock.classList.add('hidden')
+      return
+    } 
+    ipcRenderer.send('vrml.isVrmlMatch', {
+      teamId: teamSelect.value
+    })
+  })
+
+  ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
+    data.teams.map((team) => {
+      const opt = document.createElement('option');
+      opt.value = team.id;
+      opt.innerHTML = team.name;
+      if (data.teamId === team.id) {
+        opt.selected = true
+      }
+      teamSelect.appendChild(opt);
+    })
+  })
+
+  teamSelect.addEventListener('change', (event) => {
+    ipcRenderer.send('vrml.teamSelected', {
+      teamId: event.target.value
+    })
+  })
+
+  ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
+    matchDataBlock.innerHTML = `${data.teams[0].name} vs. ${data.teams[1].name}`
+    matchDataBlock.classList.remove('hidden')
+  })
+
+  ipcRenderer.on('vrml.matchDataNotFound', (event, data) => {
+    matchDataBlock.innerHTML = `No match found`
+    matchDataBlock.classList.remove('hidden')
+  })
+}
+
+const log = (message) => {
+  const logOutput = document.getElementById('logs')
+  logOutput.innerText = message + "\n" + logOutput.innerText
+}

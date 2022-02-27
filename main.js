@@ -1,30 +1,37 @@
 const { OBSPlayer } = require('./index')
+const EventEmitter = require('./src/ChainEventEmitter')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
 const dev = false
 
-const start = (webContents) => {
-    const overlayEventEmitter = {
-        send: (channel, args) => {
-            if ((typeof webContents.send) === 'function') {
-              webContents.send(channel, args)
-              console.log('event send ', channel)
-            } else {
-              console.log('can not send event')
-            }
-        },
-        on: (channel, callable) => {
-            ipcMain.on(channel, function (event, args) {
-                console.log('event received ', channel)
-              callable(args, event)
-            })
-        }
+const uiEventEmitter = (webContents) => {
+  return {
+    send: (channel, args) => {
+      if ((typeof webContents.send) === 'function') {
+        webContents.send(channel, args)
+        console.log('event send ', channel, args)
+      } else {
+        console.log('can not send event')
+      }
+    },
+    on: (channel, callable) => {
+      ipcMain.on(channel, function (event, args) {
+        console.log('event received ', channel)
+        callable(args, event)
+      })
     }
+  }
+}
 
-    new OBSPlayer(
+const start = (webContents) => {
+    const eventEmitter = new EventEmitter()
+    eventEmitter.add(uiEventEmitter(webContents))
+
+    const player = new OBSPlayer(
         __dirname,
-        overlayEventEmitter
+        eventEmitter
     )
+    player.start()
 }
 
 const createWindow = () => {
