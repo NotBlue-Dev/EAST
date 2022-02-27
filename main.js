@@ -9,7 +9,7 @@ const uiEventEmitter = (webContents) => {
     send: (channel, args) => {
       if ((typeof webContents.send) === 'function') {
         webContents.send(channel, args)
-        console.log('event send ', channel)
+        console.log('event send ', channel, args)
       } else {
         console.log('can not send event')
       }

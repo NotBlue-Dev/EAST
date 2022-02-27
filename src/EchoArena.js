@@ -11,21 +11,20 @@ class EchoArena {
     }
 
     async listen() {
-        await this.testConnection()
-        await this.request()
+        return this.testConnection().then(this.request.bind(this)).catch(console.error)
     }
 
     async testConnection() {
         try {
             await fetch(`http://${this.ip}:${this.port}/session`)
-            this.eventEmitter.send('connected')
+            this.eventEmitter.send('echoArena.connected')
             return true
         } catch(error) {
             if (error.response) {
-                this.eventEmitter.send('connected')
+                this.eventEmitter.send('echoArena.connected', {error})
                 return true
             } else {
-                this.eventEmitter.send('failed')
+                this.eventEmitter.send('echoArena.failed', {error})
                 throw new Error();
             }
         }
@@ -43,17 +42,17 @@ class EchoArena {
         }).catch(error => {
             if (error.response) {
                 if (error.response.status === 404) {
-                    this.eventEmitter.send('notFound')
+                    this.eventEmitter.send('echoArena.notFound')
                 } else {
-                    this.eventEmitter.send('requestError', {
+                    this.eventEmitter.send('echoArena.requestError', {
                         status: error.response.status
                     })
                 }
             } else if (error.request) {
-                this.eventEmitter.send('refused')
+                this.eventEmitter.send('echoArena.refused')
                 this.fails++
             } else {
-                this.eventEmitter.send('error', {error});
+                this.eventEmitter.send('echoArena.error', {error});
                 this.fails++
             }
 
@@ -62,7 +61,7 @@ class EchoArena {
                     this.request()
                 }, 500);
             } else {
-                this.eventEmitter.send('disconnected');
+                this.eventEmitter.send('echoArena.disconnected');
             }
         })
     }

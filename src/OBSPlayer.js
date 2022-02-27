@@ -45,6 +45,7 @@ class OBSPlayer {
 
     initializeListeners() {
         this.eventEmitter.on('echoArena.connect', (args, event) => {
+            console.log(args)
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
                 this.globalConfig.echoArena = {

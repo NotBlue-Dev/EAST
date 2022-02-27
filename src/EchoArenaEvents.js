@@ -10,6 +10,6 @@ module.exports = [
     new PossessionChanged(),
     new RoundOver(),
     new RoundStart(),
-    new RoundTimeChanged(),
+    //new RoundTimeChanged(),
     new ScoreChanged()
 ]

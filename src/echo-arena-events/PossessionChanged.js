@@ -1,26 +1,31 @@
 class PossessionChanged {
     constructor() {
-        this.playerName = ''
-        this.team = ''
+        this.possession = {
+            team: null,
+            player: null,
+        }
     }
 
     handle(gameData, eventEmitter) {
-        gameData.teams.forEach(team => {
-            try {
-                team.players.forEach(player => {
-                    if(player.possession && player.possession !== this.playerName) {
-                        this.playerName = player.name
-                        this.team = team
-                        
-                        eventEmitter.send('possessionChange', {
-                            player: this.playerName,
-                            team: this.team
-                        })
-                    }
-                });
-            } catch {
+        const possession = gameData.teams.reduce((prev, team) => {
+            const player = team.possession ? team.players.reduce((prevPlayer, player) => {
+                return player.possession ? player.name : prevPlayer
+            }, null) : null
+
+            return null === player ? prev : {
+                team: team.team,
+                player
             }
-        });
+            
+        }, {
+           team: null,
+           player: null, 
+        })
+
+        if (this.possession.player !== possession.player || this.possession.team !== possession.team) {
+            this.possession = possession
+            eventEmitter.send('game.possessionChange', this.possession)
+        }
     }
 }
 

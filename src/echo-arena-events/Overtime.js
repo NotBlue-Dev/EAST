@@ -12,7 +12,7 @@ class Overtime {
         if (this.isOvertime === false) {
             this.isOvertime = true
 
-            eventEmitter.send('overtime')
+            eventEmitter.send('game.overtime')
         }
     }
 }
