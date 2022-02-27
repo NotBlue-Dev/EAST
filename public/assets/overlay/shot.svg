@@ -1,0 +1,8 @@
+<svg id="Component_19_1" data-name="Component 19 – 1" xmlns="http://www.w3.org/2000/svg" width="530" height="91" viewBox="0 0 530 91">
+    <rect id="Rectangle_36" data-name="Rectangle 36" width="470" height="91" transform="translate(60)" fill="#26303a" class="MainColor"/>
+    <text id="POINTS" transform="translate(90 40.25)" fill="#fff" font-size="15" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0">POINTS</tspan></text>
+    <text id="SPEED" transform="translate(315 40.25)" fill="#fff" font-size="15" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0">SPEED</tspan></text>
+    <text id="DISTANCE" transform="translate(408 40.25)" fill="#fff" font-size="15" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0">DISTANCE</tspan></text>
+    <rect id="Rectangle_32" data-name="Rectangle 32" width="60" height="91" class="teamColor" fill="#00a8ff" opacity="0.6"/>
+  </svg>
+  

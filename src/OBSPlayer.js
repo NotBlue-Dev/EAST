@@ -115,7 +115,29 @@ class OBSPlayer {
 
         this.overlayWS.listenEvent('get-week', this.getWeek.bind(this))
         this.overlayWS.listenEvent('get-winner', this.getWinner.bind(this))
+        this.overlayWS.listenEvent('get-players', this.getPlayers.bind(this))
         this.overlayWS.listenEvent('get-teams-data', this.getTeamsData.bind(this))
+    }
+
+    getPlayers() {
+        fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
+            let blue = team[0].players;
+            let orange = team[1].players;
+            let bluePlayers = []
+            let orangePlayers = []
+
+            blue.forEach(player => {
+                bluePlayers.push(player.name)
+            });
+
+            orange.forEach(player => {
+                orangePlayers.push(player.name)
+            });
+
+            this.overlayWS.sendEvent('players',{"orange":orangePlayers, "blue":bluePlayers})
+
+
+        }).catch(error => {console.log(error)})
     }
 
     getWinner() {
@@ -258,15 +280,6 @@ class OBSPlayer {
                 rank: json[i].homeTeam.divisionLogo,
                 logo: json[i].homeTeam.teamLogo,
                 link: json[i].homeTeam.teamID,
-                rosters: [],
-                color: null
-            })
-
-            this.Allinfo.teams.push({
-                name: json[i].awayTeam.teamName,
-                rank: json[i].awayTeam.divisionLogo,
-                logo: json[i].awayTeam.teamLogo,
-                link: json[i].awayTeam.teamID,
                 rosters: [],
                 color: null
             })

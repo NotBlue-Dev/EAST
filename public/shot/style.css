@@ -1,0 +1,79 @@
+
+
+object {
+    margin-top: 39px;
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+}
+
+.content {
+    display: flex;
+    top: 3.335vw;
+    position: relative;
+    align-items: center;
+}
+
+.score {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    left: 93px;
+    top: -4px;
+    width: 8%;
+    align-items: center;
+}
+
+.wd {
+    width: 4vw;
+    text-align: center;
+}
+
+#pseudo {
+    width: 155%;
+    text-align: center;
+}
+
+#assist {
+    width: 150%;
+    text-align: center;
+    font-size: 11px;
+}
+
+#nb {
+    font-size: 30px;
+    font-weight: 700;
+    width: 3%;
+    text-align: center;
+}
+
+.hide {
+    display: none;
+}
+
+.all {
+    margin-top: 45vw;
+}
+
+.distdiv {
+    margin-left: 27px;
+}
+
+.speeddiv {
+    margin-left: 145px;
+}
+
+.contain {
+    display: flex;
+    margin-left: 20px;
+    position: relative;
+    top: 5px;
+    left: -150px;
+}
+
+.contain a {
+    font-size: 15px;
+    font-weight: 600;
+}

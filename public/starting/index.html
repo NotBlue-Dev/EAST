@@ -4,9 +4,35 @@
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
       <script src="http://localhost:4545/starting/renderer.js"></script>
+      <link rel="stylesheet" href="/starting/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Starting
+      <div class="background">
+         <object class="svgClass" type="image/svg+xml" data="/assets/overlay/starting.svg" ></object>
+      </div>
+
+      <div class="content">
+         <div class="place">
+            <a id="nbA"></a>
+            <a id="nbB"></a>
+         </div>
+         <div class="nameBar">
+            <div class="containNameStart">
+               <a id="teamNameA"></a>
+            </div>
+            <div class="containNameStartB">
+               <a id="teamNameB"></a>
+            </div>
+         </div>
+   
+         <div class="contain">
+            <div id="containerA">
+            </div>
+            <div id="containerB">
+            </div>
+         </div> 
+      </div>
+
    </body>
 </html>

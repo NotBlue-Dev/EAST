@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="650" height="87" viewBox="0 0 650 87">
+    <g id="Component_11_1" data-name="Component 11 – 1">
+      <rect id="Rectangle_24" class="MainColor" data-name="Rectangle 24" width="402" height="87" transform="translate(124)" fill="#26303a"/>
+      <rect id="Rectangle_25" data-name="Rectangle 25" width="99" height="87" transform="translate(124)" fill="#00a8ff"/>
+      <rect id="Rectangle_26" data-name="Rectangle 26" width="99" height="87" transform="translate(427)" fill="#fa0"/>
+      <rect id="Rectangle_27" class="MainColor" data-name="Rectangle 27" width="124" height="87" fill="#26303a" opacity="0.6"/>
+      <rect id="Rectangle_28" class="MainColor" data-name="Rectangle 28" width="124" height="87" transform="translate(526)" fill="#26303a" opacity="0.6"/>
+    </g>
+    <image id="teamB" data-name="60461d51-b3ca-4586-a612-f5e59b5731c5" width="58" height="58" transform="translate(559 15)" xlink:href=""></image>
+    <image id="teamA" width="58" height="58" transform="translate(33 15)" xlink:href=""></image>
+    <text id="Round" data-name="Round 1" transform="translate(300 67)" fill="#fff" font-size="13" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0"></tspan></text>
+  </svg>

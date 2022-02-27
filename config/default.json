@@ -23,7 +23,11 @@
             {"path": "/roundWin", "template": "roundWin"},
             {"path": "/betwenRound", "template": "betwenRound"},
             {"path": "/game", "template": "game"},
-            {"path": "/ot",   "template": "overTime"}
+            {"path": "/ot",   "template": "overTime"},
+            {"path": "/scoreboardOrange", "template": "scoreboardB"},
+            {"path": "/scoreboardBlue",   "template": "scoreboardO"},
+            {"path": "/possession", "template": "possess"},
+            {"path": "/shot",   "template": "shot"}
         ]
     }
 }

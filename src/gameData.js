@@ -4,6 +4,7 @@ class GameData {
         this.clock = json.game_clock
         this.blueTeamPlayers = json.teams[0].players;
         this.orangeTeamPlayers = json.teams[1].players;
+        this.lastscore = json.last_score;
         this.round = json.blue_round_score + json.orange_round_score
         this.teams = json.teams
         if (this.blueTeamPlayers === undefined && this.orangeTeamPlayers === undefined) {
