@@ -9,3 +9,37 @@
 object {
     margin-top: 49px;
 }
+
+.row {
+    width: 33%;
+    display: flex;
+    margin-left: 6vw;
+    margin-top: 13.2px;
+    margin-bottom: 13.3px;
+}
+
+
+.st {
+    width: 23% !important;
+    text-align: left !important;
+    margin-right: 6px !important ;
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 4.3vw;
+    left: -0.7vw;
+    flex-direction: column;
+}
+
+.content a {
+    width: 6%;
+    margin-right: 34px;
+    text-align: center;
+    font-size: 21px;
+    font-weight: 600;
+}
