@@ -9,24 +9,37 @@
     <title>Echo Arena Overlay</title>
   </head>
   <body>
-    <div>
+    <nav>
+      <ul>
+        <li>Dashboard</li>
+        <li>Scenes configuration</li>
+      </ul>
+    </nav>
+    <div class="block">
       <label for="echo-arena-url">Echo Arena url</label><input type="text" id="echo-arena-url" /><input type="text" id="echo-arena-port" />
       <label for="echo-arena-autoconnect"><input type="checkbox" id="echo-arena-autoconnect" /> Auto-connect</label>
       <button id="echo-arena-connect">Connect</button>
     </div>
-    <div>
+    <div class="block">
       <label for="obs-websocket-url">OBS websocket url</label><input type="text" id="obs-websocket-url" /><input type="text" id="obs-websocket-port" />
       <label for="obs-websocket-password">Password</label><input type="password" id="obs-websocket-password" />
       <label for="obs-websocket-autoconnect"><input type="checkbox" id="obs-websocket-autoconnect" /> Auto-connect</label>
       <button id="obs-websocket-connect">Connect</button>
     </div>
-    <div>
+    <div class="block">
       <label for="overlay-port">Overlays port</label><input type="text" id="overlay-port" value="4545" />
       <label for="overlay-autolaunch"><input type="checkbox" id="overlay-autolaunch" /> Auto-launch</label>
       <button id="launch-overlay-server">Launch overlay server</button>
     </div>
-    <div>
+    <div class="block">
       <select id="scenes"></select>
     </div>
+    <div class="block">
+      <h2>VRML Mode</h2>
+      <label for="vrmlMatch"><input type="checkbox" id="vrmlMatch"/> VRML Next Match</label>
+      <label for="teams">Team</label><select id="teams"></select>
+      <div id="matchData" class="hidden"></div>
+    </div>
+    <pre id="logs"></pre>
   </body>
 </html>

@@ -3,6 +3,12 @@ body {
     color: #fdf6e3
 }
 
+div.block {
+    border: 1px solid #586e75;
+    padding: 5px;
+    margin: 5px;
+}
+
 input {
     background-color: #93a1a1;
     border: 1px solid #657b83;
@@ -12,4 +18,8 @@ input {
 
 input.valid {
     background-color: #859900;
+}
+
+.hidden {
+    display: none;
 }
