@@ -1,8 +1,6 @@
 const ConfigLoader = require('./ConfigLoader')
 const OBSClient = require('./OBSClient')
 const OverlayWS = require('./ws/OverlayWS')
-const Api = require('./Api')
-const wait = require('./event/wait')
 const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
@@ -79,13 +77,30 @@ class OBSPlayer {
 
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
-                this.eventEmitter.add({on: this.overlayWS.listenEvent, send: this.overlayWS.sendEvent})
-                this.eventEmitter.send('overlayWs.listening', args)
+                this.eventEmitter.add({on: this.overlayWS.on, send: this.overlayWS.send})
                 this.globalConfig.overlay = {
                     ...this.globalConfig.overlay,
                     ...args
                 }
                 this.configLoader.save(this.globalConfig)
+                this.eventEmitter.send('overlayWs.listening', args)
+                
+                // init listener for socket
+
+                this.eventEmitter.on('vrml.getConfigMatchData', (args,event) => {
+                    this.getMatchDataFromTeam(this.globalConfig.vrml.teamId).then((match) => {
+                        this.eventEmitter.send('vrml.matchDataLoaded', match)
+                    }).catch(error => {
+                        this.eventEmitter.send('vrml.matchDataNotFound', {
+                            teamId: this.globalConfig.vrml.teamId
+                        })
+                    })
+                })
+        
+                this.eventEmitter.on('overlayWs.getWeek', (args, event) => {
+                    this.eventEmitter.send('overlayWs.week', this.Allinfo.week)
+                })
+
             }).catch((error) => {
                 this.eventEmitter.send('overlayWs.launchFailed', {
                     args,
@@ -100,6 +115,12 @@ class OBSPlayer {
                 ...this.globalConfig.vrml,
                 ...args,
             }
+            // reset team info
+            this.Allinfo = {
+                "teams":[],
+                "times":[],
+                "week":null
+            }
             this.configLoader.save(this.globalConfig)
         })
 
@@ -112,67 +133,33 @@ class OBSPlayer {
                 })
             })
         })
-
-        this.overlayWS.listenEvent('get-week', this.getWeek.bind(this))
-        this.overlayWS.listenEvent('get-winner', this.getWinner.bind(this))
-        this.overlayWS.listenEvent('get-players', this.getPlayers.bind(this))
-        this.overlayWS.listenEvent('get-teams-data', this.getTeamsData.bind(this))
     }
 
-    getPlayers() {
-        fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
-            let blue = team[0].players;
-            let orange = team[1].players;
-            let bluePlayers = []
-            let orangePlayers = []
+    // getWinner() {
+    //     fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
+    //         let blue = json.blue_points;
+    //         let orange = json.orange_points;
+    //         let winner = null
 
-            blue.forEach(player => {
-                bluePlayers.push(player.name)
-            });
+    //         if(blue>orange) {
+    //             winner = 'blue'
+    //         } else {
+    //             winner = 'orange'
+    //         }
 
-            orange.forEach(player => {
-                orangePlayers.push(player.name)
-            });
-
-            this.overlayWS.sendEvent('players',{"orange":orangePlayers, "blue":bluePlayers})
-
-
-        }).catch(error => {console.log(error)})
-    }
-
-    getWinner() {
-        fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
-            let blue = json.blue_points;
-            let orange = json.orange_points;
-            let winner = null
-
-            if(blue>orange) {
-                winner = 'blue'
-            } else {
-                winner = 'orange'
-            }
-
-            for(let i = 0; i<this.Allinfo.teams[0].length; i++) {
-                if(this.Allinfo.teams[0][i].color === 'blue') {
-                    if(winner === 'blue') {
-                        this.overlayWS.sendEvent('winner',this.Allinfo.teams[0][i])
-                    } 
-                } else {
-                    if(winner === 'orange') {
-                        this.overlayWS.sendEvent('winner',this.Allinfo.teams[0][i])
-                    }
-                }
-            }
-        }).catch(error => {console.log(error)})
-    }
-
-    getWeek() {
-        this.overlayWS.sendEvent('week',this.Allinfo.week)
-    }
-
-    getTeamsData() {
-        this.overlayWS.sendEvent('teams-data',this.Allinfo.teams)
-    }
+    //         for(let i = 0; i<this.Allinfo.teams[0].length; i++) {
+    //             if(this.Allinfo.teams[0][i].color === 'blue') {
+    //                 if(winner === 'blue') {
+    //                     this.overlayWS.send('winner',this.Allinfo.teams[0][i])
+    //                 } 
+    //             } else {
+    //                 if(winner === 'orange') {
+    //                     this.overlayWS.send('winner',this.Allinfo.teams[0][i])
+    //                 }
+    //             }
+    //         }
+    //     }).catch(error => {console.log(error)})
+    // }
 
     connectObsWebsocket(args) {
         return this.obsClient
@@ -181,8 +168,8 @@ class OBSPlayer {
                     this.obsConnectionState = true
                     console.log('Connected')
                     setTimeout(() => {
-                        this.overlayWS.sendEvent('get-teams-data')
-                        this.overlayWS.sendEvent('get-week')
+                        this.overlayWS.send('get-teams-data')
+                        this.overlayWS.send('get-week')
                         this.obsClient.send('GetSceneList').then((scenesData) => {
                             this.eventEmitter.send('scenes.loaded', {
                                 scenes: scenesData.scenes.map(scene => scene.name)
@@ -190,6 +177,10 @@ class OBSPlayer {
                         })
                         // récupérer les scènes dispos
                     }, 1000);
+
+                    // listen for scenes change
+
+
                 }
             })
             .onDisconnected((message) => {
@@ -199,43 +190,44 @@ class OBSPlayer {
         .connect(args)
     }
 
-    setColor() {
-        return new Promise((resolve,reject) => {
-            fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
+    // DANS COLORDEFINED ECHO ARENA EVENT (pas fini)
+    // setColor() {
+    //     return new Promise((resolve,reject) => {
+    //         fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
                 
-                let PlayersBlue = []
-                let PlayersOrange = []
-                let ARoster = this.Allinfo.teams[0].rosters
+    //             let PlayersBlue = []
+    //             let PlayersOrange = []
+    //             let ARoster = this.Allinfo.teams[0].rosters
     
-                function getArraysIntersection(a1,a2){
-                    return  a1.filter(function(n) { return a2.indexOf(n) !== -1;});
-                }
+    //             function getArraysIntersection(a1,a2){
+    //                 return  a1.filter(function(n) { return a2.indexOf(n) !== -1;});
+    //             }
                 
-                try {
-                    json.teams[0].players.forEach(player => {
-                        PlayersBlue.push(player.name.toLowerCase())
-                    });
-                    json.teams[1].players.forEach(player => {
-                        PlayersOrange.push(player.name.toLowerCase())
-                    });
-                } catch {
-                    console.log('one team is empty')
-                }
-                let b = getArraysIntersection(ARoster, PlayersBlue)
-                let o = getArraysIntersection(ARoster, PlayersOrange)
+    //             try {
+    //                 json.teams[0].players.forEach(player => {
+    //                     PlayersBlue.push(player.name.toLowerCase())
+    //                 });
+    //                 json.teams[1].players.forEach(player => {
+    //                     PlayersOrange.push(player.name.toLowerCase())
+    //                 });
+    //             } catch {
+    //                 console.log('one team is empty')
+    //             }
+    //             let b = getArraysIntersection(ARoster, PlayersBlue)
+    //             let o = getArraysIntersection(ARoster, PlayersOrange)
 
-                if(b.length>o.length) {
-                    this.Allinfo.teams[1].color = 'blue'
-                    this.Allinfo.teams[0].color = 'orange'
-                } else {
-                    this.Allinfo.teams[0].color = 'orange'
-                    this.Allinfo.teams[1].color = 'blue'
-                }
-                resolve()
-            // this.overlayWS.sendEvent('round',json.total_round_count)
-            }).catch(error => {console.log(error), reject()})
-        });
-    }
+    //             if(b.length>o.length) {
+    //                 this.Allinfo.teams[1].color = 'blue'
+    //                 this.Allinfo.teams[0].color = 'orange'
+    //             } else {
+    //                 this.Allinfo.teams[0].color = 'orange'
+    //                 this.Allinfo.teams[1].color = 'blue'
+    //             }
+    //             resolve()
+    //         // this.overlayWS.send('round',json.total_round_count)
+    //         }).catch(error => {console.log(error), reject()})
+    //     });
+    // }
 
     async loadTeamList(region) {
         const json = await this.vrmlClient.getTeams()
@@ -253,12 +245,14 @@ class OBSPlayer {
 
     async getMatchDataFromTeam(team) {
         const json = await this.vrmlClient.getTeamUpcomingMatches(team)
+        
         try {
             this.Allinfo.week = json[0].week
         } catch {}
+
         json.forEach(element => {
             let dt = new Date(element.dateScheduledUTC)
-            if(dt.getTime() == new Date("2022-02-14 13:00").getTime()) {
+            if(dt.getDay() === 1 && dt.getHours() === 13) {
                 this.Allinfo.times.push('TBD');
             } else {
                 dt.setHours(dt.getHours()+2);
@@ -270,31 +264,45 @@ class OBSPlayer {
             throw new Error('no matches found')
         }
 
+        if(this.Allinfo.times.filter(x => x == 'TBD').length === this.Allinfo.times.length) {
+            throw new Error('no matches scheduled')
+        }
+
         for(let i = 0; i<this.Allinfo.times.length; i++) {
-            if(this.Allinfo.times[i] === 'TBD') {
-                continue
+            if(this.Allinfo.times[i] !== 'TBD') {
+                const data = {A:await this.vrmlClient.getTeamPlace(json[i].homeTeam.teamID), B:await this.vrmlClient.getTeamPlace(json[i].awayTeam.teamID)}
+                this.Allinfo.teams.push({
+                    name: json[i].homeTeam.teamName,
+                    rank: json[i].homeTeam.divisionLogo,
+                    logo: json[i].homeTeam.teamLogo,
+                    link: json[i].homeTeam.teamID,
+                    rosters: [],
+                    place:data.A.team.rank,
+                    color: null
+                })
+    
+                this.Allinfo.teams.push({
+                    name: json[i].awayTeam.teamName,
+                    rank: json[i].awayTeam.divisionLogo,
+                    logo: json[i].awayTeam.teamLogo,
+                    link: json[i].awayTeam.teamID,
+                    rosters: [],
+                    place:data.B.team.rank,
+                    color: null
+                })
+            
+                await this.getPlayers()
+                return {
+                    time: this.Allinfo.times[i],
+                    teams: {
+                        home: this.Allinfo.teams[0],
+                        away: this.Allinfo.teams[1],
+                    }
+                };
             }
-
-            this.Allinfo.teams.push({
-                name: json[i].homeTeam.teamName,
-                rank: json[i].homeTeam.divisionLogo,
-                logo: json[i].homeTeam.teamLogo,
-                link: json[i].homeTeam.teamID,
-                rosters: [],
-                color: null
-            })
-
-            await getPlayers()
-            return {
-                time: this.Allinfo.times[i],
-                teams: {
-                    home: this.Allinfo.teams[0],
-                    away: this.Allinfo.teams[1],
-                }
-            };
         }
     }
-    
+
     async getPlayers() {
         let u = 0
         for (let u = 0; u < this.Allinfo.teams.length; u++) {
@@ -314,21 +322,6 @@ class OBSPlayer {
         return new Promise((resolve,reject) => {
             this.echoArena = new EchoArena(config, this.eventEmitter)
             this.echoArena.listen()
-
-            if (this.obsConnectionState) {
-            
-                const echoArenaApi = new Api(config, this.obsClient, this.overlayWS)
-                this.setColor().then(() => {
-                    // just for testing :
-                    this.Allinfo.times = [new Date(new Date().getTime() + 2*6000)]
-                    console.log(this.Allinfo.times)
-                    // end
-                    echoArenaApi.state = true;
-                    echoArenaApi.request()
-                    new wait(this.obsClient, this.Allinfo, this.overlayWS)
-                    resolve()
-                }).catch(error => {console.log(error), reject()})
-            }
         })
     }
 

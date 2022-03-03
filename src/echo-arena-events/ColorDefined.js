@@ -1,4 +1,5 @@
 class ColorsDefined {
+    
     constructor() {
         this.Allinfo.teams[0].rosters
     }

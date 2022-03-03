@@ -14,16 +14,15 @@ window.addEventListener("load", (event) => {
     let comp = document.getElementById('component')
 
     let svg = document.querySelector(".svgClass").getSVGDocument()
-
     let listMain = svg.getElementsByClassName('MainColor')
     for (let item of listMain) {
         if(customMain !== null) {
             item.style.fill = customMain
         }
     }
+    document.querySelector(".svgClass").classList.add('hide')
     
-
-    socket.on('score-change', (arg) => {
+    socket.on('game.scoreChanged', (arg) => {
         if(arg.data.team === 'blue') {
             svg.getElementsByClassName('teamColor')[0].style.fill = '#00A8FF'
         } else {
@@ -32,7 +31,7 @@ window.addEventListener("load", (event) => {
         
         speed.innerHTML = `${arg.data.speed}m/s`
         dist.innerHTML = `${arg.data.dist}M`
-        points.innerHTML = arg.data.ammout
+        points.innerHTML = arg.data.ammount
         pseudo.innerHTML = arg.data.scorer
         assist.innerHTML = `assisted by ${arg.data.assist}`
 

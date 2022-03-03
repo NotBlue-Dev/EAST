@@ -140,7 +140,7 @@ const initVrmlMatchMode = (document) => {
   })
 
   ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
-    matchDataBlock.innerHTML = `${data.teams[0].name} vs. ${data.teams[1].name}`
+    matchDataBlock.innerHTML = `${data.teams.home.name} vs. ${data.teams.away.name}`
     matchDataBlock.classList.remove('hidden')
   })
 

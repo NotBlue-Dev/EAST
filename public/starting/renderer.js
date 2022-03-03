@@ -44,35 +44,42 @@ window.addEventListener("load", (event) => {
 
     const teamPlayerB = document.getElementById('containerB')  
 
-    socket.on('week', (arg) => {
+    socket.on('overlayWs.week', (arg) => {
         week.innerHTML = `Week ${arg}`
     })
     
-    socket.on('teams-data', (arg) => {
-        nameA.innerHTML = arg[0].name
-        nameB.innerHTML = arg[1].name
-        divA.innerHTML = `${arg[0].place}th`
-        divB.innerHTML = `${arg[1].place}th`
-        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
-        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
-        arg[0].rosters.forEach(player => {
-            let a = document.createElement('a')
-            a.innerHTML = player
-            teamPlayerA.appendChild(a)
-        });
-        arg[1].rosters.forEach(player => {
+    socket.on('vrml.matchDataLoaded', (arg) => {
+        nameA.innerHTML = arg.teams.away.name
+        nameB.innerHTML = arg.teams.home.name
+        divA.innerHTML = `${arg.teams.home.place}th`
+        divB.innerHTML = `${arg.teams.away.place}th`
+        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.rank}`)
+        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.rank}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.logo}`)
+        
+        // clear player
+        while (teamPlayerA.firstChild) {
+            teamPlayerA.removeChild(teamPlayerA.firstChild);
+        }
+        while (teamPlayerB.firstChild) {
+            teamPlayerB.removeChild(teamPlayerB.firstChild);
+        }
+        
+        arg.teams.home.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
             teamPlayerB.appendChild(a)
         });
+        arg.teams.away.rosters.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerA.appendChild(a)
+        });
         
     });
     
-    socket.emit('get-teams-data')
-    
-    socket.emit('get-week')
+    socket.emit('overlayWs.getWeek')
 
 });
 

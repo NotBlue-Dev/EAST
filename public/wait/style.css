@@ -1,6 +1,18 @@
-
+body {
+    position: relative;
+}
 
 object {
     margin-top: 59px;
     width: 100%;
+}
+
+#timer {
+    position: absolute;
+    top: 32vw;
+    width: 15vw;
+    font-size: 39px;
+    font-weight: 600;
+    left: 42.5vw;
+    text-align: center;
 }

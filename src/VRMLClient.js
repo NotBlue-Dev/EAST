@@ -5,6 +5,10 @@ class VRMLClient {
         this.baseUrl = 'https://api.vrmasterleague.com'
     }
 
+    async getTeamPlace(teamId) {
+        return await fetch(`${this.baseUrl}/Teams/${teamId}`).then(resp => resp.json())
+    }
+
     async getTeams(region = 'eu', rank = 0) {
         try {
             const resp = await fetch(`${this.baseUrl}/EchoArena/Standings/?region=${region}&rank=${rank}`)
