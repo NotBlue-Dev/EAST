@@ -20,11 +20,9 @@ window.addEventListener("load", () => {
 
     const week = svg.getElementById('WEEK_')
 
-    socket.on('overlayWs.week', (arg) => {
-        week.innerHTML = `WEEK ${arg}`
-    })
-
     socket.on('vrml.matchDataLoaded', (arg) => {
+        week.innerHTML = `Week ${arg.week}`
+        
         try {clearInterval(matchCountDown)} catch {}
 
         imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
@@ -44,10 +42,6 @@ window.addEventListener("load", () => {
         }
         let matchCountDown = setInterval(function() {timerFunc()}, 1000)
     })
-
-    socket.emit('overlayWs.getWeek')
-    socket.emit('vrml.getConfigMatchData')
-
 
 });
 

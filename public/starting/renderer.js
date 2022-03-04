@@ -44,11 +44,9 @@ window.addEventListener("load", (event) => {
 
     const teamPlayerB = document.getElementById('containerB')  
 
-    socket.on('overlayWs.week', (arg) => {
-        week.innerHTML = `Week ${arg}`
-    })
-    
+    // for vrml
     socket.on('vrml.matchDataLoaded', (arg) => {
+        week.innerHTML = `Week ${arg.week}`
         nameA.innerHTML = arg.teams.away.name
         nameB.innerHTML = arg.teams.home.name
         divA.innerHTML = `${arg.teams.home.place}th`
@@ -76,10 +74,30 @@ window.addEventListener("load", (event) => {
             a.innerHTML = player
             teamPlayerA.appendChild(a)
         });
+    });
+
+    // for mixed
+    socket.on('game.teamChange', (arg) => {
+        // clear player
+        while (teamPlayerA.firstChild) {
+            teamPlayerA.removeChild(teamPlayerA.firstChild);
+        }
+        while (teamPlayerB.firstChild) {
+            teamPlayerB.removeChild(teamPlayerB.firstChild);
+        }
+        
+        arg.teams.blue.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerB.appendChild(a)
+        });
+        arg.teams.orange.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerA.appendChild(a)
+        });
         
     });
-    
-    socket.emit('overlayWs.getWeek')
 
 });
 

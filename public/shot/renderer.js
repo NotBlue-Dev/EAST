@@ -10,6 +10,7 @@ window.addEventListener("load", (event) => {
     const points = document.getElementById('points')
     const assist = document.getElementById('assist')
     const pseudo = document.getElementById('pseudo')
+    const number = document.getElementById('nb')
 
     let comp = document.getElementById('component')
 
@@ -20,7 +21,8 @@ window.addEventListener("load", (event) => {
             item.style.fill = customMain
         }
     }
-    document.querySelector(".svgClass").classList.add('hide')
+
+    comp.classList.add('hide')
     
     socket.on('game.scoreChanged', (arg) => {
         if(arg.data.team === 'blue') {
@@ -33,7 +35,13 @@ window.addEventListener("load", (event) => {
         dist.innerHTML = `${arg.data.dist}M`
         points.innerHTML = arg.data.ammount
         pseudo.innerHTML = arg.data.scorer
-        assist.innerHTML = `assisted by ${arg.data.assist}`
+        let nb = arg.data.nb
+        if(nb < 10) nb = `0${nb}`
+        number.innerHTML = nb
+        if(arg.data.assist !== '[INVALID]') {
+            assist.innerHTML = `assisted by ${arg.data.assist}`
+        }
+
 
         comp.classList.remove('hide')
         setTimeout(() => {

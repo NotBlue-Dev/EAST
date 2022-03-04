@@ -29,7 +29,7 @@
     <rect id="Rectangle_48" data-name="Rectangle 48" width="241" height="295" transform="translate(1679 746)" class="MainColor" fill="#26303a" opacity="0.6"/>
   </g>
   <image id="teamA" width="164" height="165" transform="translate(39 812)" xlink:href=""/>
-  <text id="WEEK_" data-name="WEEK 4" transform="translate(1461 540)" fill="#fff" font-size="54" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0"></tspan></text>
+  <text id="WEEK_" data-name="WEEK 4" transform="translate(1461 540)" fill="#fff" font-size="54" font-family="Montserrat-SemiBold, Montserrat" font-weight="600"><tspan x="0" y="0"></tspan>MIXED</text>
   <image id="teamB" width="164" height="164" transform="translate(1720 812)" xlink:href=""/>
   <image id="rankA" width="44" height="42" transform="translate(180 790)" xlink:href=""/>
   <image id="rankB" width="44" height="42" transform="translate(1856 790)" xlink:href=""/>

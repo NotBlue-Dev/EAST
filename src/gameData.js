@@ -11,6 +11,16 @@ class GameData {
         this.team = this.lastscore.team
         this.distance_thrown = this.lastscore.distance_thrown
         this.round = json.blue_round_score + json.orange_round_score
+        this.teamData = {
+            blue:[],
+            orange:[]
+        }
+        for (let player of this.blueTeamPlayers) {
+            this.teamData.blue.push(player.name)
+        }
+        for (let player of this.orangeTeamPlayers) {
+            this.teamData.orange.push(player.name)
+        }
         this.teams = json.teams
         if (this.blueTeamPlayers === undefined && this.orangeTeamPlayers === undefined) {
             return

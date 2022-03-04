@@ -43,7 +43,6 @@ class OBSPlayer {
 
     initializeListeners() {
         this.eventEmitter.on('echoArena.connect', (args, event) => {
-            console.log(args)
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
                 this.globalConfig.echoArena = {
@@ -57,6 +56,42 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.on('vrml.colorChanged', (args, event) => {
+            
+            // #######
+            // ### j'arrive pas a trouver un moyen de l'implementer a cause des events faudra qu'on voc ###
+            // #######
+            
+            // let PlayersBlue = []
+            // let PlayersOrange = []
+            // let ARoster = this.Allinfo.teams[0].rosters
+
+            // function getArraysIntersection(a1,a2){
+            //     return  a1.filter(function(n) { return a2.indexOf(n) !== -1;});
+            // }
+            
+            // try {
+            //     json.teams[0].players.forEach(player => {
+            //         PlayersBlue.push(player.name.toLowerCase())
+            //     });
+            //     json.teams[1].players.forEach(player => {
+            //         PlayersOrange.push(player.name.toLowerCase())
+            //     });
+            // } catch {
+            //     console.log('one team is empty')
+            // }
+            // let b = getArraysIntersection(ARoster, PlayersBlue)
+            // let o = getArraysIntersection(ARoster, PlayersOrange)
+
+            // if(b.length>o.length) {
+            //     this.Allinfo.teams[1].color = 'blue'
+            //     this.Allinfo.teams[0].color = 'orange'
+            // } else {
+            //     this.Allinfo.teams[0].color = 'orange'
+            //     this.Allinfo.teams[1].color = 'blue'
+            // }
         })
 
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
@@ -84,22 +119,6 @@ class OBSPlayer {
                 }
                 this.configLoader.save(this.globalConfig)
                 this.eventEmitter.send('overlayWs.listening', args)
-                
-                // init listener for socket
-
-                this.eventEmitter.on('vrml.getConfigMatchData', (args,event) => {
-                    this.getMatchDataFromTeam(this.globalConfig.vrml.teamId).then((match) => {
-                        this.eventEmitter.send('vrml.matchDataLoaded', match)
-                    }).catch(error => {
-                        this.eventEmitter.send('vrml.matchDataNotFound', {
-                            teamId: this.globalConfig.vrml.teamId
-                        })
-                    })
-                })
-        
-                this.eventEmitter.on('overlayWs.getWeek', (args, event) => {
-                    this.eventEmitter.send('overlayWs.week', this.Allinfo.week)
-                })
 
             }).catch((error) => {
                 this.eventEmitter.send('overlayWs.launchFailed', {
@@ -135,32 +154,6 @@ class OBSPlayer {
         })
     }
 
-    // getWinner() {
-    //     fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
-    //         let blue = json.blue_points;
-    //         let orange = json.orange_points;
-    //         let winner = null
-
-    //         if(blue>orange) {
-    //             winner = 'blue'
-    //         } else {
-    //             winner = 'orange'
-    //         }
-
-    //         for(let i = 0; i<this.Allinfo.teams[0].length; i++) {
-    //             if(this.Allinfo.teams[0][i].color === 'blue') {
-    //                 if(winner === 'blue') {
-    //                     this.overlayWS.send('winner',this.Allinfo.teams[0][i])
-    //                 } 
-    //             } else {
-    //                 if(winner === 'orange') {
-    //                     this.overlayWS.send('winner',this.Allinfo.teams[0][i])
-    //                 }
-    //             }
-    //         }
-    //     }).catch(error => {console.log(error)})
-    // }
-
     connectObsWebsocket(args) {
         return this.obsClient
             .onConnected((name) => {
@@ -168,8 +161,6 @@ class OBSPlayer {
                     this.obsConnectionState = true
                     console.log('Connected')
                     setTimeout(() => {
-                        this.overlayWS.send('get-teams-data')
-                        this.overlayWS.send('get-week')
                         this.obsClient.send('GetSceneList').then((scenesData) => {
                             this.eventEmitter.send('scenes.loaded', {
                                 scenes: scenesData.scenes.map(scene => scene.name)
@@ -189,45 +180,6 @@ class OBSPlayer {
             })
         .connect(args)
     }
-
-    // DANS COLORDEFINED ECHO ARENA EVENT (pas fini)
-    // setColor() {
-    //     return new Promise((resolve,reject) => {
-    //         fetch(`http://${this.config.ip}:${this.config.port}/session`).then(resp => resp.json()).then(json => {
-                
-    //             let PlayersBlue = []
-    //             let PlayersOrange = []
-    //             let ARoster = this.Allinfo.teams[0].rosters
-    
-    //             function getArraysIntersection(a1,a2){
-    //                 return  a1.filter(function(n) { return a2.indexOf(n) !== -1;});
-    //             }
-                
-    //             try {
-    //                 json.teams[0].players.forEach(player => {
-    //                     PlayersBlue.push(player.name.toLowerCase())
-    //                 });
-    //                 json.teams[1].players.forEach(player => {
-    //                     PlayersOrange.push(player.name.toLowerCase())
-    //                 });
-    //             } catch {
-    //                 console.log('one team is empty')
-    //             }
-    //             let b = getArraysIntersection(ARoster, PlayersBlue)
-    //             let o = getArraysIntersection(ARoster, PlayersOrange)
-
-    //             if(b.length>o.length) {
-    //                 this.Allinfo.teams[1].color = 'blue'
-    //                 this.Allinfo.teams[0].color = 'orange'
-    //             } else {
-    //                 this.Allinfo.teams[0].color = 'orange'
-    //                 this.Allinfo.teams[1].color = 'blue'
-    //             }
-    //             resolve()
-    //         // this.overlayWS.send('round',json.total_round_count)
-    //         }).catch(error => {console.log(error), reject()})
-    //     });
-    // }
 
     async loadTeamList(region) {
         const json = await this.vrmlClient.getTeams()
@@ -294,6 +246,7 @@ class OBSPlayer {
                 await this.getPlayers()
                 return {
                     time: this.Allinfo.times[i],
+                    week:this.Allinfo.week,
                     teams: {
                         home: this.Allinfo.teams[0],
                         away: this.Allinfo.teams[1],
@@ -320,7 +273,7 @@ class OBSPlayer {
         
     connectEchoArena(config) {
         return new Promise((resolve,reject) => {
-            this.echoArena = new EchoArena(config, this.eventEmitter)
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
             this.echoArena.listen()
         })
     }

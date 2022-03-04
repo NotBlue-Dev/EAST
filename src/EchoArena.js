@@ -4,16 +4,24 @@ const GameData = require("./gameData");
 
 class EchoArena {
     constructor({ip, port}, eventEmitter) {
+        this.eventEmitter = eventEmitter
         this.ip = ip
         this.port = port
-        this.eventEmitter = eventEmitter
         this.fails = 0
+    }
+
+    async getPlayers() {
+        await fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
+            return json.teams
+        }).catch(() => {
+
+        })
     }
 
     async listen() {
         return this.testConnection().then(this.request.bind(this)).catch(console.error)
     }
-
+ 
     async testConnection() {
         try {
             await fetch(`http://${this.ip}:${this.port}/session`)
@@ -56,10 +64,11 @@ class EchoArena {
                 this.fails++
             }
 
+            // ca fais pas long feux quand on switch de serv fails dépassent 5 en 2s
             if (this.fails < 5) {
                 setTimeout(() => {
                     this.request()
-                }, 500);
+                }, 1000);
             } else {
                 this.eventEmitter.send('echoArena.disconnected');
             }
