@@ -18,28 +18,24 @@ window.addEventListener("load", (event) => {
 
     const imgB = svg.getElementById('teamB')
 
-    socket.on('round', (arg) => {
-        svg.getElementById('Round').innerHTML = `Round ${arg}`
+    socket.on('game.roundStart', (arg) => {
+        svg.getElementById('Round').innerHTML = `Round ${arg.round}`
     });
     
-    socket.on('teams-data', (arg) => {
-        document.getElementById('teamA').innerHTML = arg[1].name
-        document.getElementById('teamB').innerHTML = arg[0].name
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
+    socket.on('vrml.matchDataLoaded', (arg) => {
+        document.getElementById('teamA').innerHTML = arg.teams.away.name
+        document.getElementById('teamB').innerHTML = arg.teams.home.name
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
     });
     
-    socket.on('score-change', (arg) => {
+    socket.on('game.scoreChanged', (arg) => {
         document.getElementById('blue').innerHTML = arg.blue
         document.getElementById('orange').innerHTML = arg.orange
     });
 
-    socket.on('round-time', (arg) => {
-        document.getElementById('timing').innerHTML = arg
+    socket.on('game.roundTime', (arg) => {
+        document.getElementById('timing').innerHTML = arg.time
     });    
-
-    socket.emit('get-teams-data')
-    
-    socket.emit('get-week')
     
 })

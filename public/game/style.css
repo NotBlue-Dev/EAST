@@ -20,7 +20,7 @@
     font-size: 50px;
     width: 4vw;
     position: relative;
-    left: -4.21vw;
+    left: -0.85vw;
     text-align: center;
     font-weight: 600;
 }
@@ -29,7 +29,7 @@
     font-size: 50px;
     width: 4vw;
     position: relative;
-    left: 4.21vw;
+    left: 0.85vw;
     text-align: center;
     font-weight: 600;
 }
@@ -39,6 +39,8 @@
     font-weight: 600;
     top: -7px;
     position: relative;
+    text-align: center;
+    width: 10%;
 }
 
 .background a {

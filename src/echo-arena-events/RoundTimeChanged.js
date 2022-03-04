@@ -8,10 +8,10 @@ class RoundTimeChanged {
             return
         }
 
-        this.time = gameData.clock
+        this.time = Math.round(gameData.clock)
         // has RoundTime ?
         eventEmitter.send('game.roundTime', {
-            time: gameData.clock
+            time: (this.time-(this.time%=60))/60+(9<this.time?':':':0')+this.time
         })
     }
 }

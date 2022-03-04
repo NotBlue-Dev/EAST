@@ -39,7 +39,7 @@ window.addEventListener("load", (event) => {
         if(nb < 10) nb = `0${nb}`
         number.innerHTML = nb
         if(arg.data.assist !== '[INVALID]') {
-            assist.innerHTML = `assisted by ${arg.data.assist}`
+            assist.innerHTML = `assisted ${arg.data.assist}`
         }
 
 

@@ -33,6 +33,12 @@ object {
     height: 69%;
 }
 
+.current {
+    font-weight: 700;
+}
+
+
+
 .div1 { grid-area: 1 / 1 / 2 / 2; display: flex; justify-content: center; align-items: center;  }
 .div2 { grid-area: 1 / 2 / 2 / 3; display: flex; justify-content: center; align-items: center;  }
 .div3 { grid-area: 2 / 2 / 3 / 3; display: flex; justify-content: center; align-items: center;  }
@@ -45,4 +51,5 @@ object {
 .content a {
     font-size: 15px;
     font-weight: 600;
+    opacity: 0.6;
 }

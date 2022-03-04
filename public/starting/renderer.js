@@ -96,7 +96,6 @@ window.addEventListener("load", (event) => {
             a.innerHTML = player
             teamPlayerA.appendChild(a)
         });
-        
     });
 
 });
