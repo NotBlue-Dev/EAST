@@ -8,14 +8,7 @@ class EchoArena {
         this.ip = ip
         this.port = port
         this.fails = 0
-    }
-
-    async getPlayers() {
-        await fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
-            return json.teams
-        }).catch(() => {
-
-        })
+        this.vrmlInfo = null
     }
 
     async listen() {
@@ -40,8 +33,7 @@ class EchoArena {
 
     async request() {
         fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
-            const gameData = new GameData(json)
-
+            const gameData = new GameData(json, this.vrmlInfo)
             events.forEach((event) => {
                 event.handle(gameData, this.eventEmitter)
             })

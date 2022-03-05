@@ -1,5 +1,6 @@
 class GameData {
-    constructor(json) {
+    constructor(json, vrmlInfo) {
+        this.vrmlInfo = vrmlInfo
         this.timestamp = Date.now()
         this.clock = json.game_clock
         this.blueTeamPlayers = json.teams[0].players;
@@ -40,6 +41,50 @@ class GameData {
 
     isPlaying() {
         return this.status === 'playing'
+    }
+
+    defineColor() {
+        // when round start check wich VRML team is orange/blue
+        if(this.vrmlInfo !== null) {
+            console.log('LAAAAAAA')
+            let PlayersBlue = []
+            let PlayersOrange = []
+            let ARoster = this.vrmlInfo.teams.home.rosters
+
+            function getArraysIntersection(a1,a2){
+                return  a1.filter(function(n) { return a2.indexOf(n) !== -1;});
+            }
+            
+            try {
+                this.blueTeamPlayers.forEach(player => {
+                    PlayersBlue.push(player.name.toLowerCase())
+                });
+                this.orangeTeamPlayers.forEach(player => {
+                    PlayersOrange.push(player.name.toLowerCase())
+                });
+            } catch {
+                console.log('one team is empty')
+            }
+            
+            let b = getArraysIntersection(ARoster, PlayersBlue)
+            let o = getArraysIntersection(ARoster, PlayersOrange)
+            
+            let teamA;
+            let teamB;
+            
+            if(b.length>o.length) {
+                teamB = 'blue'
+                teamA = 'orange'
+            } else {
+                teamA = 'orange'
+                teamB = 'blue'
+            }
+
+            this.vrmlInfo.teams.home.color = teamA
+            this.vrmlInfo.teams.away.color = teamB
+
+            return this.vrmlInfo
+        }
     }
 }
 

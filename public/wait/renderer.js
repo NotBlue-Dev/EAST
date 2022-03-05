@@ -20,13 +20,35 @@ window.addEventListener("load", () => {
 
     const week = svg.getElementById('WEEK_')
 
+    function fill(arg) {
+        orange = arg.teams.home
+        blue = arg.teams.away
+
+        if (arg.teams.home.color !== null && arg.teams.away.color !== null) { 
+            if(arg.teams.home.color === 'blue') {
+                blue = arg.teams.home
+                orange = arg.teams.away
+            } else {
+                blue = arg.teams.away
+                orange = arg.teams.home
+            }
+        }
+
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+    }
+
+    socket.on('vrml.colorChanged' , (arg) => {
+        fill(arg)
+    })
+
     socket.on('vrml.matchDataLoaded', (arg) => {
+        fill(arg)
+        
         week.innerHTML = `Week ${arg.week}`
         
         try {clearInterval(matchCountDown)} catch {}
 
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.logo}`)
         let date = new Date()
         let nextMatch = new Date(arg.time)
         let time = Math.round((nextMatch.getTime() - date.getTime()) / 1000)

@@ -44,17 +44,29 @@ window.addEventListener("load", (event) => {
 
     const teamPlayerB = document.getElementById('containerB')  
 
-    // for vrml
-    socket.on('vrml.matchDataLoaded', (arg) => {
+    function fill(arg) {
+        orange = arg.teams.home
+        blue = arg.teams.away
+
+        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+            if(arg.teams.home.color === 'blue') {
+                blue = arg.teams.home
+                orange = arg.teams.away
+            } else {
+                blue = arg.teams.away
+                orange = arg.teams.home
+            }
+        }
+
         week.innerHTML = `Week ${arg.week}`
-        nameA.innerHTML = arg.teams.away.name
-        nameB.innerHTML = arg.teams.home.name
-        divA.innerHTML = `${arg.teams.home.place}th`
-        divB.innerHTML = `${arg.teams.away.place}th`
-        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.rank}`)
-        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.rank}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.logo}`)
+        nameA.innerHTML = orange.name
+        nameB.innerHTML = blue.name
+        divA.innerHTML = `${blue.place}th`
+        divB.innerHTML = `${orange.place}th`
+        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.rank}`)
+        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.rank}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
         
         // clear player
         while (teamPlayerA.firstChild) {
@@ -64,17 +76,26 @@ window.addEventListener("load", (event) => {
             teamPlayerB.removeChild(teamPlayerB.firstChild);
         }
         
-        arg.teams.home.rosters.forEach(player => {
+        blue.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
             teamPlayerB.appendChild(a)
         });
-        arg.teams.away.rosters.forEach(player => {
+        orange.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
             teamPlayerA.appendChild(a)
         });
+    }
+
+    // for vrml
+    socket.on('vrml.matchDataLoaded', (arg) => {
+        fill(arg)
     });
+
+    socket.on('vrml.colorChanged' , (arg) => {
+        fill(arg)
+    })
 
     // for mixed
     socket.on('game.teamChange', (arg) => {

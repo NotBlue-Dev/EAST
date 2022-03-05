@@ -58,10 +58,6 @@ class OBSPlayer {
             })
         })
 
-        this.eventEmitter.on('vrml.colorChanged', (args, event) => {
-            // ColorDefined.js
-        })
-
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
                 this.eventEmitter.send('obsWebsocket.connected', args)
@@ -113,6 +109,7 @@ class OBSPlayer {
 
         this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
             this.getMatchDataFromTeam(args.teamId).then((match) => {
+                if(this.echoArena !== null) this.echoArena.vrmlInfo = match
                 this.eventEmitter.send('vrml.matchDataLoaded', match)
             }).catch(error => {
                 this.eventEmitter.send('vrml.matchDataNotFound', {

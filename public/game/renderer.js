@@ -21,12 +21,33 @@ window.addEventListener("load", (event) => {
     socket.on('game.roundStart', (arg) => {
         svg.getElementById('Round').innerHTML = `Round ${arg.round}`
     });
-    
+
+    function fill(arg) {
+        orange = arg.teams.home
+        blue = arg.teams.away
+
+        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+            if(arg.teams.home.color === 'blue') {
+                blue = arg.teams.home
+                orange = arg.teams.away
+            } else {
+                blue = arg.teams.away
+                orange = arg.teams.home
+            }
+        }
+
+        document.getElementById('teamA').innerHTML = blue.name
+        document.getElementById('teamB').innerHTML = orange.name
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+    }
+
+    socket.on('vrml.colorChanged' , (arg) => {
+        fill(arg)
+    })
+
     socket.on('vrml.matchDataLoaded', (arg) => {
-        document.getElementById('teamA').innerHTML = arg.teams.away.name
-        document.getElementById('teamB').innerHTML = arg.teams.home.name
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.away.logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg.teams.home.logo}`)
+        fill(arg)
     });
     
     socket.on('game.scoreChanged', (arg) => {
