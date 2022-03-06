@@ -19,15 +19,13 @@ class ScoreChanged {
 
             if(gameData.team === 'blue') {
                 team = 0
-            } else {
+            } else if(gameData.team === 'orange') {
                 team = 1
             }
-            console.log(team)
+
             gameData.teams[team].players.forEach(player => {
-                console.log(player.name, gameData.person_scored)
                 if(player.name === gameData.person_scored) {
                     nbData = player.number
-                    console.log(nbData)
                 }
             });
 

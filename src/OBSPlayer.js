@@ -76,7 +76,7 @@ class OBSPlayer {
 
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
-                this.eventEmitter.add({on: this.overlayWS.on, send: this.overlayWS.send})
+                this.eventEmitter.add(this.overlayWS)
                 this.globalConfig.overlay = {
                     ...this.globalConfig.overlay,
                     ...args

@@ -24,7 +24,6 @@ class RoundStart {
             })
 
             let teamsColor = gameData.defineColor()
-            console.log(teamsColor)
             eventEmitter.send('vrml.colorChanged', teamsColor)
         }
     }

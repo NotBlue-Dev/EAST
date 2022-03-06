@@ -36,7 +36,7 @@ window.addEventListener("load", (event) => {
 
         // reset
         let current = document.getElementsByClassName('current')[0]
-        if(current !== undefined) current.classList.remove('current')
+        current && current.classList.remove('current')
 
         if(arg.team === 'ORANGE TEAM') {
             for(let x =0; x<orange.length; x++) {

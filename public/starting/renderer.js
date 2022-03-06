@@ -44,7 +44,7 @@ window.addEventListener("load", (event) => {
 
     const teamPlayerB = document.getElementById('containerB')  
 
-    function fill(arg) {
+    const fill = (arg) => {
         orange = arg.teams.home
         blue = arg.teams.away
 
@@ -89,13 +89,9 @@ window.addEventListener("load", (event) => {
     }
 
     // for vrml
-    socket.on('vrml.matchDataLoaded', (arg) => {
-        fill(arg)
-    });
+    socket.on('vrml.matchDataLoaded', fill)
 
-    socket.on('vrml.colorChanged' , (arg) => {
-        fill(arg)
-    })
+    socket.on('vrml.colorChanged', fill)
 
     // for mixed
     socket.on('game.teamChange', (arg) => {

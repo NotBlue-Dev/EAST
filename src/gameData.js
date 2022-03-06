@@ -46,7 +46,6 @@ class GameData {
     defineColor() {
         // when round start check wich VRML team is orange/blue
         if(this.vrmlInfo !== null) {
-            console.log('LAAAAAAA')
             let PlayersBlue = []
             let PlayersOrange = []
             let ARoster = this.vrmlInfo.teams.home.rosters
