@@ -32,13 +32,80 @@
       <button id="launch-overlay-server">Launch overlay server</button>
     </div>
     <div class="block">
-      <select id="scenes"></select>
-    </div>
-    <div class="block">
       <h2>VRML Mode</h2>
       <label for="vrmlMatch"><input type="checkbox" id="vrmlMatch"/> VRML Next Match</label>
       <label for="teams">Team</label><select id="teams"></select>
       <div id="matchData" class="hidden"></div>
+    </div>
+    <div class="block" id="autostream-wrapper">
+      <div>
+        <h2>Stream</h2>
+        <label for="main-scene">Main scene</label><select id="main-scene" class="scene-select" type="text"></select>
+        <label for="wait-scene">Wait scene</label><select id="wait-scene" class="scene-select" type="text"></select>
+        <label for="autostream"><input id="autostream" type="checkbox"> Autostream</label>
+        <label for="launch-time">Launch time</label><input id="launch-time" type="time"/>
+        <h3>Start stream</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Scene</td>
+              <td>Duration</td>
+              <td><button>+</button></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><select id="start-scene[0]" class="scene-select" type="text"></td>
+              <td><input id="start-duration[0]" type="number" min="1"/>s</td>
+              <td><button>-</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Game stream</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Event</td>
+              <td>Delay</td>
+              <td>Scene</td>
+              <td>Duration</td>
+              <td><button>+</button></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><select id="event[0]" class="echo-arena-event-select"></select></td>
+              <td><input id="delay[0]" type="number"/ min="1">s</td>
+              <td><select id="scene[0]" class="scene-select" type="text"></td>
+              <td><input id="duration[0]" type="number" min="1"/>s</td>
+              <td><button>-</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>End stream</h3>
+         
+        <table>
+          <thead>
+            <tr>
+              <td>Scene</td>
+              <td>Duration</td>
+              <td><button>+</button></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><label for="delay-after-end-game">Delay after end game</label></td>
+              <td><input id="delay-after-end-game" type="number"/ min="1">s</td>
+              <td><button>-</button></td>
+            </tr>
+            <tr>
+              <td><select id="start-scene[0]" class="scene-select" type="text"></td>
+              <td><input id="start-duration[0]" type="number" min="1"/>s</td>
+              <td><button>-</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <pre id="logs"></pre>
   </body>

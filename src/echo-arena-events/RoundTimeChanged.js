@@ -1,5 +1,6 @@
 class RoundTimeChanged {
     constructor() {
+        this.name = 'Round time change (do not use)'
         this.time = null
     }
 

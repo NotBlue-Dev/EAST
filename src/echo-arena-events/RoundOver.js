@@ -1,5 +1,6 @@
 class RoundOver {
     constructor () {
+        this.name = 'Round over'
         this.roundIsOver = false
         this.rounds = []
     }

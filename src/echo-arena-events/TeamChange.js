@@ -1,5 +1,6 @@
 class TeamChange {
     constructor() {
+        this.name = 'Team change'
         this.teams = {
             blue:[],
             orange:[]

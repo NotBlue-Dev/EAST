@@ -5,13 +5,15 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaPortInput = document.getElementById('echo-arena-port')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
-  echoArenaConnectButton.addEventListener('click', () => {
+  const echoArenaConnect = () => {
     ipcRenderer.send('echoArena.connect', {
       ip: echoArenaUrlInput.value,
       port: echoArenaPortInput.value,
       autoConnect: echoArenaAutoConnectInput.checked,
     })
-  })
+  }
+  
+  echoArenaConnectButton.addEventListener('click', echoArenaConnect)
 
   ipcRenderer.on('echoArena.connected', () => {
     echoArenaConnectButton.disabled = true
@@ -23,14 +25,16 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
   const obsWebsocketAutoConnectInput = document.getElementById('obs-websocket-autoconnect')
   const obsWebsocketConnectButton = document.getElementById('obs-websocket-connect')
-  obsWebsocketConnectButton.addEventListener('click', () => {
+  const obsWebsocketConnect = () => {
     ipcRenderer.send('obsWebsocket.connect', {
       ip: obsWebsocketUrlInput.value,
       port: obsWebsocketPortInput.value,
       password: obsWebsocketPasswordInput.value,
       autoConnect: obsWebsocketAutoConnectInput.checked,
     })
-  })
+  }
+
+  obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true
@@ -52,22 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
     log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
-  const echoArenaConnect = () => {
-    ipcRenderer.send('echoArena.connect', {
-      ip: echoArenaUrlInput.value,
-      port: echoArenaPortInput.value,
-      autoConnect: echoArenaAutoConnectInput.checked,
-    })
-  }
-
-  const obsWebsocketConnect = () => {
-    ipcRenderer.send('obsWebsocket.connect', {
-      ip: obsWebsocketUrlInput.value,
-      port: obsWebsocketPortInput.value,
-      password: obsWebsocketPasswordInput.value,
-      autoConnect: obsWebsocketAutoConnectInput.checked,
-    })
-  }
+ 
 
   ipcRenderer.on('config.loaded', (event, data) => {
     echoArenaUrlInput.value = data.echoArena.ip
@@ -91,15 +80,6 @@ window.addEventListener('DOMContentLoaded', () => {
       })
     }
 
-    const obsWebsocketConnect = () => {
-      ipcRenderer.send('obsWebsocket.connect', {
-        ip: obsWebsocketUrlInput.value,
-        port: obsWebsocketPortInput.value,
-        password: obsWebsocketPasswordInput.value,
-        autoConnect: obsWebsocketAutoConnectInput.checked,
-      })
-    }
-    
     overlayAutoLaunchInput.checked = data.overlay.autoLaunch
     overlayPortInput.value = data.overlay.port
     if (data.overlay.autoLaunch) {
@@ -111,12 +91,14 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 
   ipcRenderer.on('scenes.loaded', (event, data) => {
-    const sceneSelect = document.getElementById('scenes')
-    data.scenes.map((scene) => {
-      const opt = document.createElement('option');
-      opt.value = scene;
-      opt.innerHTML = scene;
-      sceneSelect.appendChild(opt);
+    const sceneSelects = document.querySelectorAll('.scene-select')
+    sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
+      data.scenes.map((scene) => {
+        const opt = document.createElement('option');
+        opt.value = scene;
+        opt.innerHTML = scene;
+        sceneSelect.appendChild(opt);
+      })
     })
     log('OBS Scenes loaded')
   })
@@ -126,6 +108,7 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 
   initVrmlMatchMode(document)
+  initAutoStream(document)
 })
 
 
@@ -170,6 +153,20 @@ const initVrmlMatchMode = (document) => {
   ipcRenderer.on('vrml.matchDataNotFound', (event, data) => {
     matchDataBlock.innerHTML = `No match found`
     matchDataBlock.classList.remove('hidden')
+  })
+}
+
+const initAutoStream = (document) => {
+  ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
+    const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
+    echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
+      data.events.map((eventName) => {    
+        const opt = document.createElement('option');
+        opt.value = eventName;
+        opt.innerHTML = eventName;
+        echoEventSelect.appendChild(opt);
+      })
+    })
   })
 }
 
