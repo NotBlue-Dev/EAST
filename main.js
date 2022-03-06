@@ -1,5 +1,6 @@
 const { OBSPlayer } = require('./index')
-const EventEmitter = require('./src/ChainEventEmitter')
+const ChainEventEmitter = require('./src/ChainEventEmitter')
+const EventEmitter = require('events')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
 const dev = false
@@ -23,8 +24,18 @@ const uiEventEmitter = (webContents) => {
   }
 }
 
+const stdEventEmitter = () => {
+  const eventEmitter = new EventEmitter()
+  
+  return {
+    send: eventEmitter.emit,
+    on: eventEmitter.on,
+  }
+}
+
 const start = (webContents) => {
-    const eventEmitter = new EventEmitter()
+    const eventEmitter = new ChainEventEmitter()
+    eventEmitter.add(stdEventEmitter())
     eventEmitter.add(uiEventEmitter(webContents))
 
     const player = new OBSPlayer(
