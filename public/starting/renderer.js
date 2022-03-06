@@ -44,35 +44,76 @@ window.addEventListener("load", (event) => {
 
     const teamPlayerB = document.getElementById('containerB')  
 
-    socket.on('week', (arg) => {
-        week.innerHTML = `Week ${arg}`
-    })
-    
-    socket.on('teams-data', (arg) => {
-        nameA.innerHTML = arg[0].name
-        nameB.innerHTML = arg[1].name
-        divA.innerHTML = `${arg[0].place}th`
-        divB.innerHTML = `${arg[1].place}th`
-        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
-        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].rank}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
-        arg[0].rosters.forEach(player => {
-            let a = document.createElement('a')
-            a.innerHTML = player
-            teamPlayerA.appendChild(a)
-        });
-        arg[1].rosters.forEach(player => {
+    const fill = (arg) => {
+        orange = arg.teams.home
+        blue = arg.teams.away
+
+        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+            if(arg.teams.home.color === 'blue') {
+                blue = arg.teams.home
+                orange = arg.teams.away
+            } else {
+                blue = arg.teams.away
+                orange = arg.teams.home
+            }
+        }
+
+        week.innerHTML = `Week ${arg.week}`
+        nameA.innerHTML = orange.name
+        nameB.innerHTML = blue.name
+        divA.innerHTML = `${blue.place}th`
+        divB.innerHTML = `${orange.place}th`
+        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.rank}`)
+        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.rank}`)
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+        
+        // clear player
+        while (teamPlayerA.firstChild) {
+            teamPlayerA.removeChild(teamPlayerA.firstChild);
+        }
+        while (teamPlayerB.firstChild) {
+            teamPlayerB.removeChild(teamPlayerB.firstChild);
+        }
+        
+        blue.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
             teamPlayerB.appendChild(a)
         });
+        orange.rosters.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerA.appendChild(a)
+        });
+    }
+
+    // for vrml
+    socket.on('vrml.matchDataLoaded', fill)
+
+    socket.on('vrml.colorChanged', fill)
+
+    // for mixed
+    socket.on('game.teamChange', (arg) => {
+        // clear player
+        while (teamPlayerA.firstChild) {
+            teamPlayerA.removeChild(teamPlayerA.firstChild);
+        }
+        while (teamPlayerB.firstChild) {
+            teamPlayerB.removeChild(teamPlayerB.firstChild);
+        }
         
+        arg.teams.blue.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerB.appendChild(a)
+        });
+        arg.teams.orange.forEach(player => {
+            let a = document.createElement('a')
+            a.innerHTML = player
+            teamPlayerA.appendChild(a)
+        });
     });
-    
-    socket.emit('get-teams-data')
-    
-    socket.emit('get-week')
 
 });
 

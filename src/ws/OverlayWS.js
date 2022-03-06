@@ -34,14 +34,13 @@ class OverlayWS {
         })
     }
 
-    listenEvent = (channel, callable) => {
+    on = (channel, callable) => {
         this.io.on('connection', (socket) => {
             socket.on(channel, callable);
         });
-        
     }
     
-    sendEvent = (channel, args) => {
+    send = (channel, args) => {
         this.io.emit(channel, args);
     }
 }

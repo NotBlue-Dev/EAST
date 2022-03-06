@@ -4,14 +4,14 @@ class RoundTimeChanged {
     }
 
     handle(gameData, eventEmitter) {
-        if (gameData.clock === this.time) {
+        if (gameData.clockDisplay === this.time) {
             return
         }
 
-        this.time = gameData.clock
+        this.time = gameData.clockDisplay.replace(/\.[^.]*$/g, "")
         // has RoundTime ?
         eventEmitter.send('game.roundTime', {
-            time: gameData.clock
+            time: this.time
         })
     }
 }

@@ -14,32 +14,44 @@ window.addEventListener("load", (event) => {
         }
     }
 
-    const imgA = svg.getElementById('teamA')
+    const imgA = svg.getElementById('blue-logo')
 
-    const imgB = svg.getElementById('teamB')
+    const imgB = svg.getElementById('orange-logo')
 
-    socket.on('round', (arg) => {
-        svg.getElementById('Round').innerHTML = `Round ${arg}`
+    socket.on('game.roundStart', (arg) => {
+        svg.getElementById('Round').innerHTML = `Round ${arg.round}`
     });
+
+    const fill = (arg) => {
+        orange = arg.teams.home
+        blue = arg.teams.away
+
+        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+            if(arg.teams.home.color === 'blue') {
+                blue = arg.teams.home
+                orange = arg.teams.away
+            } else {
+                blue = arg.teams.away
+                orange = arg.teams.home
+            }
+        }
+
+        document.getElementById('blue-name').innerHTML = blue.name
+        document.getElementById('orange-name').innerHTML = orange.name
+        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+    }
+
+    socket.on('vrml.colorChanged', fill)
+    socket.on('vrml.matchDataLoaded', fill)
     
-    socket.on('teams-data', (arg) => {
-        document.getElementById('teamA').innerHTML = arg[1].name
-        document.getElementById('teamB').innerHTML = arg[0].name
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[1].logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${arg[0].logo}`)
-    });
-    
-    socket.on('score-change', (arg) => {
-        document.getElementById('blue').innerHTML = arg.blue
-        document.getElementById('orange').innerHTML = arg.orange
+    socket.on('game.scoreChanged', (arg) => {
+        document.getElementById('blue-score').innerHTML = arg.blue
+        document.getElementById('orange-score').innerHTML = arg.orange
     });
 
-    socket.on('round-time', (arg) => {
-        document.getElementById('timing').innerHTML = arg
+    socket.on('game.roundTime', (arg) => {
+        document.getElementById('timing').innerHTML = arg.time
     });    
-
-    socket.emit('get-teams-data')
-    
-    socket.emit('get-week')
     
 })

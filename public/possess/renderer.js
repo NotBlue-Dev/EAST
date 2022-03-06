@@ -7,27 +7,49 @@ window.addEventListener("load", (event) => {
 
     const orange = document.getElementsByClassName('orange')
 
-    socket.on('players', (arg) => {
+    socket.on('game.teamChange', (arg) => {
+        while (orange.firstChild) {
+            orange.removeChild(orange.firstChild);
+        }
+        while (blue.firstChild) {
+            blue.removeChild(blue.firstChild);
+        }
+
         for(let x =0; x<orange.length; x++) {
-            if(arg.orange[x] !== undefined) {
-                orange[x].id = arg.orange[x]
-                orange[x].innerHTML = arg.orange[x]
+            let or = arg.teams.orange
+            if(or[x] !== undefined) {
+                orange[x].id = or[x]
+                orange[x].innerHTML = or[x]
             }
         }
     
         for(let i =0; i<blue.length; i++) {
-            if(arg.blue[i] !== undefined) {
-                blue[i].id = arg.blue[i]
-                blue[i].innerHTML = arg.blue[i]
+            let bl = arg.teams.blue
+            if(bl[i] !== undefined) {
+                blue[i].id = bl[i]
+                blue[i].innerHTML = bl[i]
             }
         }
     });
 
-    socket.on('posses-change', (arg) => {
-        console.log(arg)
+    socket.on('game.possessionChange', (arg) => {
+
+        // reset
+        let current = document.getElementsByClassName('current')[0]
+        current && current.classList.remove('current')
+
+        if(arg.team === 'ORANGE TEAM') {
+            for(let x =0; x<orange.length; x++) {
+                if(orange[x].id == arg.player) {
+                    orange[x].classList.add('current')
+                }
+            }
+        } else {
+            for(let i =0; i<blue.length; i++) {
+                if(blue[i].id == arg.player) {
+                    blue[i].classList.add('current')
+                }
+            }
+        }
     });  
-
-
-
-    socket.emit('get-players')
 })
