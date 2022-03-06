@@ -68,20 +68,8 @@ class GameData {
             let b = getArraysIntersection(ARoster, PlayersBlue)
             let o = getArraysIntersection(ARoster, PlayersOrange)
             
-this.vrmlInfo.teams.home.color = 'orange'
-this.vrmlInfo.teams.away.color = 'blue'
-            let teamB;
-            
-            if(b.length>o.length) {
-                teamB = 'blue'
-                teamA = 'orange'
-            } else {
-                teamA = 'orange'
-                teamB = 'blue'
-            }
-
-            this.vrmlInfo.teams.home.color = teamA
-            this.vrmlInfo.teams.away.color = teamB
+            this.vrmlInfo.teams.home.color = (b.length>o.length) ? 'orange':'blue'
+            this.vrmlInfo.teams.away.color = (b.length>o.length) ? 'blue':'orange'
 
             return this.vrmlInfo
         }
