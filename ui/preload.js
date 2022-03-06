@@ -52,15 +52,31 @@ window.addEventListener('DOMContentLoaded', () => {
     log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
+  const echoArenaConnect = () => {
+    ipcRenderer.send('echoArena.connect', {
+      ip: echoArenaUrlInput.value,
+      port: echoArenaPortInput.value,
+      autoConnect: echoArenaAutoConnectInput.checked,
+    })
+  }
+
+  const obsWebsocketConnect = () => {
+    ipcRenderer.send('obsWebsocket.connect', {
+      ip: obsWebsocketUrlInput.value,
+      port: obsWebsocketPortInput.value,
+      password: obsWebsocketPasswordInput.value,
+      autoConnect: obsWebsocketAutoConnectInput.checked,
+    })
+  }
+
   ipcRenderer.on('config.loaded', (event, data) => {
     echoArenaUrlInput.value = data.echoArena.ip
     echoArenaPortInput.value = data.echoArena.port
     echoArenaAutoConnectInput.value = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {
-      ipcRenderer.send('echoArena.connect', {
-        ip: echoArenaUrlInput.value,
-        port: echoArenaPortInput.value,
-        autoConnect: echoArenaAutoConnectInput.checked,
+      const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)
+      ipcRenderer.on('echoArena.connected', () => {
+        clearInterval(echoArenaAutoConnect)
       })
     }
     
@@ -69,6 +85,13 @@ window.addEventListener('DOMContentLoaded', () => {
     obsWebsocketPasswordInput.value = data.obs.password
     obsWebsocketAutoConnectInput.checked = data.obs.autoConnect
     if (data.obs.autoConnect) {
+      const obsWebsocketAutoConnect = setInterval(obsWebsocketConnect, 10000)
+      ipcRenderer.on('obsWebsocket.connected', () => {
+        clearInterval(obsWebsocketAutoConnect)
+      })
+    }
+
+    const obsWebsocketConnect = () => {
       ipcRenderer.send('obsWebsocket.connect', {
         ip: obsWebsocketUrlInput.value,
         port: obsWebsocketPortInput.value,
@@ -76,7 +99,7 @@ window.addEventListener('DOMContentLoaded', () => {
         autoConnect: obsWebsocketAutoConnectInput.checked,
       })
     }
-
+    
     overlayAutoLaunchInput.checked = data.overlay.autoLaunch
     overlayPortInput.value = data.overlay.port
     if (data.overlay.autoLaunch) {
