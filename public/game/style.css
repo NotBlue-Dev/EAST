@@ -16,7 +16,7 @@
     margin-top: 3vw;
 }
 
-#blue {
+#blue-score {
     font-size: 50px;
     width: 4vw;
     position: relative;
@@ -25,7 +25,7 @@
     font-weight: 600;
 }
 
-#orange {
+#orange-score {
     font-size: 50px;
     width: 4vw;
     position: relative;
