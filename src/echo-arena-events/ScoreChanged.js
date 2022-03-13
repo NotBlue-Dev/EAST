@@ -1,5 +1,6 @@
 class ScoreChanged {
     constructor() {
+        this.name = 'Score changed'
         this.orangePoints = null
         this.bluePoints = null
     }

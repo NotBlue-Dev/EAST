@@ -1,5 +1,6 @@
 class Overtime {
     constructor() {
+        this.name = 'Overtime'
         this.isOvertime = false
     }
 

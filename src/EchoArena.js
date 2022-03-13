@@ -9,6 +9,10 @@ class EchoArena {
         this.port = port
         this.fails = 0
         this.vrmlInfo = null
+
+        this.eventEmitter.send('echoArena.eventsLoaded', {
+            events: events.map(event => event.name).filter(event => event !== undefined)
+        })
     }
 
     async listen() {

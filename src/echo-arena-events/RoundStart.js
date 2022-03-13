@@ -1,5 +1,6 @@
 class RoundStart {
     constructor() {
+        this.name = 'Round start'
         this.roundStarted = false
         this.lastRound = 0
     }
