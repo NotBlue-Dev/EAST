@@ -14,7 +14,7 @@ class EchoArena {
             events: events.map(event => event.name).filter(event => event !== undefined)
         })
     }
-
+    
     async listen() {
         return this.testConnection().then(this.request.bind(this)).catch(console.error)
     }

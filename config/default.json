@@ -29,5 +29,28 @@
             {"path": "/possession", "template": "possess"},
             {"path": "/shot",   "template": "shot"}
         ]
+    },
+    "autoStream": {
+        "autoStart":{
+            "main":"Echo",
+            "wait":"Waiting",
+            "time":""
+        },
+        "start":{
+            "scene":"Starting",
+            "duration":5
+        },
+        "game":{
+            "events":[
+                {"event":"Round start","delay":2, "scene":"Echo", "duration":5},
+                {"event":"Round over","delay":2, "scene":"Round Betwen", "duration":5},
+                {"event":"Score changed","delay":2, "scene":"Goal", "duration":5},
+                {"event":"Overtime","delay":2, "scene":"OT", "duration":5}
+            ]
+        },
+        "end":{
+            "ending":{"scene":"Ending","duration":5},
+            "delay":5
+        }
     }
 }

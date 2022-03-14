@@ -156,17 +156,22 @@ const initVrmlMatchMode = (document) => {
   })
 }
 
+let initAuto = false
+
 const initAutoStream = (document) => {
   ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
-    const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
-    echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
-      data.events.map((eventName) => {    
-        const opt = document.createElement('option');
-        opt.value = eventName;
-        opt.innerHTML = eventName;
-        echoEventSelect.appendChild(opt);
+    if(!initAuto) {
+      const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
+      echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
+        data.events.map((eventName) => {    
+          const opt = document.createElement('option');
+          opt.value = eventName;
+          opt.innerHTML = eventName;
+          echoEventSelect.appendChild(opt);
+        })
       })
-    })
+      initAuto = true
+    }
   })
 }
 
