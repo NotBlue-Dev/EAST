@@ -42,6 +42,39 @@ class OBSPlayer {
     }
 
     initializeListeners() {
+        this.eventEmitter.on('scenes.autoStart', (args, event) => {
+            this.globalConfig.autoStream.autoStart = {
+                ...this.globalConfig.autoStream.autoStart,
+                ...args
+            }
+            this.configLoader.save(this.globalConfig)
+        })
+
+        this.eventEmitter.on('scenes.start', (args, event) => {
+            this.globalConfig.autoStream.start = {
+                ...this.globalConfig.autoStream.start,
+                ...args
+            }
+            this.configLoader.save(this.globalConfig)
+        })
+        
+        this.eventEmitter.on('scenes.events', (args, event) => {
+            this.globalConfig.autoStream.game = {
+                ...this.globalConfig.autoStream.game,
+                ...args
+            }
+            this.configLoader.save(this.globalConfig)
+        })
+
+        this.eventEmitter.on('scenes.end', (args, event) => {
+            this.globalConfig.autoStream.end = {
+                ...this.globalConfig.autoStream.end,
+                ...args
+            }
+            this.configLoader.save(this.globalConfig)
+        })
+        
+
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
@@ -73,7 +106,7 @@ class OBSPlayer {
                 })
             })
         })
-
+        
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
                 this.eventEmitter.add(this.overlayWS)
@@ -130,6 +163,7 @@ class OBSPlayer {
                             this.eventEmitter.send('scenes.loaded', {
                                 scenes: scenesData.scenes.map(scene => scene.name)
                             })
+                            this.eventEmitter.send('autoStream.configLoaded', this.globalConfig.autoStream)
                         })
                         // récupérer les scènes dispos
                     }, 1000);
