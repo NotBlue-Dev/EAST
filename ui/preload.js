@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron')
+let events;
 
 window.addEventListener('DOMContentLoaded', () => {
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
@@ -80,9 +81,9 @@ window.addEventListener('DOMContentLoaded', () => {
       })
     }
 
-    overlayAutoLaunchInput.checked = data.overlay.autoLaunch
-    overlayPortInput.value = data.overlay.port
-    if (data.overlay.autoLaunch) {
+    overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch
+    overlayPortInput.value = data.overlayWs.port
+    if (data.overlayWs.autoLaunch) {
       ipcRenderer.send('overlayWs.launchServer', {
         autoLaunch: overlayAutoLaunchInput.checked,
         port: overlayPortInput.value
@@ -92,6 +93,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('scenes.loaded', (event, data) => {
     const sceneSelects = document.querySelectorAll('.scene-select')
+    const main = document.getElementById('main-scene')
+    const wait = document.getElementById('wait-scene')
+    const autostream = document.getElementById('autostream')
+    const launch = document.getElementById('launch-time')
+    const start = document.getElementById('start-scene[0]')
+    const durStart = document.getElementById('start-duration[0]')
+    const end = document.getElementById('end-scene[0]')
+    const delay = document.getElementById('end-duration[0]')
+    const durEnd = document.getElementById('delay-after-end-game')
+
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
       data.scenes.map((scene) => {
         const opt = document.createElement('option');
@@ -99,6 +110,19 @@ window.addEventListener('DOMContentLoaded', () => {
         opt.innerHTML = scene;
         sceneSelect.appendChild(opt);
       })
+    })
+
+    ipcRenderer.on('autoStream.configLoaded', (event, data) => {
+      main.value = data.autoStart.main
+      wait.value = data.autoStart.wait
+      autostream.checked = data.autoStart.auto
+      launch.value = data.autoStart.time
+      start.value = data.start.scene
+      durStart.value = data.start.duration
+      end.value = data.end.ending.scene
+      durEnd.value = data.end.ending.duration
+      delay.value = data.end.delay
+      events = data.game.events
     })
     log('OBS Scenes loaded')
   })
@@ -162,6 +186,21 @@ const initAutoStream = (document) => {
   ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
     if(!initAuto) {
       const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
+      const main = document.getElementById('main-scene')
+      const wait = document.getElementById('wait-scene')
+      const autostream = document.getElementById('autostream')
+      const launch = document.getElementById('launch-time')
+      const start = document.getElementById('start-scene[0]')
+      const durStart = document.getElementById('start-duration[0]')
+      const end = document.getElementById('end-scene[0]')
+      const delay = document.getElementById('end-duration[0]')
+      const durEnd = document.getElementById('delay-after-end-game')
+      const event = document.getElementById('event[0]')
+      const delayEvent = document.getElementById('delay[0]')
+      const scene = document.getElementById('scene[0]')
+      const dur = document.getElementById('duration[0]')
+      const state = document.getElementById('event')
+
       echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
         data.events.map((eventName) => {    
           const opt = document.createElement('option');
@@ -170,7 +209,72 @@ const initAutoStream = (document) => {
           echoEventSelect.appendChild(opt);
         })
       })
+
+      const sendAuto = () => {
+        ipcRenderer.send('scenes.autoStart', {
+          main: main.value,
+          wait: wait.value,
+          auto:autostream.checked,
+          time: launch.value
+        })
+      }
+
+      const sendStart = () => {
+        ipcRenderer.send('scenes.start', {
+          scene: start.value,
+          duration: durStart.value,
+        })
+      }
+
+      const sendEnd = () => {
+        ipcRenderer.send('scenes.end', {
+          ending: {scene:end.value, duration:durEnd.value},
+          delay: delay.value,
+        })
+      }
+
+      const sendEvent = () => {
+        events = events.filter(function( obj ) {
+          return obj.event !== event.value;
+        })
+        events.push({
+          event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked
+        })
+
+        ipcRenderer.send('scenes.events', {
+          events:events
+        })
+      }
+
+      const switchEvent = (event) => {
+        let data = events.find(element => element.event === event)
+        state.checked = data.used
+        dur.value = data.duration
+        scene.value = data.scene
+        delayEvent.value = data.delay
+      }
+
+      event.addEventListener('change', (event) => {
+        switchEvent(event.target.value)
+      })
+
+      state.addEventListener('change', sendEvent, false)
+      dur.oninput = () => {sendEvent()}
+      delayEvent.oninput = () => {sendEvent()}
+      scene.addEventListener('change', sendEvent, false)
+      event.addEventListener('change', sendEvent, false)
+      end.addEventListener('change', sendEnd, false);
+      durEnd.oninput = () => {sendEnd()}
+      delay.oninput = () => {sendEnd()}
+      start.addEventListener('change', sendStart, false);
+      durStart.oninput = () => {sendStart()}
+      main.addEventListener('change', sendAuto, false);
+      wait.addEventListener('change', sendAuto, false);
+      launch.oninput = () => {sendAuto()}
+      autostream.addEventListener('change', sendAuto, false);
+
       initAuto = true
+
     }
   })
 }
