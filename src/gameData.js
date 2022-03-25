@@ -16,12 +16,24 @@ class GameData {
             blue:[],
             orange:[]
         }
+        this.playerStats = {
+            blue:[],
+            orange:[]
+        }
+        for (let player of this.blueTeamPlayers) {
+            this.playerStats.blue.push({name:player.name, stats:player.stats})
+        }
+        for (let player of this.orangeTeamPlayers) {
+            this.playerStats.orange.push({name:player.name, stats:player.stats})
+        }
+
         for (let player of this.blueTeamPlayers) {
             this.teamData.blue.push(player.name)
         }
         for (let player of this.orangeTeamPlayers) {
             this.teamData.orange.push(player.name)
         }
+
         this.teams = json.teams
         if (this.blueTeamPlayers === undefined && this.orangeTeamPlayers === undefined) {
             return
