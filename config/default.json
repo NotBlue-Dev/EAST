@@ -1,6 +1,7 @@
 {
     "vrml": {
-        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2"
+        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2",
+        "autoLoad": false
     },
     "echoArena": {
         "ip": "127.0.0.1",

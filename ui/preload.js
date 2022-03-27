@@ -139,19 +139,33 @@ window.addEventListener('DOMContentLoaded', () => {
 const initVrmlMatchMode = (document) => {
   const matchDataBlock = document.getElementById('matchData')
   const isVrmlMatchInput = document.getElementById('vrmlMatch')
+  const autoLoad = document.getElementById('vrml-autoconnect')
   const teamSelect = document.getElementById('teams')
+  
+  autoLoad.addEventListener('change', (event) => {
+    ipcRenderer.send('vrml.autoLoad', autoLoad.checked) 
+    vrmlNext(event.target.checked)
+  })
+
+  const vrmlNext = (value) => {
+    if(value) {
+      ipcRenderer.send('vrml.isVrmlMatch', {
+        teamId: teamSelect.value
+      })
+    }
+
+  }
+
   isVrmlMatchInput.addEventListener('change', (event) => {
-    const value = event.target.checked
-    if (!value) {
-      matchDataBlock.classList.add('hidden')
-      return
-    } 
-    ipcRenderer.send('vrml.isVrmlMatch', {
-      teamId: teamSelect.value
-    })
+    vrmlNext(event.target.checked)
   })
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
+    autoLoad.checked = data.auto
+    if(data.auto) {
+      vrmlNext(data.auto)
+    }
+
     data.teams.map((team) => {
       const opt = document.createElement('option');
       opt.value = team.id;
@@ -167,6 +181,9 @@ const initVrmlMatchMode = (document) => {
     ipcRenderer.send('vrml.teamSelected', {
       teamId: event.target.value
     })
+    if(autoLoad.checked) {
+      vrmlNext(true)
+    }
   })
 
   ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {

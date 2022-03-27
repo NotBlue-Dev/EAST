@@ -73,7 +73,8 @@ class OBSPlayer {
             }
             this.configLoader.save(this.globalConfig)
         })
-        
+
+
 
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
@@ -123,6 +124,11 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.on('vrml.autoLoad', (args, event) => {
+            this.globalConfig.vrml.autoLoad = args
+            this.configLoader.save(this.globalConfig)
         })
 
         this.eventEmitter.on('vrml.teamSelected', (args, event) => {
@@ -190,7 +196,8 @@ class OBSPlayer {
         }).sort((a, b) => a.name.localeCompare(b.name))
         this.eventEmitter.send('vrml.teamListLoaded', {
             teams,
-            teamId: this.globalConfig.vrml.teamId
+            teamId: this.globalConfig.vrml.teamId,
+            auto:this.globalConfig.vrml.autoLoad
         })
     }
 
