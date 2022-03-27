@@ -41,24 +41,34 @@
     <div class="block" id="autostream-wrapper">
       <div>
         <h2>Stream</h2>
-        <label for="main-scene">Main scene</label><select id="main-scene" class="scene-select" type="text"></select>
-        <label for="wait-scene">Wait scene</label><select id="wait-scene" class="scene-select" type="text"></select>
+        <label for="main-scene">In-game scene</label><select id="main-scene" class="scene-select" type="text"></select>
+        <label for="wait-scene">Wait scene (VRML)</label><select id="wait-scene" class="scene-select" type="text"></select>
         <label for="autostream"><input id="autostream" type="checkbox"> Autostream</label>
         <label for="launch-time">Launch time</label><input id="launch-time" type="time"/>
+        
         <h3>Start stream</h3>
         <table>
           <thead>
             <tr>
-              <td>Scene</td>
-              <td>Duration</td>
-              <td><button>+</button></td>
+              <td>Scene before game</td>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><select id="start-scene[0]" class="scene-select" type="text"></td>
-              <td><input id="start-duration[0]" type="number" min="1"/>s</td>
-              <td><button>-</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Betwen Game</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>Scene betwen game</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><select id="betwen-scene[0]" class="scene-select" type="text"></td>
             </tr>
           </tbody>
         </table>
@@ -85,7 +95,6 @@
           </tbody>
         </table>
         <h3>End stream</h3>
-         
         <table>
           <thead>
             <tr>

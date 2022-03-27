@@ -38,9 +38,9 @@
             "time":"",
             "auto": false
         },
-        "start":{
-            "scene":"Starting",
-            "duration":5
+        "start": {
+            "scene": "Starting",
+            "betwen":"Round Betwen"
         },
         "game":{
             "events":[

@@ -98,7 +98,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const autostream = document.getElementById('autostream')
     const launch = document.getElementById('launch-time')
     const start = document.getElementById('start-scene[0]')
-    const durStart = document.getElementById('start-duration[0]')
     const end = document.getElementById('end-scene[0]')
     const delay = document.getElementById('end-duration[0]')
     const durEnd = document.getElementById('delay-after-end-game')
@@ -118,7 +117,6 @@ window.addEventListener('DOMContentLoaded', () => {
       autostream.checked = data.autoStart.auto
       launch.value = data.autoStart.time
       start.value = data.start.scene
-      durStart.value = data.start.duration
       end.value = data.end.ending.scene
       durEnd.value = data.end.ending.duration
       delay.value = data.end.delay
@@ -208,7 +206,6 @@ const initAutoStream = (document) => {
       const autostream = document.getElementById('autostream')
       const launch = document.getElementById('launch-time')
       const start = document.getElementById('start-scene[0]')
-      const durStart = document.getElementById('start-duration[0]')
       const end = document.getElementById('end-scene[0]')
       const delay = document.getElementById('end-duration[0]')
       const durEnd = document.getElementById('delay-after-end-game')
@@ -217,6 +214,7 @@ const initAutoStream = (document) => {
       const scene = document.getElementById('scene[0]')
       const dur = document.getElementById('duration[0]')
       const state = document.getElementById('event')
+      const betwen = document.getElementById('betwen-scene[0]')
 
       echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
         data.events.map((eventName) => {    
@@ -239,14 +237,14 @@ const initAutoStream = (document) => {
       const sendStart = () => {
         ipcRenderer.send('scenes.start', {
           scene: start.value,
-          duration: durStart.value,
+          betwen:betwen.value
         })
       }
 
       const sendEnd = () => {
         ipcRenderer.send('scenes.end', {
-          ending: {scene:end.value, duration:durEnd.value},
-          delay: delay.value,
+          ending: {scene:end.value, duration:delay.value},
+          delay: durEnd.value,
         })
       }
 
@@ -274,7 +272,7 @@ const initAutoStream = (document) => {
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })
-
+      betwen.addEventListener('change',sendStart, false)
       state.addEventListener('change', sendEvent, false)
       dur.oninput = () => {sendEvent()}
       delayEvent.oninput = () => {sendEvent()}
@@ -284,7 +282,6 @@ const initAutoStream = (document) => {
       durEnd.oninput = () => {sendEnd()}
       delay.oninput = () => {sendEnd()}
       start.addEventListener('change', sendStart, false);
-      durStart.oninput = () => {sendStart()}
       main.addEventListener('change', sendAuto, false);
       wait.addEventListener('change', sendAuto, false);
       launch.oninput = () => {sendAuto()}

@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
+const events = require('./EchoArenaEvents.js')
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -83,10 +84,12 @@ class OBSPlayer {
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
+                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
                 this.globalConfig.echoArena = {
                     ...this.globalConfig.echoArena,
                     ...args,
                 }
+                
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('echoArena.connectionFailed', {
@@ -94,6 +97,10 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.send('echoArena.eventsLoaded', {
+            events: events.map(event => event.name).filter(event => event !== undefined)
         })
 
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
@@ -113,20 +120,20 @@ class OBSPlayer {
         })
 
         this.eventEmitter.on('obsWebsocket.startStream', (args, event) => {
-            this.obsClient.send('StartStreaming')
-        }).catch((error) => {
-            this.eventEmitter.send('obsWebsocket.startStreamFailed', {
-                args,
-                error
+            this.obsClient.send('StartStreaming').catch((error) => {
+                this.eventEmitter.send('obsWebsocket.startStreamFailed', {
+                    args,
+                    error
+                })
             })
         })
     
         this.eventEmitter.on('obsWebsocket.stopStream', (args, event) => {
-            this.obsClient.send('StopStreaming')
-        }).catch((error) => {
-            this.eventEmitter.send('obsWebsocket.stopStreamFailed', {
-                args,
-                error
+            this.obsClient.send('StopStreaming').catch((error) => {
+                this.eventEmitter.send('obsWebsocket.stopStreamFailed', {
+                    args,
+                    error
+                })
             })
         })
 
@@ -298,7 +305,6 @@ class OBSPlayer {
         return new Promise((resolve,reject) => {
             this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
             this.echoArena.listen()
-            this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
         })
     }
 
