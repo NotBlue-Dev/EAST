@@ -1,6 +1,6 @@
 class ScoreBoard {
     constructor() {
-        this.name = 'ScoreBoard'
+        this.name = 'scoreBoard'
         this.teams = {
             blue:[],
             orange:[]
@@ -13,7 +13,7 @@ class ScoreBoard {
         }
         this.teams = gameData.playerStats
 
-        eventEmitter.send('game.ScoreBoard', {
+        eventEmitter.send('game.scoreBoard', {
             blue: this.teams.blue,
             orange: this.teams.orange
         })

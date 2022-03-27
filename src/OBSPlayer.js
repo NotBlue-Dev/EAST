@@ -4,6 +4,7 @@ const OverlayWS = require('./ws/OverlayWS')
 const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
+const EventHandler = require('./EventHandler')
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -15,6 +16,7 @@ class OBSPlayer {
         this.obsClient = new OBSClient()
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
         this.scenes = []
+        this.eventHandler = null
         this.echoArena = null
 
         this.config = this.globalConfig.echoArena
@@ -48,6 +50,7 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
         this.eventEmitter.on('scenes.start', (args, event) => {
@@ -56,6 +59,7 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
         
         this.eventEmitter.on('scenes.events', (args, event) => {
@@ -64,6 +68,7 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
         this.eventEmitter.on('scenes.end', (args, event) => {
@@ -72,9 +77,8 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
-
-
 
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
@@ -107,7 +111,25 @@ class OBSPlayer {
                 })
             })
         })
-        
+
+        this.eventEmitter.on('obsWebsocket.startStream', (args, event) => {
+            this.obsClient.send('StartStreaming')
+        }).catch((error) => {
+            this.eventEmitter.send('obsWebsocket.startStreamFailed', {
+                args,
+                error
+            })
+        })
+    
+        this.eventEmitter.on('obsWebsocket.stopStream', (args, event) => {
+            this.obsClient.send('StopStreaming')
+        }).catch((error) => {
+            this.eventEmitter.send('obsWebsocket.stopStreamFailed', {
+                args,
+                error
+            })
+        })
+
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
                 this.eventEmitter.add(this.overlayWS)
@@ -171,12 +193,7 @@ class OBSPlayer {
                             })
                             this.eventEmitter.send('autoStream.configLoaded', this.globalConfig.autoStream)
                         })
-                        // récupérer les scènes dispos
                     }, 1000);
-
-                    // listen for scenes change
-
-
                 }
             })
             .onDisconnected((message) => {
@@ -281,6 +298,7 @@ class OBSPlayer {
         return new Promise((resolve,reject) => {
             this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
             this.echoArena.listen()
+            this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
         })
     }
 
