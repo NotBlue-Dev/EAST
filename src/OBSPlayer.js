@@ -84,7 +84,6 @@ class OBSPlayer {
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
-                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
                 this.globalConfig.echoArena = {
                     ...this.globalConfig.echoArena,
                     ...args,
@@ -106,10 +105,12 @@ class OBSPlayer {
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
                 this.eventEmitter.send('obsWebsocket.connected', args)
+                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
                 this.globalConfig.obs = {
                     ...this.globalConfig.obs,
                     ...args,
                 }
+ 
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {

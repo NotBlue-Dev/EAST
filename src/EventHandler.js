@@ -4,7 +4,9 @@ class EventHandler {
         this.eventEmitter = eventEmitter
         this.listenConfigChange()
         this.listenGameEvents()
+        this.initAutoStart()
         this.config = config
+
     }
     // read config, listen game events, setcurrent scene with timeout, start stream and stop stream
     
@@ -12,10 +14,16 @@ class EventHandler {
         this.eventEmitter.on('scenes.changed', (args, event) => {
             this.config = args
         })
+        
     }
 
     // AutoStart
-
+    initAutoStart() {
+        
+        this.obsClient.on('StreamStarted', (args) => {
+            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.scene})
+        })
+    }
     // Start stream
 
     // End Stream

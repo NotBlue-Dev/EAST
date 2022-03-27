@@ -101,6 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const end = document.getElementById('end-scene[0]')
     const delay = document.getElementById('end-duration[0]')
     const durEnd = document.getElementById('delay-after-end-game')
+    const betwen = document.getElementById('betwen-scene[0]')
 
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
       data.scenes.map((scene) => {
@@ -121,6 +122,7 @@ window.addEventListener('DOMContentLoaded', () => {
       durEnd.value = data.end.ending.duration
       delay.value = data.end.delay
       events = data.game.events
+      betwen.value = data.start.betwen
     })
     log('OBS Scenes loaded')
   })
