@@ -275,8 +275,15 @@ class OBSPlayer {
                 })
             
                 await this.getPlayers()
+
+                let date = new Date(this.Allinfo.times[i])
+                let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+                let offset = date.getTimezoneOffset() / 60;
+                let hours = date.getHours();
+                newDate.setHours(hours - offset);
+
                 return {
-                    time: this.Allinfo.times[i],
+                    time: newDate,
                     week:this.Allinfo.week,
                     teams: {
                         home: this.Allinfo.teams[0],
