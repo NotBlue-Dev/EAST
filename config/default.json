@@ -12,7 +12,8 @@
         "ip": "127.0.0.1",
         "port": 4444,
         "password": "toor",
-        "autoConnect": false
+        "autoConnect": false,
+        "autoBuffer":true
     },
     "overlayWs": {
         "port": 4545,

@@ -26,19 +26,39 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
   const obsWebsocketAutoConnectInput = document.getElementById('obs-websocket-autoconnect')
   const obsWebsocketConnectButton = document.getElementById('obs-websocket-connect')
+  const obsWebsocketAutoBufferInput = document.getElementById('obs-buffer-autolaunch')
+  const obsWebsocketStartBufferButton = document.getElementById('obs-start-buffer')
+  obsWebsocketStartBufferButton.disabled = true
   const obsWebsocketConnect = () => {
     ipcRenderer.send('obsWebsocket.connect', {
       ip: obsWebsocketUrlInput.value,
       port: obsWebsocketPortInput.value,
       password: obsWebsocketPasswordInput.value,
       autoConnect: obsWebsocketAutoConnectInput.checked,
+      autoBuffer:obsWebsocketAutoBufferInput.checked,
     })
   }
+  
+  const startBuffer = () => {
+    ipcRenderer.send('obsWebsocket.startBuffer')
+    obsWebsocketStartBufferButton.disabled = true
+  }
 
+  const autoBuffer = () => {
+    ipcRenderer.send('obsWebsocket.autoBuffer', obsWebsocketAutoBufferInput.checked)
+  }
+
+  obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
+  obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true
+    obsWebsocketStartBufferButton.disabled = false
+    if(obsWebsocketAutoBufferInput.checked) {
+      startBuffer()
+      obsWebsocketStartBufferButton.disabled = true
+    }
     log(`OBS Websocket connected`)
   })
 
@@ -79,6 +99,9 @@ window.addEventListener('DOMContentLoaded', () => {
       ipcRenderer.on('obsWebsocket.connected', () => {
         clearInterval(obsWebsocketAutoConnect)
       })
+    }
+    if(data.obs.autoBuffer) {
+      obsWebsocketAutoBufferInput.checked = true
     }
 
     overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch

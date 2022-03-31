@@ -45,6 +45,11 @@ class OBSPlayer {
     }
 
     initializeListeners() {
+        this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
+            this.globalConfig.obs.autoBuffer = args
+            this.configLoader.save(this.globalConfig)
+        })
+
         this.eventEmitter.on('scenes.autoStart', (args, event) => {
             this.globalConfig.autoStream.autoStart = {
                 ...this.globalConfig.autoStream.autoStart,
@@ -100,7 +105,7 @@ class OBSPlayer {
 
         this.eventEmitter.send('echoArena.eventsLoaded', {
             events: events.map(event => event.name).filter(event => event !== undefined)
-        })
+        }) 
 
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
@@ -136,6 +141,10 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.on('obsWebsocket.startBuffer', (args, event) => {
+            this.obsClient.send("StartReplayBuffer")
         })
 
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {

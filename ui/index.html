@@ -27,6 +27,11 @@
       <button id="obs-websocket-connect">Connect</button>
     </div>
     <div class="block">
+      <a>Replay buffer OBS</a>
+      <label for="obs-buffer-autolaunch"><input type="checkbox" id="obs-buffer-autolaunch" /> Auto-start</label>
+      <button id="obs-start-buffer">Start</button>
+    </div>
+    <div class="block">
       <label for="overlay-port">Overlays port</label><input type="text" id="overlay-port" value="4545" />
       <label for="overlay-autolaunch"><input type="checkbox" id="overlay-autolaunch" /> Auto-launch</label>
       <button id="launch-overlay-server">Launch overlay server</button>
@@ -45,7 +50,7 @@
         <label for="wait-scene">Wait scene (VRML)</label><select id="wait-scene" class="scene-select" type="text"></select>
         <label for="autostream"><input id="autostream" type="checkbox"> Autostream</label>
         <label for="launch-time">Launch time</label><input id="launch-time" type="time"/>
-        
+
         <h3>Start stream</h3>
         <table>
           <thead>
