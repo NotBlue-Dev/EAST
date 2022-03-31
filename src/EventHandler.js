@@ -8,13 +8,28 @@ class EventHandler {
         this.autoStream = null
         this.vrml = false
         this.left = 0
+        // round win counter
+        this.roundData = {orange:0,blue:0}
         this.listenGameEvents()
         this.initListener()
     }
     
-    // Event handler (setcurrent scene with timeout, stop stream)
+    // Event handler (stop stream (detecter stop stream :  ))
+    // End stream,delay = time without game restarting (count round win) 
+
+    // reset need to reset the win round count (reset event done)
+
+    // show end stream scene during duration, end stream
+
+    // owa le bordel
 
     initListener() {
+        this.eventEmitter.on('game.emptyTeam', (args, event) => {
+            if(this.roundData.orange !== 0 && this.roundData.blue !== 0) {
+                // start delay before end game
+            }
+        })
+
         this.eventEmitter.on('obsWebsocket.connected', (args, event) => {
             this.autoStart()
         })
@@ -44,13 +59,10 @@ class EventHandler {
             clearInterval(this.timer)
             this.timer = setInterval(() => {
                 let date = new Date()
-                // convert args.time (date) to local time date
                 let localTime = new Date(args.time.getTime() + date.getTimezoneOffset() * 60000)
                 let incoming = localTime.getHours() + ':' + localTime.getMinutes()
-                // start 10m before for the wait page
                 let currentTime = date.getHours() + ':' + date.getMinutes() - 10
                 let timeLeft = incoming - currentTime
-                // convert minutes to milisecondes
                 this.left = timeLeft * 60 * 1000
                 if(timeLeft <= 10) {
                     this.vrml = true
@@ -80,30 +92,67 @@ class EventHandler {
         }
     }
 
+    switchWindowEvent(event) {
+        if(event.used) {
+            setTimeout(() => {
+                this.obsClient.send('SetCurrentScene',{"scene-name":event.scene})
+                setTimeout(() => {
+                    this.obsClient.send('SetCurrentScene',{"scene-name":this.config.autoStart.main})
+                }, event.duration * 1000);
+            }, event.delay * 1000);
+        }
+    }
+
     listenGameEvents() {
+        // y'a peut etre mieux a faire que de faire un listener par event (plus tard)
         this.eventEmitter.on('game.scoreChanged', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
+
+        
+
         this.eventEmitter.on('game.overtime', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
+
         this.eventEmitter.on('game.possessionChange', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
+
         this.eventEmitter.on('game.roundOver', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
+            this.roundData[args.winner]++
+            if(this.roundData.blue-this.roundData.orange >= 2 || this.roundData.orange-this.roundData.blue >= 2) {
+                // start delay before end game
+            }
         })
         this.eventEmitter.on('game.roundStart', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
         this.eventEmitter.on('game.teamChange', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
         this.eventEmitter.on('game.roundTime', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
         this.eventEmitter.on('game.scoreBoard', (args, event) => {
-            console.log(args)
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
         })
 
         

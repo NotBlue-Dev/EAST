@@ -14,12 +14,13 @@ class RoundOver {
         if (this.roundIsOver === false) {
             this.roundIsOver = true
 
-            this.rounds.push({blue: gameData.bluepoints, orange: gameData.orangepoints})
-            const winner = (gameData.bluepoints == gameData.orangepoints) ? null : (gameData.bluepoints > gameData.orangepoints) ? 'blue' : 'orange'
+            this.rounds.push({blue: gameData.blueTeam.points, orange: gameData.orangeTeam.points})
+            const winner = (gameData.blueTeam.points == gameData.orangeTeam.points) ? null : (gameData.blueTeam.points > gameData.orangeTeam.points) ? 'blue' : 'orange'
 
             eventEmitter.send('game.roundOver', {
                 rounds: this.rounds,
-                winner
+                name:this.name,
+                winner:winner
             })
         }
     }

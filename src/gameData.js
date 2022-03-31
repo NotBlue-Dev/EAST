@@ -3,47 +3,55 @@ class GameData {
         this.vrmlInfo = vrmlInfo
         this.timestamp = Date.now()
         this.clock = json.game_clock
-        this.blueTeamPlayers = json.teams[0].players;
-        this.orangeTeamPlayers = json.teams[1].players;
+        this.teams = json.teams
+
+        this.blueTeam = {
+            blueTeamPlayers: json.teams[0].players,
+            blueReset: (json.blue_team_restart_request > 0),
+            teamData:[],
+            playerStats:[],
+            points:json.blue_points
+        }
+        this.orangeTeam = {
+            orangeTeamPlayers :json.teams[1].players,
+            orangeReset :(json.orange_team_restart_request > 0),
+            teamData:[],
+            playerStats:[],
+            points:json.orange_points
+        }
+        
         this.lastscore = json.last_score;
         this.point_amount = this.lastscore.point_amount
         this.person_scored = this.lastscore.person_scored
         this.assist_scored = this.lastscore.assist_scored
         this.team = this.lastscore.team
+        
+        
         this.distance_thrown = this.lastscore.distance_thrown
         this.round = json.blue_round_score + json.orange_round_score
-        this.teamData = {
-            blue:[],
-            orange:[]
+
+        for (let player of this.blueTeam.blueTeamPlayers) {
+            player.stats.possession_time = Math.round(player.stats.possession_time)
+            this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
         }
-        this.playerStats = {
-            blue:[],
-            orange:[]
-        }
-        for (let player of this.blueTeamPlayers) {
-            this.playerStats.blue.push({name:player.name, stats:player.stats})
-        }
-        for (let player of this.orangeTeamPlayers) {
-            this.playerStats.orange.push({name:player.name, stats:player.stats})
+        for (let player of this.orangeTeam.orangeTeamPlayers) {
+            player.stats.possession_time = Math.round(player.stats.possession_time)
+            this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
         }
 
-        for (let player of this.blueTeamPlayers) {
-            this.teamData.blue.push(player.name)
+        for (let player of this.blueTeam.blueTeamPlayers) {
+            this.blueTeam.teamData.push(player.name)
         }
-        for (let player of this.orangeTeamPlayers) {
-            this.teamData.orange.push(player.name)
+        for (let player of this.orangeTeam.orangeTeamPlayers) {
+            this.orangeTeam.teamData.push(player.name)
         }
 
-        this.teams = json.teams
-        if (this.blueTeamPlayers === undefined && this.orangeTeamPlayers === undefined) {
+        if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {
             return
         }
 
-        this.orangepoints = json.orange_points;
-        this.bluepoints = json.blue_points;
         this.status = json.game_status;
         this.clockDisplay = json.game_clock_display;
-
         this.matchType = json.match_type
     }
 
@@ -67,10 +75,10 @@ class GameData {
             }
             
             try {
-                this.blueTeamPlayers.forEach(player => {
+                this.blueTeam.blueTeamPlayers.forEach(player => {
                     PlayersBlue.push(player.name.toLowerCase())
                 });
-                this.orangeTeamPlayers.forEach(player => {
+                this.orangeTeam.orangeTeamPlayers.forEach(player => {
                     PlayersOrange.push(player.name.toLowerCase())
                 });
             } catch {

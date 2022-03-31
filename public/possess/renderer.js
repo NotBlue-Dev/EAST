@@ -38,7 +38,7 @@ window.addEventListener("load", (event) => {
         let current = document.getElementsByClassName('current')[0]
         current && current.classList.remove('current')
 
-        if(arg.team === 'ORANGE TEAM') {
+        if(arg.possession.team === 'ORANGE TEAM') {
             for(let x =0; x<orange.length; x++) {
                 if(orange[x].id == arg.player) {
                     orange[x].classList.add('current')
