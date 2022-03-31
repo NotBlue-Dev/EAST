@@ -25,7 +25,7 @@ class PossessionChanged {
 
         if (this.possession.player !== possession.player || this.possession.team !== possession.team) {
             this.possession = possession
-            eventEmitter.send('game.possessionChange', this.possession)
+            eventEmitter.send('game.possessionChange', {possession:this.possession, name:this.name})
         }
     }
 }

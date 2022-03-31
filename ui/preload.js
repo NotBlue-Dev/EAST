@@ -26,19 +26,39 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
   const obsWebsocketAutoConnectInput = document.getElementById('obs-websocket-autoconnect')
   const obsWebsocketConnectButton = document.getElementById('obs-websocket-connect')
+  const obsWebsocketAutoBufferInput = document.getElementById('obs-buffer-autolaunch')
+  const obsWebsocketStartBufferButton = document.getElementById('obs-start-buffer')
+  obsWebsocketStartBufferButton.disabled = true
   const obsWebsocketConnect = () => {
     ipcRenderer.send('obsWebsocket.connect', {
       ip: obsWebsocketUrlInput.value,
       port: obsWebsocketPortInput.value,
       password: obsWebsocketPasswordInput.value,
       autoConnect: obsWebsocketAutoConnectInput.checked,
+      autoBuffer:obsWebsocketAutoBufferInput.checked,
     })
   }
+  
+  const startBuffer = () => {
+    ipcRenderer.send('obsWebsocket.startBuffer')
+    obsWebsocketStartBufferButton.disabled = true
+  }
 
+  const autoBuffer = () => {
+    ipcRenderer.send('obsWebsocket.autoBuffer', obsWebsocketAutoBufferInput.checked)
+  }
+
+  obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
+  obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true
+    obsWebsocketStartBufferButton.disabled = false
+    if(obsWebsocketAutoBufferInput.checked) {
+      startBuffer()
+      obsWebsocketStartBufferButton.disabled = true
+    }
     log(`OBS Websocket connected`)
   })
 
@@ -80,6 +100,9 @@ window.addEventListener('DOMContentLoaded', () => {
         clearInterval(obsWebsocketAutoConnect)
       })
     }
+    if(data.obs.autoBuffer) {
+      obsWebsocketAutoBufferInput.checked = true
+    }
 
     overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch
     overlayPortInput.value = data.overlayWs.port
@@ -98,10 +121,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const autostream = document.getElementById('autostream')
     const launch = document.getElementById('launch-time')
     const start = document.getElementById('start-scene[0]')
-    const durStart = document.getElementById('start-duration[0]')
     const end = document.getElementById('end-scene[0]')
     const delay = document.getElementById('end-duration[0]')
     const durEnd = document.getElementById('delay-after-end-game')
+    const betwen = document.getElementById('betwen-scene[0]')
 
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
       data.scenes.map((scene) => {
@@ -118,11 +141,11 @@ window.addEventListener('DOMContentLoaded', () => {
       autostream.checked = data.autoStart.auto
       launch.value = data.autoStart.time
       start.value = data.start.scene
-      durStart.value = data.start.duration
       end.value = data.end.ending.scene
       durEnd.value = data.end.ending.duration
       delay.value = data.end.delay
       events = data.game.events
+      betwen.value = data.start.betwen
     })
     log('OBS Scenes loaded')
   })
@@ -139,19 +162,33 @@ window.addEventListener('DOMContentLoaded', () => {
 const initVrmlMatchMode = (document) => {
   const matchDataBlock = document.getElementById('matchData')
   const isVrmlMatchInput = document.getElementById('vrmlMatch')
+  const autoLoad = document.getElementById('vrml-autoconnect')
   const teamSelect = document.getElementById('teams')
+  
+  autoLoad.addEventListener('change', (event) => {
+    ipcRenderer.send('vrml.autoLoad', autoLoad.checked) 
+    vrmlNext(event.target.checked)
+  })
+
+  const vrmlNext = (value) => {
+    if(value) {
+      ipcRenderer.send('vrml.isVrmlMatch', {
+        teamId: teamSelect.value
+      })
+    }
+
+  }
+
   isVrmlMatchInput.addEventListener('change', (event) => {
-    const value = event.target.checked
-    if (!value) {
-      matchDataBlock.classList.add('hidden')
-      return
-    } 
-    ipcRenderer.send('vrml.isVrmlMatch', {
-      teamId: teamSelect.value
-    })
+    vrmlNext(event.target.checked)
   })
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
+    autoLoad.checked = data.auto
+    if(data.auto) {
+      vrmlNext(data.auto)
+    }
+
     data.teams.map((team) => {
       const opt = document.createElement('option');
       opt.value = team.id;
@@ -167,6 +204,9 @@ const initVrmlMatchMode = (document) => {
     ipcRenderer.send('vrml.teamSelected', {
       teamId: event.target.value
     })
+    if(autoLoad.checked) {
+      vrmlNext(true)
+    }
   })
 
   ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
@@ -191,7 +231,6 @@ const initAutoStream = (document) => {
       const autostream = document.getElementById('autostream')
       const launch = document.getElementById('launch-time')
       const start = document.getElementById('start-scene[0]')
-      const durStart = document.getElementById('start-duration[0]')
       const end = document.getElementById('end-scene[0]')
       const delay = document.getElementById('end-duration[0]')
       const durEnd = document.getElementById('delay-after-end-game')
@@ -200,6 +239,7 @@ const initAutoStream = (document) => {
       const scene = document.getElementById('scene[0]')
       const dur = document.getElementById('duration[0]')
       const state = document.getElementById('event')
+      const betwen = document.getElementById('betwen-scene[0]')
 
       echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
         data.events.map((eventName) => {    
@@ -222,14 +262,14 @@ const initAutoStream = (document) => {
       const sendStart = () => {
         ipcRenderer.send('scenes.start', {
           scene: start.value,
-          duration: durStart.value,
+          betwen:betwen.value
         })
       }
 
       const sendEnd = () => {
         ipcRenderer.send('scenes.end', {
-          ending: {scene:end.value, duration:durEnd.value},
-          delay: delay.value,
+          ending: {scene:end.value, duration:delay.value},
+          delay: durEnd.value,
         })
       }
 
@@ -257,7 +297,7 @@ const initAutoStream = (document) => {
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })
-
+      betwen.addEventListener('change',sendStart, false)
       state.addEventListener('change', sendEvent, false)
       dur.oninput = () => {sendEvent()}
       delayEvent.oninput = () => {sendEvent()}
@@ -267,7 +307,6 @@ const initAutoStream = (document) => {
       durEnd.oninput = () => {sendEnd()}
       delay.oninput = () => {sendEnd()}
       start.addEventListener('change', sendStart, false);
-      durStart.oninput = () => {sendStart()}
       main.addEventListener('change', sendAuto, false);
       wait.addEventListener('change', sendAuto, false);
       launch.oninput = () => {sendAuto()}

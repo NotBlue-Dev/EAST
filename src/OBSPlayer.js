@@ -4,6 +4,8 @@ const OverlayWS = require('./ws/OverlayWS')
 const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
+const EventHandler = require('./EventHandler')
+const events = require('./EchoArenaEvents.js')
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -15,6 +17,7 @@ class OBSPlayer {
         this.obsClient = new OBSClient()
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
         this.scenes = []
+        this.eventHandler = null
         this.echoArena = null
 
         this.config = this.globalConfig.echoArena
@@ -42,12 +45,18 @@ class OBSPlayer {
     }
 
     initializeListeners() {
+        this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
+            this.globalConfig.obs.autoBuffer = args
+            this.configLoader.save(this.globalConfig)
+        })
+
         this.eventEmitter.on('scenes.autoStart', (args, event) => {
             this.globalConfig.autoStream.autoStart = {
                 ...this.globalConfig.autoStream.autoStart,
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
         this.eventEmitter.on('scenes.start', (args, event) => {
@@ -56,6 +65,7 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
         
         this.eventEmitter.on('scenes.events', (args, event) => {
@@ -64,6 +74,7 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
         this.eventEmitter.on('scenes.end', (args, event) => {
@@ -72,8 +83,8 @@ class OBSPlayer {
                 ...args
             }
             this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
-        
 
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
@@ -82,6 +93,7 @@ class OBSPlayer {
                     ...this.globalConfig.echoArena,
                     ...args,
                 }
+                
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('echoArena.connectionFailed', {
@@ -91,13 +103,19 @@ class OBSPlayer {
             })
         })
 
+        this.eventEmitter.send('echoArena.eventsLoaded', {
+            events: events.map(event => event.name).filter(event => event !== undefined)
+        }) 
+
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
                 this.eventEmitter.send('obsWebsocket.connected', args)
+                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
                 this.globalConfig.obs = {
                     ...this.globalConfig.obs,
                     ...args,
                 }
+ 
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
@@ -106,7 +124,29 @@ class OBSPlayer {
                 })
             })
         })
-        
+
+        this.eventEmitter.on('obsWebsocket.startStream', (args, event) => {
+            this.obsClient.send('StartStreaming').catch((error) => {
+                this.eventEmitter.send('obsWebsocket.startStreamFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+    
+        this.eventEmitter.on('obsWebsocket.stopStream', (args, event) => {
+            this.obsClient.send('StopStreaming').catch((error) => {
+                this.eventEmitter.send('obsWebsocket.stopStreamFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+
+        this.eventEmitter.on('obsWebsocket.startBuffer', (args, event) => {
+            this.obsClient.send("StartReplayBuffer")
+        })
+
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
                 this.eventEmitter.add(this.overlayWS)
@@ -123,6 +163,11 @@ class OBSPlayer {
                     error
                 })
             })
+        })
+
+        this.eventEmitter.on('vrml.autoLoad', (args, event) => {
+            this.globalConfig.vrml.autoLoad = args
+            this.configLoader.save(this.globalConfig)
         })
 
         this.eventEmitter.on('vrml.teamSelected', (args, event) => {
@@ -165,12 +210,7 @@ class OBSPlayer {
                             })
                             this.eventEmitter.send('autoStream.configLoaded', this.globalConfig.autoStream)
                         })
-                        // récupérer les scènes dispos
                     }, 1000);
-
-                    // listen for scenes change
-
-
                 }
             })
             .onDisconnected((message) => {
@@ -190,7 +230,8 @@ class OBSPlayer {
         }).sort((a, b) => a.name.localeCompare(b.name))
         this.eventEmitter.send('vrml.teamListLoaded', {
             teams,
-            teamId: this.globalConfig.vrml.teamId
+            teamId: this.globalConfig.vrml.teamId,
+            auto:this.globalConfig.vrml.autoLoad
         })
     }
 
@@ -243,8 +284,15 @@ class OBSPlayer {
                 })
             
                 await this.getPlayers()
+
+                let date = new Date(this.Allinfo.times[i])
+                let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+                let offset = date.getTimezoneOffset() / 60;
+                let hours = date.getHours();
+                newDate.setHours(hours - offset);
+
                 return {
-                    time: this.Allinfo.times[i],
+                    time: newDate,
                     week:this.Allinfo.week,
                     teams: {
                         home: this.Allinfo.teams[0],

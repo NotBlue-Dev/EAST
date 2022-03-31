@@ -7,14 +7,13 @@ class ScoreChanged {
 
     handle(gameData, eventEmitter) {
         if (this.orangePoints === null || this.bluePoints === null) {
-            this.bluePoints = gameData.bluepoints
-            this.orangePoints = gameData.orangepoints
+            this.bluePoints = gameData.blueTeam.points
+            this.orangePoints = gameData.orangeTeam.points
             return
         }
-        if (this.orangePoints != gameData.orangepoints || this.bluePoints != gameData.bluepoints) {
-            this.bluePoints = gameData.bluepoints
-            this.orangePoints = gameData.orangepoints
-
+        if (this.orangePoints != gameData.orangeTeam.points || this.bluePoints != gameData.blueTeam.points) {
+            this.bluePoints = gameData.blueTeam.points
+            this.orangePoints = gameData.orangeTeam.points
             let team;
             let nbData;
 
@@ -40,7 +39,7 @@ class ScoreChanged {
                 nb:nbData
             }
 
-            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data});
+            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data, name:this.name});
         }
     }
 }

@@ -1,6 +1,7 @@
 {
     "vrml": {
-        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2"
+        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2",
+        "autoLoad": false
     },
     "echoArena": {
         "ip": "127.0.0.1",
@@ -11,7 +12,8 @@
         "ip": "127.0.0.1",
         "port": 4444,
         "password": "toor",
-        "autoConnect": false
+        "autoConnect": false,
+        "autoBuffer":true
     },
     "overlayWs": {
         "port": 4545,
@@ -37,9 +39,9 @@
             "time":"",
             "auto": false
         },
-        "start":{
-            "scene":"Starting",
-            "duration":5
+        "start": {
+            "scene": "Starting",
+            "betwen":"Round Betwen"
         },
         "game":{
             "events":[
@@ -48,6 +50,7 @@
                 {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":true},
                 {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true},
                 {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false},
+                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false},
                 {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false}
             ]
         },

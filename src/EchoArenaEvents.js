@@ -5,6 +5,8 @@ const PossessionChanged = require("./echo-arena-events/PossessionChanged");
 const RoundTimeChanged = require("./echo-arena-events/RoundTimeChanged");
 const ScoreChanged = require("./echo-arena-events/scoreChanged");
 const TeamChange = require("./echo-arena-events/TeamChange");
+const ScoreBoard = require("./echo-arena-events/ScoreBoard");
+const Restart = require("./echo-arena-events/Restart");
 
 module.exports = [
     new Overtime(),
@@ -12,6 +14,8 @@ module.exports = [
     new RoundOver(),
     new RoundStart(),
     new TeamChange(),
+    new ScoreBoard(),
+    new Restart(),
     //new RoundTimeChanged(),
     new ScoreChanged()
 ]

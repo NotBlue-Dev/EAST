@@ -1,25 +1,29 @@
 class TeamChange {
     constructor() {
         this.name = 'Team change'
-        this.teams = {
-            blue:[],
-            orange:[]
-        }
+        this.blue = []
+        this.orange = []
         this.rostersA = []
     }
 
     handle(gameData, eventEmitter) {
-        if (JSON.stringify(gameData.teamData) === JSON.stringify(this.teams)) {
-            return
+        if (JSON.stringify(gameData.blueTeam.teamData) === JSON.stringify(this.blue) && (JSON.stringify(gameData.orangeTeam.teamData) === JSON.stringify(this.orange))) {
+            return 
         }
         
-        this.teams = gameData.teamData
+        this.blue = gameData.blueTeam.teamData
+        this.orange = gameData.orangeTeam.teamData
+
+        if(this.blue.length === 0 || this.orange.length === 0) {
+            eventEmitter.send('game.emptyTeam')
+        }
 
         let teamsColor = gameData.defineColor()
         eventEmitter.send('vrml.colorChanged', teamsColor)
 
         eventEmitter.send('game.teamChange', {
-            teams: gameData.teamData
+            teams: {blue: this.blue, orange: this.orange},
+            name:this.name
         })
     }
 }

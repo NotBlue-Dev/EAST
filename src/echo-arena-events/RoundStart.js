@@ -21,7 +21,8 @@ class RoundStart {
             this.roundStarted = true
             this.lastRound = gameData.round
             eventEmitter.send('game.roundStart', {
-                round: gameData.round
+                round: gameData.round,
+                name: this.name
             })
 
             let teamsColor = gameData.defineColor()
