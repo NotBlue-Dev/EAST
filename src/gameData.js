@@ -30,20 +30,24 @@ class GameData {
         this.distance_thrown = this.lastscore.distance_thrown
         this.round = json.blue_round_score + json.orange_round_score
 
-        for (let player of this.blueTeam.blueTeamPlayers) {
-            player.stats.possession_time = Math.round(player.stats.possession_time)
-            this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
+        if(this.blueTeam.blueTeamPlayers.length !== 0) {
+            for (let player of this.blueTeam.blueTeamPlayers) {
+                player.stats.possession_time = Math.round(player.stats.possession_time)
+                this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
+            }
+            for (let player of this.blueTeam.blueTeamPlayers) {
+                this.blueTeam.teamData.push(player.name)
+            }
         }
-        for (let player of this.orangeTeam.orangeTeamPlayers) {
-            player.stats.possession_time = Math.round(player.stats.possession_time)
-            this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
-        }
-
-        for (let player of this.blueTeam.blueTeamPlayers) {
-            this.blueTeam.teamData.push(player.name)
-        }
-        for (let player of this.orangeTeam.orangeTeamPlayers) {
-            this.orangeTeam.teamData.push(player.name)
+ 
+        if(this.orangeTeam.orangeTeamPlayers.length !== 0) {
+            for (let player of this.orangeTeam.orangeTeamPlayers) {
+                player.stats.possession_time = Math.round(player.stats.possession_time)
+                this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
+            }
+            for (let player of this.orangeTeam.orangeTeamPlayers) {
+                this.orangeTeam.teamData.push(player.name)
+            }
         }
 
         if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {

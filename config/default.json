@@ -49,6 +49,7 @@
                 {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":true},
                 {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true},
                 {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false},
+                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false},
                 {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false}
             ]
         },

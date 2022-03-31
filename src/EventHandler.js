@@ -14,19 +14,21 @@ class EventHandler {
         this.initListener()
     }
     
-    // Event handler (stop stream (detecter stop stream :  ))
-    // End stream,delay = time without game restarting (count round win) 
-
-    // reset need to reset the win round count (reset event done)
-
-    // show end stream scene during duration, end stream
-
-    // owa le bordel
+    endStream() {
+        clearTimeout(this.delay)
+        clearTimeout(this.dur)
+        this.delay = setTimeout(() => {
+            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.ending.scene})
+            this.dur = setTimeout(() => {
+                this.obsClient.send('StopStreaming')
+            }, this.config.ending.duration * 1000);
+        }, this.config.end.delay * 1000);
+    }
 
     initListener() {
         this.eventEmitter.on('game.emptyTeam', (args, event) => {
             if(this.roundData.orange !== 0 && this.roundData.blue !== 0) {
-                // start delay before end game
+                this.endStream()
             }
         })
 
@@ -111,7 +113,12 @@ class EventHandler {
             this.switchWindowEvent(gameEvent)
         })
 
-        
+        this.eventEmitter.on('game.restart', (args, event) => {
+            let index = this.config.game.events.findIndex(x => x.event === args.name)
+            let gameEvent = this.config.game.events[index]
+            this.switchWindowEvent(gameEvent)
+            this.roundData = {orange:0,blue:0}
+        })
 
         this.eventEmitter.on('game.overtime', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
@@ -131,7 +138,7 @@ class EventHandler {
             this.switchWindowEvent(gameEvent)
             this.roundData[args.winner]++
             if(this.roundData.blue-this.roundData.orange >= 2 || this.roundData.orange-this.roundData.blue >= 2) {
-                // start delay before end game
+                this.endStream()
             }
         })
         this.eventEmitter.on('game.roundStart', (args, event) => {
@@ -143,6 +150,8 @@ class EventHandler {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
+            clearTimeout(this.delay)
+            clearTimeout(this.dur)
         })
         this.eventEmitter.on('game.roundTime', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
