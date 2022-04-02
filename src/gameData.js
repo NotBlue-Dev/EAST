@@ -10,6 +10,7 @@ class GameData {
             blueReset: (json.blue_team_restart_request > 0),
             teamData:[],
             playerStats:[],
+            playerPosition:[],
             points:json.blue_points
         }
         this.orangeTeam = {
@@ -17,8 +18,10 @@ class GameData {
             orangeReset :(json.orange_team_restart_request > 0),
             teamData:[],
             playerStats:[],
+            playerPosition:[],
             points:json.orange_points
         }
+        this.discPosition = [json.disc.position[0], json.disc.position[2]]
         
         this.lastscore = json.last_score;
         this.point_amount = this.lastscore.point_amount
@@ -34,9 +37,8 @@ class GameData {
             for (let player of this.blueTeam.blueTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
                 this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
-            }
-            for (let player of this.blueTeam.blueTeamPlayers) {
                 this.blueTeam.teamData.push(player.name)
+                this.blueTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
             }
         }
  
@@ -44,9 +46,8 @@ class GameData {
             for (let player of this.orangeTeam.orangeTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
                 this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
-            }
-            for (let player of this.orangeTeam.orangeTeamPlayers) {
                 this.orangeTeam.teamData.push(player.name)
+                this.orangeTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
             }
         }
 
