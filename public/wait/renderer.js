@@ -53,10 +53,23 @@ window.addEventListener("load", () => {
         let nextMatch = new Date(arg.time)
         let time = Math.round((nextMatch.getTime() - date.getTime()) / 1000)
         function timerFunc() {
-            let minutes = Math.floor(time / 60);
-            let seconds = Math.round(time - minutes * 60);
+            let hours = Math.floor(time / 3600);
+            let restTime = time - hours * 3600;
+            let minutes = Math.floor(restTime / 60);
+            let seconds = Math.round(restTime - minutes * 60);
             time--
-            timer.innerHTML = `${minutes}:${seconds}`
+            if (minutes < 10) {
+                minutes = '0' + minutes
+            }
+            if (seconds < 10) {
+                seconds = '0' + seconds
+            }
+            
+            if (hours > 0) {
+                timer.innerHTML = `${hours}:${minutes}:${seconds}`
+            } else {
+                timer.innerHTML = `${minutes}:${seconds}`
+            }
             if (time < 1) {
                 // switch scene send event to obs
                 clearInterval(matchCountDown);
