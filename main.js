@@ -47,8 +47,13 @@ const start = (webContents) => {
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    minWidth:600,
+    minHeight: 500,
+    maxHeight:900,
+    maxWidth: 730,
+    width: 730,
+    height: 900,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'ui', 'preload.js')
     }
