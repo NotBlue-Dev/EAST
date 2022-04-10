@@ -19,5 +19,5 @@ module.exports = [
     new Restart(),
     //new RoundTimeChanged(),
     new ScoreChanged(),
-    new Minimap()
+    // new Minimap()
 ]

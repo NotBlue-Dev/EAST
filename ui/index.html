@@ -3,126 +3,191 @@
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <link href="style.css" rel="stylesheet">
     <title>Echo Arena Overlay</title>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li>Dashboard</li>
-        <li>Scenes configuration</li>
-      </ul>
-    </nav>
-    <div class="block">
-      <label for="echo-arena-url">Echo Arena url</label><input type="text" id="echo-arena-url" /><input type="text" id="echo-arena-port" />
-      <label for="echo-arena-autoconnect"><input type="checkbox" id="echo-arena-autoconnect" /> Auto-connect</label>
-      <button id="echo-arena-connect">Connect</button>
-    </div>
-    <div class="block">
-      <label for="obs-websocket-url">OBS websocket url</label><input type="text" id="obs-websocket-url" /><input type="text" id="obs-websocket-port" />
-      <label for="obs-websocket-password">Password</label><input type="password" id="obs-websocket-password" />
-      <label for="obs-websocket-autoconnect"><input type="checkbox" id="obs-websocket-autoconnect" /> Auto-connect</label>
-      <button id="obs-websocket-connect">Connect</button>
-    </div>
-    <div class="block">
-      <a>Replay buffer OBS</a>
-      <label for="obs-buffer-autolaunch"><input type="checkbox" id="obs-buffer-autolaunch" /> Auto-start</label>
-      <button id="obs-start-buffer">Start</button>
-    </div>
-    <div class="block">
-      <label for="overlay-port">Overlays port</label><input type="text" id="overlay-port" value="4545" />
-      <label for="overlay-autolaunch"><input type="checkbox" id="overlay-autolaunch" /> Auto-launch</label>
-      <button id="launch-overlay-server">Launch overlay server</button>
-    </div>
-    <div class="block">
-      <h2>VRML Mode</h2>
-      <label for="vrml-autoconnect"><input type="checkbox" id="vrml-autoconnect" />Auto-Load-Match</label>
-      <label for="vrmlMatch"><input type="checkbox" id="vrmlMatch"/> VRML Next Match</label>
-      <label for="teams">Team</label><select id="teams"></select>
-      <div id="matchData" class="hidden"></div>
-    </div>
-    <div class="block" id="autostream-wrapper">
-      <div>
-        <h2>Stream</h2>
-        <label for="main-scene">In-game scene</label><select id="main-scene" class="scene-select" type="text"></select>
-        <label for="wait-scene">Wait scene (VRML)</label><select id="wait-scene" class="scene-select" type="text"></select>
-        <label for="autostream"><input id="autostream" type="checkbox"> Autostream</label>
-        <label for="launch-time">Launch time</label><input id="launch-time" type="time"/>
 
-        <h3>Start stream</h3>
-        <table>
-          <thead>
-            <tr>
-              <td>Scene before game</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><select id="start-scene[0]" class="scene-select" type="text"></td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>Betwen Game</h3>
-        <table>
-          <thead>
-            <tr>
-              <td>Scene betwen game</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><select id="betwen-scene[0]" class="scene-select" type="text"></td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>Game stream</h3>
-        <table>
-          <thead>
-            <tr>
-              <td>Event</td>
-              <td>Delay</td>
-              <td>Scene</td>
-              <td>Duration</td>
-              <td><button>+</button></td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><select id="event[0]" class="echo-arena-event-select"></select></td>
-              <td><input id="delay[0]" type="number"/ min="1">s</td>
-              <td><select id="scene[0]" class="scene-select" type="text"></td>
-              <td><input id="duration[0]" type="number" min="1"/>s</td>
-              <td><button>-</button></td>
-              <td><label for="event"><input type="checkbox" id="event"/> Enable this event</label></td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>End stream</h3>
-        <table>
-          <thead>
-            <tr>
-              <td>Scene</td>
-              <td>Duration</td>
-              <td><button>+</button></td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><label for="delay-after-end-game">Delay after end game</label></td>
-              <td><input id="delay-after-end-game" type="number"/ min="1">s</td>
-              <td><button>-</button></td>
-            </tr>
-            <tr>
-              <td><select id="end-scene[0]" class="scene-select" type="text"></td>
-              <td><input id="end-duration[0]" type="number" min="1"/>s</td>
-              <td><button>-</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <pre id="logs"></pre>
+    <nav class="navbar-container">
+        <div class="navbar-header">
+          <img alt="logo" class="navbar-logo" src="../public/assets/minimap_disc.png">
+        </div>
+        <ul class="navbar-nav">
+          <li id="dashboard" class="active"><a  href="#">Dashboard</a></li>
+          <li id="scenes"><a href="#" >Scenes</a></li>
+        </ul>
+    </nav>
+
+    <section id="dashboard-wrapper">
+      <article>
+        <h2>Echo VR</h2>
+        <article class="block">
+          
+          <div>
+            <label for="echo-arena-url">Quest IP</label>
+            <div class="inline">
+              <input class="txt" type="text" id="echo-arena-url" />
+              <button id="echo-arena-connect">Connect</button>
+            </div>
+          </div>
+          <div>
+            <label for="echo-arena-autoconnect">Auto-connect</label>
+            <div class="inline no-bottom">
+              <input type="checkbox" id="echo-arena-autoconnect" />
+              <a>Enable</a>
+            </div>
+          </div>
+        </article>
+      </article>
+
+      <article>
+        <h2>OBS</h2>
+        <article class="block">
+          <label for="obs-websocket-url">Websocket IP and Port</label>
+          <div class="inline">
+            <input type="text" class="obs" id="obs-websocket-url" />
+            <input type="text" class="obs" id="obs-websocket-port" />
+            <button id="obs-websocket-connect">Connect</button>
+          </div>
+
+          <label for="obs-websocket-password">Password</label>
+          <div class="inline">
+            <input type="password" class="obs" id="obs-websocket-password" />
+          </div>
+          
+          <label for="obs-websocket-autoconnect">Auto-connect</label>
+          <div class="inline">
+            <input type="checkbox" id="obs-websocket-autoconnect" /><a>Enable</a>
+          </div>
+          
+          
+          <label for="obs-buffer-autolaunch">Replay Buffer</label>
+          <div class="inline">
+            <input type="checkbox" id="obs-buffer-autolaunch" /><a>Auto-start</a>
+          </div>
+          <div class="inline no-bottom">
+            <button id="obs-start-buffer">Start</button>
+          </div>
+
+
+        </article>
+      </article>
+
+      <article>
+        <h2>Overlay</h2>
+        <article class="block">
+          <label for="overlay-port">Port</label>
+          <div class="inline">
+            <input type="text" class="txt" id="overlay-port" value="4545" />
+            <button id="launch-overlay-server">Launch</button>
+          </div>
+
+          <label for="overlay-autolaunch">Auto-launch</label>
+          <div class="inline no-bottom">
+            <input type="checkbox" id="overlay-autolaunch" /><a>Enable</a>
+          </div>
+        </article>
+      </article>
+      
+      <article>
+        <h2>VRML Mode</h2>
+        <article class="block">
+          <label for="teams">Team</label>
+          <div class="inline">
+            <select id="teams"></select>
+          </div>
+
+          <div id="matchData" class="hidden inline"></div>
+          <div class="inline">
+            <label for="vrml-autoconnect">Stream incoming match</label>
+            <div class="inline"><input type="checkbox" id="vrml-autoconnect" /><a>Enable</a></div>
+          </div>
+
+          <label for="vrmlMatch">Auto-load incoming match</label>
+          <div class="inline no-bottom">
+            <input type="checkbox" id="vrmlMatch"/><a>Enable</a>
+          </div>
+        </article>
+      </article>
+    </section>
+    
+    <section class="hidden" id="autostream-wrapper">
+        <article>
+          <h2>Main</h2>
+          <article class="block">
+            <label for="main-scene">In-game scene</label>
+            <div class="inline">
+              <select id="main-scene" class="scene-select" type="text"></select>
+            </div>
+            
+            <label for="wait-scene">Wait scene (VRML)</label>
+            <div class="inline"><select id="wait-scene" class="scene-select" type="text"></select></div>
+            
+            <label for="autostream">Auto start stream</label>
+            <div class="inline"><input id="autostream" type="checkbox"><a>Enable</a></div>
+            
+            <label for="launch-time">Time</label>
+            <div class="inline no-bottom"><input id="launch-time" class="txt" type="time"/></div>
+          </article>
+        </article>
+
+        <article>
+          <h2>Start</h2>
+          <article class="block">
+            <label for="start-scene[0]">Scene before the game</label>
+            <div class="inline no-bottom">
+              <select id="start-scene[0]" class="scene-select" type="text"></select>
+            </div>
+          </article>
+        </article>
+
+        <article>
+          <h2>Betwen</h2>
+          <article class="block">
+            <label for="betwen-scene[0]">Scene betwen round</label>
+            <div class="inline no-bottom">
+              <select id="betwen-scene[0]" class="scene-select txt" type="text"></select>
+            </div>
+          </article>
+        </article>
+        
+        <article>
+          <h2>Events</h2>
+          <article class="block">
+            <label for="event[0]">Event</label>
+            <div class="inline"><select id="event[0]" class="txt"  class="echo-arena-event-select"></select></div>
+            
+            <label for="delay[0]">Delay</label>
+            <div class="inline"><input class="txt" id="delay[0]" type="number"/ min="1"></div>
+            
+            <label for="scene[0]">Scene shown</label>
+            <div class="inline"><select id="scene[0]" class="scene-select txt" type="text"></select></div>
+            
+            <label for="scene[0]">Duration</label>
+            <div class="inline"><input id="duration[0]" class="txt" type="number" min="1"/></div>
+        
+            <label for="event">Use this event</label>
+            <div class="inline"><label for="event"><input type="checkbox" id="event"/> <a>Enable</a></label></div>
+            
+          </article>
+        </article>
+
+        <article>
+          <h2>End</h2>
+          <article class="block">
+            <label for="delay-after-end-game">Scene when game stream end</label>
+            <div class="inline"><select id="end-scene[0]" class="scene-select" type="text"></select></div>
+
+            <label for="delay-after-end-game">Delay</label>
+            <div class="inline"><input id="delay-after-end-game" class="txt" type="number"/ min="1"></div>
+
+            <label for="delay-after-end-game">Duration</label>
+            <div class="inline"><input id="end-duration[0]" class="txt" type="number" min="1"/></div>
+
+          </article>
+        </article>
+    </section>
   </body>
 </html>

@@ -1,6 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
 body {
-    background-color: #002b36;
-    color: #fdf6e3
+    background-color: #2D3F4B;
+    color: #fdf6e3;
+    overflow-x: hidden;
+    font-family: 'Montserrat';
+    margin: 0;
+    padding: 0;
+    padding-bottom: 34px;
+}
+
+nav {
+    font-size: 19px;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.navbar-header {
+    margin-left: 9%;
+}
+
+.navbar-container {
+    display: flex;
+    background-color: #152630;
+    height: 73px;
+    align-items: center;
+}
+
+.active {
+    font-weight: 600;
+}
+
+.navbar-logo {
+    margin-left: 9%;
+    width: 43px;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    margin-left: 7%;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    margin-right: 7%;
+}
+
+.block {
+    padding: 12px 16px 18px 16px;
+    border-radius: 5px;
+    background-color: #152630;
+}
+
+section {
+    margin-left: 9%;
+    margin-right: 9%;
 }
 
 div.block {
@@ -9,11 +67,70 @@ div.block {
     margin: 5px;
 }
 
+li a {
+    color: white;
+    text-decoration: none;
+    list-style: none;
+}
+
+.block label {
+    font-size: 16px;
+}
+
+.inline {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    background-color: #41515B;
+    padding: 5.5px 16px;
+    color: #BCBCBC;
+    font-family: 'MontSerrat';
+    font-weight: 400;
+    border: 1px solid #878787;
+    border-radius: 5px;
+}
+
+.block a, label {
+    opacity: 0.75;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+.txt {
+    padding: 6px !important;
+    width: 72%;
+}
+
+.obs {
+    margin-right: 6px;
+    padding: 6px !important;
+}
+
 input {
-    background-color: #93a1a1;
-    border: 1px solid #657b83;
-    padding: 5px;
-    color: #002b36;
+    background-color: #41515B;
+    border: 1px solid #878787;
+    padding: 6px 22%;
+    color: white;
+    border-radius: 5px;
+    margin-right: 12px;
+}
+
+select {
+    background-color: #41515B;
+    border: 1px solid #878787;
+    color: white;
+    border-radius: 5px;
+    padding: 6px;
+    width: 72%;
+}
+
+.no-bottom {
+    margin-bottom: 0 !important;
 }
 
 input.valid {

@@ -2,17 +2,35 @@ const { ipcRenderer } = require('electron')
 let events;
 
 window.addEventListener('DOMContentLoaded', () => {
+  const dashboard = document.getElementById('dashboard')
+  const scenes = document.getElementById('scenes')
+  const dashWrapper = document.getElementById('dashboard-wrapper')
+  const scenesWrapper = document.getElementById('autostream-wrapper')
+
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
-  const echoArenaPortInput = document.getElementById('echo-arena-port')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
   const echoArenaConnect = () => {
     ipcRenderer.send('echoArena.connect', {
       ip: echoArenaUrlInput.value,
-      port: echoArenaPortInput.value,
+      port: 6721,
       autoConnect: echoArenaAutoConnectInput.checked,
     })
   }
+
+  dashboard.addEventListener('click', (event) => {
+    dashWrapper.classList.remove('hidden')
+    scenesWrapper.classList.add('hidden')
+    dashboard.classList.add('active')
+    scenes.classList.remove('active')
+  })
+
+  scenes.addEventListener('click', (event) => {
+    scenesWrapper.classList.remove('hidden')
+    dashboard.classList.remove('active')
+    scenes.classList.add('active')
+    dashWrapper.classList.add('hidden')
+  })
   
   echoArenaConnectButton.addEventListener('click', echoArenaConnect)
 
@@ -81,7 +99,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('config.loaded', (event, data) => {
     echoArenaUrlInput.value = data.echoArena.ip
-    echoArenaPortInput.value = data.echoArena.port
     echoArenaAutoConnectInput.value = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {
       const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)
@@ -319,6 +336,6 @@ const initAutoStream = (document) => {
 }
 
 const log = (message) => {
-  const logOutput = document.getElementById('logs')
-  logOutput.innerText = message + "\n" + logOutput.innerText
+  // const logOutput = document.getElementById('logs')
+  // logOutput.innerText = message + "\n" + logOutput.innerText
 }
