@@ -1,24 +1,14 @@
 let socket = io();
 
 window.addEventListener("load", () => {
-    
-    // ADD SOCKET LISTENING TO CUSTOM COLOR AND DO THIS WITH THE RIGHT COLORS
-    let customMain = null
-    let listMain = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('MainColor')
-    for (let item of listMain) {
-        if(customMain !== null) {
-            item.style.fill = customMain
-        }
-    }
 
-    let svg = document.querySelector(".svgClass").getSVGDocument()
-    const imgA = svg.getElementById('teamAWait')
-
-    const imgB = svg.getElementById('teamBWait')
-
+    const imgA = document.getElementById('Blue')
+    const TeamA = document.getElementById('BlueName')
+    const imgB = document.getElementById('Orange')
+    const TeamB = document.getElementById('OrangeName')
     const timer = document.getElementById('timer')
 
-    const week = svg.getElementById('WEEK_')
+    const week = document.getElementById('week')
 
     const fill = function (arg) {
         orange = arg.teams.home
@@ -34,8 +24,10 @@ window.addEventListener("load", () => {
             }
         }
 
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
+        imgB.src = `https://vrmasterleague.com/${orange.logo}`
+        imgA.src = `https://vrmasterleague.com/${blue.logo}`
+        TeamA.innerHTML = orange.name
+        TeamB.innerHTML = blue.name
     }
 
     socket.on('vrml.colorChanged' , (arg) => {
@@ -45,8 +37,10 @@ window.addEventListener("load", () => {
     socket.on('vrml.matchDataLoaded', (arg) => {
         fill(arg)
         
-        week.innerHTML = `Week ${arg.week}`
+        week.innerHTML = `VRML Week ${arg.week}`
         
+        console.log(arg)
+
         try {clearInterval(matchCountDown)} catch {}
 
         let date = new Date()

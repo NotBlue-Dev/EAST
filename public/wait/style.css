@@ -1,14 +1,91 @@
 body {
-    position: relative;
+    width: 100%;
+    background-color: #1B121E;
+    overflow-y: hidden;
+    position: absolute;
+    font-family: 'Kanit', sans-serif;
 }
 
-object {
-    margin-top: 59px;
-    width: 100%;
+.echo {
+    width: 14vw;
+}
+
+.content a {
+    line-height: 2.5vw;
+}
+
+.logo {
+    filter: brightness(0) saturate(100%) invert(11%) sepia(25%) saturate(607%) hue-rotate(194deg) brightness(94%) contrast(95%);
+    width: 85%;
+    margin: -16% auto;
+    margin-left: 7.6%;
+    display: block;
+    position: absolute;
+}
+
+.vs {
+    font-size: 14vw;
+    line-height: 9vw !important;
+    margin-bottom: 0.5vw;
+}
+
+.content {
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 522px;
+    font-size: 2vw;
+    margin-top: 17vw;
+    align-items: center;
+}
+
+.ColorLogo {
+    position: relative;
+    width: 20vw;
+}
+
+.boxOrange {
+    background: linear-gradient(to right, #DC872C, #FA4011);
+    height: 3.5vw;
+}
+
+.boxBlue {
+    background: linear-gradient(to right, #0376FF, #03BAE0);
+    height: 3.5vw;
+}
+
+.teamColor {
+    font-size: 2.21vw;
+    font-weight: 600;
+    justify-content: center;
+    display: flex;
+}
+
+.colorOrange {
+    font-weight: 600;
+    float: right;
+}
+
+.colorBlue {
+    font-weight: 600;
+}
+
+.teams {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    display: flex;
+    margin-right: auto;
+    justify-content: space-around;
+    width: 94%;
+    margin-top: 15vw;
 }
 
 #timer {
-    position: absolute;
+    
     top: 32vw;
     width: 15vw;
     font-size: 39px;
