@@ -1,9 +1,15 @@
 body {
     width: 100%;
-    background-color: #1B121E;
     overflow-y: hidden;
     position: absolute;
     font-family: 'Kanit', sans-serif;
+}
+
+.background {
+    width: 100%;
+    position: absolute;
+    height: 100vh;
+    background-color: #1B121E;
 }
 
 .echo {

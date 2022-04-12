@@ -1,79 +1,48 @@
-
-
-object {
-    margin-top: 39px;
+body {
+    background-color: blue;
 }
 
-.background {
-    position: absolute;
+.replay-container {
+    --size: 26vw;
+    --radius: 0.4vw;
+    position: relative;
+    width: var(--size);
+    height: 14vw;
+    margin: 2vw 71vw;
+    padding: var(--radius);
+    overflow: hidden;
+}
+
+.replay-box {
+    position: relative;
     width: 100%;
-}
-
-.content {
-    display: flex;
-    top: 3.335vw;
-    position: relative;
-    align-items: center;
-}
-
-.score {
-    position: relative;
-    display: flex;
     flex-direction: column;
-    left: 93px;
-    top: -4px;
-    width: 8%;
-    align-items: center;
-}
-
-.wd {
-    width: 4vw;
-    text-align: center;
-}
-
-#pseudo {
-    width: 155%;
-    text-align: center;
-}
-
-#assist {
-    width: 150%;
-    text-align: center;
-    font-size: 11px;
-}
-
-#nb {
-    font-size: 30px;
-    font-weight: 700;
-    width: 3%;
-    text-align: center;
-}
-
-.hide {
-    display: none;
-}
-
-.all {
-    margin-top: 45vw;
-}
-
-.distdiv {
-    margin-left: 27px;
-}
-
-.speeddiv {
-    margin-left: 145px;
-}
-
-.contain {
+    height: 100%;
     display: flex;
-    margin-left: 20px;
-    position: relative;
-    top: 5px;
-    left: -150px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #1B121E;
 }
 
-.contain a {
-    font-size: 15px;
+.here {
+    font-size: 2vw;
+}
+
+.replay {
+    position: fixed;
+    top: 13vw;
     font-weight: 600;
+    font-size: 3vw;
+}
+
+.replay-container::before {
+    content: '';
+    width: 150%;
+    height: 119vw;
+    position: absolute;
+    top: -351%;
+    left: -25%;
+    background: conic-gradient(#DC872C, #FA3F10);
+    animation: rotate-border 5s linear infinite;
 }
