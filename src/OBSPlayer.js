@@ -246,6 +246,9 @@ class OBSPlayer {
     async getMatchDataFromTeam(team) {
         const json = await this.vrmlClient.getTeamUpcomingMatches(team)
         
+        // reset team info
+        this.Allinfo.teams = []
+
         try {
             this.Allinfo.week = json[0].week
         } catch {}

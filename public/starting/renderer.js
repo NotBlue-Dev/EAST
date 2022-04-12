@@ -2,52 +2,23 @@ let socket = io();
 
 window.addEventListener("load", (event) => {
 
-    // ADD SOCKET LISTENING TO CUSTOM COLOR AND DO THIS WITH THE RIGHT COLORS
-    let customMain = null
-    let customScd = null
+    const imgA = document.getElementById('BLOGO')
 
-    let listMain = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('MainColor')
-    for (let item of listMain) {
-        if(customMain !== null) {
-            item.style.fill = customMain
-        }
-    }
+    const imgB = document.getElementById('OLOGO')
 
-    let listScd = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('ScdColor')
-    for (let item of listScd) {
-        if(item !== null) {
-            item.style.fill = customScd
-        }
-    }
-    
-    let svg = document.querySelector(".svgClass").getSVGDocument()
+    const week = document.getElementById('week')
 
-    const imgA = svg.getElementById('teamA')
+    const nameA = document.getElementById('OrangeName')
 
-    const imgB = svg.getElementById('teamB')
+    const nameB = document.getElementById('BlueName')   
 
-    const week = svg.getElementById('WEEK_')
+    const teamPlayerA = document.getElementById('BoxOrange')  
 
-    const nameA = document.getElementById('teamNameA')
-
-    const nameB = document.getElementById('teamNameB')   
-    
-    const rankA = svg.getElementById('rankA')  
-
-    const rankB = svg.getElementById('rankB')  
-
-    const divA = document.getElementById('nbA')  
-
-    const divB = document.getElementById('nbB')  
-
-    const teamPlayerA = document.getElementById('containerA')  
-
-    const teamPlayerB = document.getElementById('containerB')  
+    const teamPlayerB = document.getElementById('BoxBlue') 
 
     const fill = (arg) => {
         orange = arg.teams.home
         blue = arg.teams.away
-
         if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
             if(arg.teams.home.color === 'blue') {
                 blue = arg.teams.home
@@ -58,15 +29,11 @@ window.addEventListener("load", (event) => {
             }
         }
 
-        week.innerHTML = `Week ${arg.week}`
+        week.innerHTML = `VRML Week ${arg.week}`
         nameA.innerHTML = orange.name
         nameB.innerHTML = blue.name
-        divA.innerHTML = `${blue.place}th`
-        divB.innerHTML = `${orange.place}th`
-        rankA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.rank}`)
-        rankB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.rank}`)
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+        imgA.src = `https://vrmasterleague.com/${blue.logo}`
+        imgB.src = `https://vrmasterleague.com/${orange.logo}`
         
         // clear player
         while (teamPlayerA.firstChild) {
@@ -79,12 +46,20 @@ window.addEventListener("load", (event) => {
         blue.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
-            teamPlayerB.appendChild(a)
+            let div = document.createElement('div')
+            div.classList.add('row')
+            div.classList.add('b')
+            div.appendChild(a)
+            teamPlayerB.appendChild(div)
         });
         orange.rosters.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
-            teamPlayerA.appendChild(a)
+            let div = document.createElement('div')
+            div.classList.add('row')
+            div.classList.add('o')
+            div.appendChild(a)
+            teamPlayerA.appendChild(div)
         });
     }
 
@@ -106,15 +81,22 @@ window.addEventListener("load", (event) => {
         arg.teams.blue.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
-            teamPlayerB.appendChild(a)
+            let div = document.createElement('div')
+            div.classList.add('row')
+            div.classList.add('b')
+            div.appendChild(a)
+            teamPlayerB.appendChild(div)
         });
         arg.teams.orange.forEach(player => {
             let a = document.createElement('a')
             a.innerHTML = player
-            teamPlayerA.appendChild(a)
+            let div = document.createElement('div')
+            div.classList.add('row')
+            div.classList.add('o')
+            div.appendChild(a)
+            teamPlayerA.appendChild(div)
         });
     });
 
     socket.emit('overlay.ready', {'overlay': 'starting'})
 });
-
