@@ -3,6 +3,7 @@ class RoundOver {
         this.name = 'Round over'
         this.roundIsOver = false
         this.rounds = []
+        this.customizable = true
     }
 
     handle (gameData, eventEmitter) {

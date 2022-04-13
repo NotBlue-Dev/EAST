@@ -39,6 +39,8 @@ window.addEventListener('DOMContentLoaded', () => {
     log(`Echo Arena connected`)
   })
 
+  initAutoStream(document)
+
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url')
   const obsWebsocketPortInput = document.getElementById('obs-websocket-port')
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
@@ -172,7 +174,6 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 
   initVrmlMatchMode(document)
-  initAutoStream(document)
 })
 
 
@@ -257,15 +258,16 @@ const initAutoStream = (document) => {
       const dur = document.getElementById('duration[0]')
       const state = document.getElementById('event')
       const betwen = document.getElementById('betwen-scene[0]')
+      const clips = document.getElementById('clips')
+      const buffer = document.getElementById('buffer')
 
-      echoEventSelects && [...echoEventSelects].forEach((echoEventSelect) => {
         data.events.map((eventName) => {    
           const opt = document.createElement('option');
           opt.value = eventName;
           opt.innerHTML = eventName;
-          echoEventSelect.appendChild(opt);
+          console.log(opt)
+          event.appendChild(opt);
         })
-      })
 
       const sendAuto = () => {
         ipcRenderer.send('scenes.autoStart', {
@@ -294,9 +296,13 @@ const initAutoStream = (document) => {
         events = events.filter(function( obj ) {
           return obj.event !== event.value;
         })
-        events.push({
-          event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked
-        })
+
+        let obj = {event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked, canClip:false}
+        if(clips.style.display == 'block') {
+          obj = {event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked, canClip:true, clip:buffer.checked}
+        } 
+
+        events.push(obj)
 
         ipcRenderer.send('scenes.events', {
           events:events
@@ -305,12 +311,20 @@ const initAutoStream = (document) => {
 
       const switchEvent = (event) => {
         let data = events.find(element => element.event === event)
+        if (data.canClip) {
+          clips.style.display = 'block'
+          buffer.checked = data.clip
+        } else {
+          clips.style.display = 'none'
+          buffer.checked = false
+        }
         state.checked = data.used
         dur.value = data.duration
         scene.value = data.scene
         delayEvent.value = data.delay
       }
 
+      buffer.addEventListener('change',sendEvent, false)
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })

@@ -4,6 +4,7 @@ class TeamChange {
         this.blue = []
         this.orange = []
         this.rostersA = []
+        this.customizable = true
     }
 
     handle(gameData, eventEmitter) {

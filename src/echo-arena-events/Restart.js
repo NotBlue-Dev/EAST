@@ -2,6 +2,7 @@ class Restart {
     constructor() {
         this.name = 'Restart'
         this.Restart = false
+        this.customizable = true
     }
 
     handle(gameData, eventEmitter) {

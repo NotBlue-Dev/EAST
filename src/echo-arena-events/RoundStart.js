@@ -3,6 +3,7 @@ class RoundStart {
         this.name = 'Round start'
         this.roundStarted = false
         this.lastRound = 0
+        this.customizable = true
     }
 
     handle(gameData, eventEmitter) {

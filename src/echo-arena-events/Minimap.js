@@ -2,9 +2,10 @@ class Minimap {
     constructor() {
         // disc x,z
         // player x,z head, number
-        this.name = 'Minimap'
+        this.name = 'Minimap (do not use)'
         this.blue = []
         this.orange = []
+        this.customizable = false
     }
 
     handle(gameData, eventEmitter) {

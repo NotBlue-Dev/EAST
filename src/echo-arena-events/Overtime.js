@@ -2,6 +2,7 @@ class Overtime {
     constructor() {
         this.name = 'Overtime'
         this.isOvertime = false
+        this.customizable = true
     }
 
     handle(gameData, eventEmitter) {

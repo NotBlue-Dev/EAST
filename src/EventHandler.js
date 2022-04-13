@@ -95,6 +95,7 @@ class EventHandler {
     }
 
     switchWindowEvent(event) {
+        console.log(event)
         if(event.used) {
             setTimeout(() => {
                 this.obsClient.send('SetCurrentScene',{"scene-name":event.scene})
@@ -111,6 +112,11 @@ class EventHandler {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
+            if(gameEvent.clip) {
+                setTimeout(() => {
+                    this.obsClient.send('SaveReplayBuffer')
+                }, gameEvent.delay * 1000);
+            }
         })
 
         this.eventEmitter.on('game.restart', (args, event) => {
@@ -153,18 +159,6 @@ class EventHandler {
             clearTimeout(this.delay)
             clearTimeout(this.dur)
         })
-        this.eventEmitter.on('game.roundTime', (args, event) => {
-            let index = this.config.game.events.findIndex(x => x.event === args.name)
-            let gameEvent = this.config.game.events[index]
-            this.switchWindowEvent(gameEvent)
-        })
-        this.eventEmitter.on('game.scoreBoard', (args, event) => {
-            let index = this.config.game.events.findIndex(x => x.event === args.name)
-            let gameEvent = this.config.game.events[index]
-            this.switchWindowEvent(gameEvent)
-        })
-
-        
     }
 
 }

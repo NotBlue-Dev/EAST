@@ -86,6 +86,15 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
+        this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
+            this.globalConfig.autoStream.end = {
+                ...this.globalConfig.autoStream.end,
+                ...args
+            }
+            this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
+        })
+
         this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
@@ -103,8 +112,9 @@ class OBSPlayer {
             })
         })
 
+        let ev = events.filter(event => event.customizable)
         this.eventEmitter.send('echoArena.eventsLoaded', {
-            events: events.map(event => event.name).filter(event => event !== undefined)
+            events: ev.map(event => event.name)
         }) 
 
         this.eventEmitter.on('obsWebsocket.connect', (args, event) => {

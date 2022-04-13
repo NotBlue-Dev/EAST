@@ -1,6 +1,7 @@
 class PossessionChanged {
     constructor() {
         this.name = 'Possession changed'
+        this.customizable = true
         this.possession = {
             team: null,
             player: null,

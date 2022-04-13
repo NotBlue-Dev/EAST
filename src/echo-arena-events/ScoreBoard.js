@@ -1,8 +1,9 @@
 class ScoreBoard {
     constructor() {
-        this.name = 'scoreBoard'
+        this.name = 'scoreBoard (do not use)'
         this.blue = []
         this.orange = []
+        this.customizable = false
     }
 
     handle(gameData, eventEmitter) {

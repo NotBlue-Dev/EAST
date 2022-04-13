@@ -45,13 +45,13 @@
         },
         "game":{
             "events":[
-                {"event":"Round start","delay":2, "scene":"Echo", "duration":5, "used":true},
-                {"event":"Round over","delay":2, "scene":"Round Betwen", "duration":5, "used":true},
-                {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":false},
-                {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true},
-                {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false},
-                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false},
-                {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false}
+                {"event":"Round start","delay":2, "scene":"Echo", "duration":5, "used":true, "canClip":false},
+                {"event":"Round over","delay":2, "scene":"Round Betwen", "duration":5, "used":true, "canClip":false},
+                {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":false, "canClip":true, "clip":true},
+                {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true, "canClip":false},
+                {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
+                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
+                {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false, "canClip":false}
             ]
         },
         "end":{

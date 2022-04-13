@@ -18,6 +18,10 @@ body::-webkit-scrollbar {
     display: none;
 }
 
+#clips {
+    display: none;
+}
+
 .navbar-header {
     margin-left: 9%;
 }

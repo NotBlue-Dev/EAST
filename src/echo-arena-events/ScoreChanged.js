@@ -3,6 +3,7 @@ class ScoreChanged {
         this.name = 'Score changed'
         this.orangePoints = null
         this.bluePoints = null
+        this.customizable = true
     }
 
     handle(gameData, eventEmitter) {
@@ -39,7 +40,7 @@ class ScoreChanged {
                 nb:nbData
             }
 
-            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data, name:this.name});
+            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data, name:this.name, clip:false});
         }
     }
 }
