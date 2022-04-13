@@ -111,6 +111,9 @@ class EventHandler {
         this.eventEmitter.on('game.scoreChanged', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
+            setTimeout(() => {
+                this.eventEmitter.send('game.endScore')
+            }, gameEvent.duration * 1000);
             this.switchWindowEvent(gameEvent)
             if(gameEvent.clip) {
                 setTimeout(() => {

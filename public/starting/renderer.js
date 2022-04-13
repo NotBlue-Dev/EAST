@@ -70,6 +70,9 @@ window.addEventListener("load", (event) => {
 
     // for mixed
     socket.on('game.teamChange', (arg) => {
+
+        nameA.innerHTML = "Orange"
+        nameB.innerHTML = "Blue"
         // clear player
         while (teamPlayerA.firstChild) {
             teamPlayerA.removeChild(teamPlayerA.firstChild);

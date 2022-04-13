@@ -28,9 +28,10 @@ window.addEventListener("load", (event) => {
         }
 
         comp.classList.remove('hide')
-        setTimeout(() => {
-            comp.classList.add('hide')
-        }, 8000);
+    })
+
+    socket.on('game.endScore', (arg) => {
+        comp.classList.add('hide')
     })
     
     socket.emit('overlay.ready', {'overlay': 'shot'})
