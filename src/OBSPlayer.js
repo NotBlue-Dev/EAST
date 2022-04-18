@@ -112,6 +112,15 @@ class OBSPlayer {
             })
         })
 
+        this.eventEmitter.on('echoArena.edit', (args, event) => {
+            this.globalConfig.echoArena.ip = args.ip
+            this.globalConfig.echoArena.autoConnect = args.autoConnect
+            this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('echoArena.configEdited', this.globalConfig.echoArena)
+        })
+
+        
+
         let ev = events.filter(event => event.customizable)
         this.eventEmitter.send('echoArena.eventsLoaded', {
             events: ev.map(event => event.name)
@@ -160,10 +169,8 @@ class OBSPlayer {
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
                 this.eventEmitter.add(this.overlayWS)
-                this.globalConfig.overlay = {
-                    ...this.globalConfig.overlay,
-                    ...args
-                }
+                this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
+                this.globalConfig.overlayWs.port = args.port
                 this.configLoader.save(this.globalConfig)
                 this.eventEmitter.send('overlayWs.listening', args)
 
@@ -174,6 +181,14 @@ class OBSPlayer {
                 })
             })
         })
+
+        this.eventEmitter.on('overlayWs.config', (args, event) => {
+            this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
+            this.globalConfig.overlayWs.port = args.port
+            this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('overlayWs.configEdited', this.globalConfig.overlayWs)
+        })
+        
 
         this.eventEmitter.on('overlay.ready', (args, event) => {
             this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)

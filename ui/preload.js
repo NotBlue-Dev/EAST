@@ -10,6 +10,17 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
+  const echoArenaConfig = () => {
+    ipcRenderer.send('echoArena.edit', {
+      ip: echoArenaUrlInput.value,
+      autoConnect: echoArenaAutoConnectInput.checked,
+    })
+
+  }
+  
+  echoArenaUrlInput.addEventListener('change', echoArenaConfig,false)
+  echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig,false)
+
   const echoArenaConnect = () => {
     ipcRenderer.send('echoArena.connect', {
       ip: echoArenaUrlInput.value,
@@ -85,12 +96,23 @@ window.addEventListener('DOMContentLoaded', () => {
   const overlayPortInput = document.getElementById('overlay-port')
   const overlayAutoLaunchInput = document.getElementById('overlay-autolaunch')
   const launchOverlayServerButton = document.getElementById('launch-overlay-server')
-  launchOverlayServerButton.addEventListener('click', () => {
+  const launch = () => {
     ipcRenderer.send('overlayWs.launchServer', {
       autoLaunch: overlayAutoLaunchInput.checked,
       port: overlayPortInput.value
     })
-  })
+  }
+
+  const edit = () => {
+    ipcRenderer.send('overlayWs.config', {
+      autoLaunch: overlayAutoLaunchInput.checked,
+      port: overlayPortInput.value
+    })
+  }
+
+  overlayPortInput.addEventListener('change', edit,false)
+  overlayAutoLaunchInput.addEventListener('change', edit,false)
+  launchOverlayServerButton.addEventListener('click', launch,false)
 
   ipcRenderer.on('overlayWs.listening', (event, args) => {
     launchOverlayServerButton.disabled = true
@@ -101,7 +123,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('config.loaded', (event, data) => {
     echoArenaUrlInput.value = data.echoArena.ip
-    echoArenaAutoConnectInput.value = data.echoArena.autoConnect
+    echoArenaAutoConnectInput.checked = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {
       const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)
       ipcRenderer.on('echoArena.connected', () => {
@@ -122,14 +144,15 @@ window.addEventListener('DOMContentLoaded', () => {
     if(data.obs.autoBuffer) {
       obsWebsocketAutoBufferInput.checked = true
     }
-
     overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch
     overlayPortInput.value = data.overlayWs.port
     if (data.overlayWs.autoLaunch) {
-      ipcRenderer.send('overlayWs.launchServer', {
-        autoLaunch: overlayAutoLaunchInput.checked,
-        port: overlayPortInput.value
-      })
+      setTimeout(() => {
+        ipcRenderer.send('overlayWs.launchServer', {
+          autoLaunch: overlayAutoLaunchInput.checked,
+          port: overlayPortInput.value
+        })
+      }, 5000);
     }
   })
 
@@ -203,9 +226,6 @@ const initVrmlMatchMode = (document) => {
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
     autoLoad.checked = data.auto
-    if(data.auto) {
-      vrmlNext(data.auto)
-    }
 
     data.teams.map((team) => {
       const opt = document.createElement('option');
@@ -216,6 +236,10 @@ const initVrmlMatchMode = (document) => {
       }
       teamSelect.appendChild(opt);
     })
+
+    if(data.auto) {
+      vrmlNext(data.auto)
+    }
   })
 
   teamSelect.addEventListener('change', (event) => {
