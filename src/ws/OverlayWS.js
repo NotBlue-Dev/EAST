@@ -14,6 +14,10 @@ class OverlayWS {
         this.initializeOverlayServer(app, config)
         this.server = http.createServer(app)
         this.io = new Server(this.server);
+
+        this.io.on('connection', (socket) => {
+            this.socket = socket
+        })
     }
 
     initializeOverlayServer(app, config) {
@@ -35,9 +39,7 @@ class OverlayWS {
     }
 
     on = (channel, callable) => {
-        this.io.on('connection', (socket) => {
-            socket.on(channel, callable);
-        });
+        this.socket.on(channel, callable);
     }
     
     send = (channel, args) => {

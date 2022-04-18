@@ -20,7 +20,7 @@ window.addEventListener("load", () => {
 
     const week = svg.getElementById('WEEK_')
 
-    function fill(arg) {
+    const fill = function (arg) {
         orange = arg.teams.home
         blue = arg.teams.away
 
@@ -78,5 +78,6 @@ window.addEventListener("load", () => {
         let matchCountDown = setInterval(function() {timerFunc()}, 1000)
     })
 
+    socket.emit('overlay.ready', {'overlay': 'wait'})
 });
 

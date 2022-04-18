@@ -17,7 +17,7 @@ class RoundStart {
             return
         }
 
-        if (status === 'round_start' && (gameData.round != this.lastRound || gameData.round == 0)) {
+        if (status === 'round_start' && (gameData.round != this.lastRound)) {
             this.roundStarted = true
             this.lastRound = gameData.round
             eventEmitter.send('game.roundStart', {

@@ -1,6 +1,7 @@
 class GameData {
-    constructor(json, vrmlInfo) {
+    constructor(json, vrmlInfo, pingTracking = false) {
         this.vrmlInfo = vrmlInfo
+        this.pingTracking = pingTracking
         this.timestamp = Date.now()
         this.clock = json.game_clock
         this.teams = json.teams
@@ -11,6 +12,7 @@ class GameData {
             teamData:[],
             playerStats:[],
             playerPosition:[],
+            playerPing:[],
             points:json.blue_points
         }
         this.orangeTeam = {
@@ -19,6 +21,7 @@ class GameData {
             teamData:[],
             playerStats:[],
             playerPosition:[],
+            playerPing:[],
             points:json.orange_points
         }
         this.discPosition = [json.disc.position[0], json.disc.position[2]]
@@ -31,7 +34,11 @@ class GameData {
         
         
         this.distance_thrown = this.lastscore.distance_thrown
-        this.round = json.blue_round_score + json.orange_round_score
+        this.round = json.blue_round_score + json.orange_round_score + 1
+        
+        if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {
+            return
+        }
 
         if(this.blueTeam.blueTeamPlayers.length !== 0) {
             for (let player of this.blueTeam.blueTeamPlayers) {
@@ -39,6 +46,7 @@ class GameData {
                 this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
                 this.blueTeam.teamData.push(player.name)
                 this.blueTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
+                this.blueTeam.playerPing.push({name: player.name, ping: player.ping})
             }
         }
  
@@ -48,11 +56,8 @@ class GameData {
                 this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
                 this.orangeTeam.teamData.push(player.name)
                 this.orangeTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
+                this.orangeTeam.playerPing.push({name: player.name, ping: player.ping})
             }
-        }
-
-        if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {
-            return
         }
 
         this.status = json.game_status;

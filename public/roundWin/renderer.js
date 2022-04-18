@@ -11,3 +11,5 @@ socket.on('round', (arg) => {
 socket.on('winner', (arg) => {
     console.log(arg)
 });
+
+socket.emit('overlay.ready', {'overlay': 'roundWin'})

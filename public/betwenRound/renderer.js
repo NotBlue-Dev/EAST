@@ -69,10 +69,7 @@ window.addEventListener("load", (event) => {
         }
     })
 
-    socket.emit('get-teams-data')
-    
-    socket.emit('get-week')
-
+    socket.emit('overlay.ready', {'overlay': 'betweenRound'})
 });
 
 

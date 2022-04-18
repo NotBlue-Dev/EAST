@@ -50,6 +50,7 @@ window.addEventListener("load", (event) => {
 
     socket.on('game.roundTime', (arg) => {
         document.getElementById('timing').innerHTML = arg.time
-    });    
-    
+    });
+
+    socket.emit('overlay.ready', {'overlay': 'game'})
 })

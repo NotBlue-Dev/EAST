@@ -49,9 +49,6 @@ window.addEventListener("load", (event) => {
         }, 8000);
     })
     
-
-
-
-
+    socket.emit('overlay.ready', {'overlay': 'shot'})
 });
 

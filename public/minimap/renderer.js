@@ -76,6 +76,8 @@ window.addEventListener('load', function() {
 
         set_pos(disc, arg.disc[0], arg.disc[1]); 
     });
+
+    socket.emit('overlay.ready', {'overlay': 'minimap'})
 });
 
 function set_pos(elem, x, z) {
