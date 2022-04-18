@@ -7,7 +7,7 @@ class GameData {
         this.teams = json.teams
 
         this.blueTeam = {
-            blueTeamPlayers: json.teams[0].players,
+            blueTeamPlayers: [],
             blueReset: (json.blue_team_restart_request > 0),
             teamData:[],
             playerStats:[],
@@ -15,8 +15,9 @@ class GameData {
             playerPing:[],
             points:json.blue_points
         }
+        this.blueTeam.blueTeamPlayers = json.teams[0].players
         this.orangeTeam = {
-            orangeTeamPlayers :json.teams[1].players,
+            orangeTeamPlayers :[],
             orangeReset :(json.orange_team_restart_request > 0),
             teamData:[],
             playerStats:[],
@@ -24,6 +25,7 @@ class GameData {
             playerPing:[],
             points:json.orange_points
         }
+        this.orangeTeam.orangeTeamPlayers=json.teams[1].players
         this.discPosition = [json.disc.position[0], json.disc.position[2]]
         
         this.lastscore = json.last_score;

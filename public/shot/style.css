@@ -2,9 +2,10 @@ body {
     overflow: hidden;
 }
 
-.replay-container {
+#gradient {
     --size: 26vw;
     --radius: 0.4vw;
+    --gradient:conic-gradient(#DC872C, #FA3F10);
     position: relative;
     width: var(--size);
     height: 14vw;
@@ -109,13 +110,13 @@ body {
     background-image: linear-gradient(to right, rgb(3, 117, 255), rgb(3, 185, 224));
 }
 
-.replay-container::before {
+#gradient::before {
     content: '';
     width: 150%;
     height: 119vw;
     position: absolute;
     top: -351%;
+    background: var(--gradient);
     left: -25%;
-    background: conic-gradient(#DC872C, #FA3F10);
     animation: rotate-border 5s linear infinite;
 }

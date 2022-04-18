@@ -1,24 +1,9 @@
 let socket = io();
 
 window.addEventListener("load", (event) => {
-    let svg = document.querySelector(".svgClass").getSVGDocument()
+    const imgA = document.getElementById('logoA')
 
-    let customMain = null
-
-    let listMain = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('MainColor')
-    for (let item of listMain) {
-        if(customMain !== null) {
-            item.style.fill = customMain
-        }
-    }
-
-    const imgA = svg.getElementById('blue-logo')
-
-    const imgB = svg.getElementById('orange-logo')
-
-    socket.on('game.roundStart', (arg) => {
-        svg.getElementById('Round').innerHTML = `Round ${arg.round}`
-    });
+    const imgB = document.getElementById('logoB')
 
     const fill = (arg) => {
         orange = arg.teams.home
@@ -34,23 +19,40 @@ window.addEventListener("load", (event) => {
             }
         }
 
-        document.getElementById('blue-name').innerHTML = blue.name
-        document.getElementById('orange-name').innerHTML = orange.name
-        imgA.setAttribute("xlink:href", `https://vrmasterleague.com/${blue.logo}`)
-        imgB.setAttribute("xlink:href", `https://vrmasterleague.com/${orange.logo}`)
+        document.getElementById('teamA').innerHTML = blue.name
+        document.getElementById('teamB').innerHTML = orange.name
+        imgA.src = `https://vrmasterleague.com/${blue.logo}`
+        imgB.src = `https://vrmasterleague.com/${orange.logo}`
     }
 
     socket.on('vrml.colorChanged', fill)
     socket.on('vrml.matchDataLoaded', fill)
     
     socket.on('game.scoreChanged', (arg) => {
-        document.getElementById('blue-score').innerHTML = arg.blue
-        document.getElementById('orange-score').innerHTML = arg.orange
+        document.getElementById('scoreB').innerHTML = arg.blue
+        document.getElementById('scoreA').innerHTML = arg.orange
     });
 
     socket.on('game.roundTime', (arg) => {
-        document.getElementById('timing').innerHTML = arg.time
+        let split = arg.time.split('.')
+
+        document.getElementById('ms').innerHTML = `.${split[1]}`
+        document.getElementById('minutes').innerHTML = `${split[0]}`
     });
+
+    socket.on('game.roundOver', (arg) => {
+        if(arg.winner !== null) {
+            if(arg.winner === 'orange') {
+                let current = document.getElementById(`OrangeR${arg.rounds[arg.rounds.length-1].currentRound}`)
+                current.classList.add('winO')
+                current.classList.remove('tbdO')
+            } else {
+                let current = document.getElementById(`BlueR${arg.rounds[arg.rounds.length-1].currentRound}`)
+                current.classList.add('winB')
+                current.classList.remove('tbdB')
+            }
+        }
+    })
 
     socket.emit('overlay.ready', {'overlay': 'game'})
 })

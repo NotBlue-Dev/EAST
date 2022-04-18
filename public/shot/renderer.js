@@ -15,13 +15,15 @@ window.addEventListener("load", (event) => {
     socket.on('game.scoreChanged', (arg) => {
         if(arg.data.team === 'blue') {
             document.getElementById('box').classList.add('b')
+            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(rgb(3, 117, 255), rgb(3, 185, 224))")
         } else {
             document.getElementById('box').classList.add('o')
+            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(#DC872C, #FA3F10)");
         }
         
         speed.innerHTML = `${arg.data.speed}m/s`
         dist.innerHTML = `${arg.data.dist}m`
-        points.innerHTML = arg.data.ammount
+        points.innerHTML = `${arg.data.ammount}pts`
         pseudo.innerHTML = arg.data.scorer
         if(arg.data.assist !== '[INVALID]') {
             assist.innerHTML = `Assisted by ${arg.data.assist}`

@@ -18,8 +18,8 @@ module.exports = [
     new TeamChange(),
     // new ScoreBoard(),
     new Restart(),
-    new RoundTimeChanged(),
+    // new RoundTimeChanged(),
     new ScoreChanged(),
     // new Minimap()
-    new PingTracking(),
+    // new PingTracking(),
 ]

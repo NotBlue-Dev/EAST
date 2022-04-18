@@ -8,20 +8,38 @@
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      <div class="background">
-         <object class="svgClass" type="image/svg+xml" data="/assets/overlay/top.svg" >
-         </object>
+      <div class="topBar">
+         <img id="logoA" src="/assets/temp.png">
+         <div class="content">
+            <div class="left">
+               <a id="teamA"></a>
+            </div>
+
+            <div class="mid">
+               <div class="time">
+                  <a id="minutes" class="second"></a>
+                  <a id="ms" class="ms"></a>
+               </div>
+               <div class="bo3">
+                  <a>BO3</a>
+               </div>
+            </div>
+
+            <div class="right">
+               <a id="teamB"></a>
+            </div>
+         </div>
+         <img id="logoB" src="/assets/temp.png">
       </div>
-      <div class="content">
-         <a id="blue-score">0</a>
-         <a id="timing"></a>
-         <a id="orange-score">0</a>
+      <div id="OrangeR2" class="round tbdO"></div>
+      <div id="OrangeR1" class="round tbdO"></div>
+      <div class="orange">
+         <div class="scoreA"><a id="scoreA"></a></div>
       </div>
-      <div class="divA">
-         <a class="txt" id="blue-name"></a>
-      </div>
-      <div class="divB">
-         <a class="txt" id="orange-name"></a>
+      <div id="BlueR2" class="round tbdB"></div>
+      <div id="BlueR1" class="round tbdB"></div>
+      <div class="blue">
+         <div class="scoreB"><a id="scoreB"></a></div>
       </div>
    </body>
 </html>
