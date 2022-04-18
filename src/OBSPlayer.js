@@ -165,6 +165,10 @@ class OBSPlayer {
             })
         })
 
+        this.eventEmitter.on('overlay.ready', (args, event) => {
+            this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)
+        })
+
         this.eventEmitter.on('vrml.autoLoad', (args, event) => {
             this.globalConfig.vrml.autoLoad = args
             this.configLoader.save(this.globalConfig)
@@ -186,13 +190,17 @@ class OBSPlayer {
         })
 
         this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
-            this.getMatchDataFromTeam(args.teamId).then((match) => {
-                if(this.echoArena !== null) this.echoArena.vrmlInfo = match
-                this.eventEmitter.send('vrml.matchDataLoaded', match)
-            }).catch(error => {
-                this.eventEmitter.send('vrml.matchDataNotFound', {
-                    teamId: args.teamId
-                })
+            this.loadMatchDataFromTeam(args.teamId)
+        })
+    }
+
+    loadMatchDataFromTeam(teamId) {
+        this.getMatchDataFromTeam(teamId).then((match) => {
+            if(this.echoArena !== null) this.echoArena.vrmlInfo = match
+            this.eventEmitter.send('vrml.matchDataLoaded', match)
+        }).catch(error => {
+            this.eventEmitter.send('vrml.matchDataNotFound', {
+                teamId: teamId
             })
         })
     }

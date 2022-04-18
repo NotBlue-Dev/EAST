@@ -115,5 +115,6 @@ window.addEventListener("load", (event) => {
         });
     });
 
+    socket.emit('overlay.ready', {'overlay': 'starting'})
 });
 

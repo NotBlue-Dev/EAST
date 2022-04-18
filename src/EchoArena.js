@@ -33,7 +33,7 @@ class EchoArena {
 
     async request() {
         fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
-            const gameData = new GameData(json, this.vrmlInfo)
+            const gameData = new GameData(json, this.vrmlInfo, true)
             events.forEach((event) => {
                 event.handle(gameData, this.eventEmitter)
             })
@@ -60,9 +60,12 @@ class EchoArena {
             if (this.fails < 5) {
                 setTimeout(() => {
                     this.request()
-                }, 1000);
+                }, 500);
             } else {
                 this.eventEmitter.send('echoArena.disconnected');
+                setTimeout(() => {
+                    this.request()
+                }, 2000);
             }
         })
     }
