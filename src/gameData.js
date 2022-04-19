@@ -45,7 +45,7 @@ class GameData {
         if(this.blueTeam.blueTeamPlayers.length !== 0) {
             for (let player of this.blueTeam.blueTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
-                this.blueTeam.playerStats.push({name:player.name, stats:player.stats})
+                this.blueTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})
                 this.blueTeam.teamData.push(player.name)
                 this.blueTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
                 this.blueTeam.playerPing.push({name: player.name, ping: player.ping})
@@ -55,7 +55,7 @@ class GameData {
         if(this.orangeTeam.orangeTeamPlayers.length !== 0) {
             for (let player of this.orangeTeam.orangeTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
-                this.orangeTeam.playerStats.push({name:player.name, stats:player.stats})
+                this.orangeTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})
                 this.orangeTeam.teamData.push(player.name)
                 this.orangeTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
                 this.orangeTeam.playerPing.push({name: player.name, ping: player.ping})
