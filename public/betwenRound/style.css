@@ -1,133 +1,151 @@
-
-
-object {
-    margin-top: 39px;
+body {
+    width: 100%;
+    overflow-y: hidden;
+    position: absolute;
+    font-family: 'Kanit', sans-serif;
 }
 
 .background {
-    position: absolute;
     width: 100%;
+    position: absolute;
+    height: 100vh;
+    background-color: #1B121E;
 }
 
-.content {
+#gradient {
+    --size: 56.4vw;
+    --radius: 0.8vw;
     position: relative;
+    width: var(--size);
+    height: 31.1vw;
+    margin-left: 2vw !important;
+    margin-top: 3vw !important;
+    padding: var(--radius);
+    overflow: hidden;
 }
 
+#gradient::before {
+    content: '';
+    width: 150%;
+    height: 119vw;
+    position: absolute;
+    top: -111%;
+    left: -25%;
+    background: conic-gradient(#0000ff00, #DC872C, #0000ff00, #03BAE0);
+    animation: rotate-border 5s linear infinite;
+}
 
-.nameBar {
+.replay-box {
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
     display: flex;
-    position: relative;
-    top: 37.2vw;
+    align-items: center;
     justify-content: center;
+    color: #fff;
+    background-color: #1B121E;
 }
 
-#teamNameA{
-    font-size: 1.2vw;
-    font-weight: 700;
-
-}
-
-#teamNameB {
-    font-size: 1.2vw;
-    font-weight: 700;
-
-}
-
-.mainColorFill {
-    fill:red !important
-}
-
-.contain {
-    margin-top: 37.8vw;
-    position: relative;
-}
-
-.contain a{
-    font-size: 1.2vw;
+.RoundO {
+    border-width: 0.2vw;
+    width: 4vw;
+    height: 4vw;
     font-weight: 600;
-    margin-top: 0.57vw;
-    margin-bottom: 0.55vw;
-}
-
-.place {
+    font-size: 2.5vw;
     display: flex;
-    top: 53.9vw;
-    font-size: 1.2vw;
-    font-weight: 700;
-    position: relative;
-}
-
-#nbA {
-    position: relative;
-    margin-left: 3.8vw;
-    width: 5%;
-    text-align-last: center;
-}
-
-#nbB {
-    position: absolute;
-    margin-left: 91.3vw;
-    width: 5%;
-    text-align: center;
-}
-
-#containerA {
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    justify-content: center;
     align-items: center;
-
-    margin-left: 42.2vw;
-
+    border-style: solid;
+    border-image:linear-gradient(to left, #DC872C, #FA4011) 1;
 }
 
-#containerB {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    align-items: center;
-    width: 15vw;
-    top: 0;
-    margin-left: 21.5vw;
-    top: 0;
-}
-
-.containNameStart {
-    position: relative;
-    align-items: center;
-    width: 455px;
-    margin-left: 42.2vw;
-    text-align: center;
-}
-
-.containNameStartB {
-    position: absolute;
-    align-items: center;
-    width: 455px;
-    margin-right: 42vw;
-    text-align: center;
-}
-
-.item a {
-    width: 20%;
-    text-align: center;
-}
-
-.item {
-    display: flex;
-    width: 96%;
-    justify-content: space-around;
-}
-
-.containScore {
-    position: absolute;
-    top: 43.53vw;
-    left: 45.75vw;
-    display: flex;
-    flex-direction: column;
-    gap: 55px;
-    font-size: 20px;
+.RoundB {
+    border-width: 0.2vw;
+    border-style: solid;
+    width: 4vw;
+    height: 4vw;
     font-weight: 600;
-    width: 8.6%;
+    font-size: 2.5vw;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    border-image:linear-gradient(to left, #0BDBE8, #0375FF) 1;
+}
+
+.rightTop {
+    position: absolute;
+    top: 2.95vw;
+    left: 65.5vw;
+}
+
+.rightTop h1 {
+    font-weight: 600;
+    font-size: 4vw;
+    margin-top: 0;
+    margin-left: 0.5vw;
+    line-height: 3.5vw;
+}
+
+.echo {
+    width: 30vw;
+}
+
+.sc {
+    font-size: 1.8vw;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 2.5vw;
+}
+
+.scores {
+    position: absolute;
+    left: 73.5vw;
+    top: 16.5vw;
+}
+
+.top, .bottom {
+    display: flex;
+    gap: 1vw;
+}
+
+.top {
+    margin-bottom: 1vw;
+}
+
+.replay {
+    position: fixed;
+    top: -3vw;
+    font-weight: 600;
+    font-size: 3vw;
+}
+
+.winO {
+    background-image: linear-gradient(to left, #DC872C, #FA4011);
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+}
+
+.looseO {
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+    background-color: #6E4416;
+}
+
+.winB {
+    background-image: linear-gradient(to left, #0BDBE8, #0375FF);
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+}
+
+.looseB {
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+    background-color: #025D70;
 }

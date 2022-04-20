@@ -1,30 +1,6 @@
 let socket = io();
 
 window.addEventListener("load", (event) => {
-
-    // ADD SOCKET LISTENING TO CUSTOM COLOR AND DO THIS WITH THE RIGHT COLORS
-    let customMain = null
-    let customScd = null
-
-    let listMain = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('MainColor')
-    for (let item of listMain) {
-        if(customMain !== null) {
-            item.style.fill = customMain
-        }
-    }
-
-    let listScd = document.querySelector(".svgClass").getSVGDocument().getElementsByClassName('ScdColor')
-    for (let item of listScd) {
-        if(item !== null) {
-            item.style.fill = customScd
-        }
-    }
-
-
-
-
-    let svg = document.querySelector(".svgClass").getSVGDocument()
-
     const imgA = svg.getElementById('teamA')
 
     const imgB = svg.getElementById('teamB')
