@@ -95,6 +95,13 @@ body {
     width: 13vw;
 }
 
+.cont {
+    display: flex;
+    position: absolute;
+    left: 2vw;
+    top: 37.9vw;
+}
+
 .rowO {
     background-image: linear-gradient(to left, rgba(250, 63, 16, 0.25), rgba(220, 135, 44,0.25));
     display: flex;
@@ -169,6 +176,10 @@ body {
     font-size: 1.05vw;
 }
 
+.hide {
+    display: none;
+}
+
 .rowB {
     background-image: linear-gradient(to right, rgba(3, 117, 255,0.25), rgba(3, 185, 224,0.25));
     display: flex;
@@ -184,10 +195,6 @@ body {
     display: flex;
     top: 37.9vw;
     left: 49.5vw;
-}
-
-.orange, .blue {
-    position: absolute;
 }
 
 .sc {
