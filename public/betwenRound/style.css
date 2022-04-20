@@ -91,6 +91,105 @@ body {
     width: 30vw;
 }
 
+.logoO, .logoB {
+    width: 13vw;
+}
+
+.rowO {
+    background-image: linear-gradient(to left, rgba(250, 63, 16, 0.25), rgba(220, 135, 44,0.25));
+    display: flex;
+    font-weight: 600;
+    font-size: 1.1vw;
+    margin-bottom: -1px;
+    align-items: center;
+    height: 2.7vw;
+    width: 34.5vw;
+}
+
+.name {
+    margin-left: 0.5vw;
+}
+
+.dat {
+    width: 1.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.data {
+    display: flex;
+    gap: 1.8vw;
+    margin-left: 11.1vw;
+}
+
+.contain {
+    display: flex;
+    gap: 1.5vw;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1vw;
+}
+
+.teamO {
+    width: 13.75vw;
+    height: 2.5vw;
+    background-image: linear-gradient(to left, #DC872C, #FA4011);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.05vw;
+}
+
+
+.datab {
+    margin-left: 1.15vw;
+    margin-right: 9.9vw;
+}
+
+.b {
+    justify-content: end;
+}
+
+.orange {
+    display: flex;
+    top: 37.9vw;
+    left: 2vw;
+}
+
+.teamB {
+    width: 13.75vw;
+    height: 2.5vw;
+    background: linear-gradient(to right, #0376FF, #03BAE0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.05vw;
+}
+
+.rowB {
+    background-image: linear-gradient(to right, rgba(3, 117, 255,0.25), rgba(3, 185, 224,0.25));
+    display: flex;
+    font-weight: 600;
+    font-size: 1.1vw;
+    margin-bottom: -1px;
+    align-items: center;
+    height: 2.7vw;
+    width: 34.5vw;
+}
+
+.blue {
+    display: flex;
+    top: 37.9vw;
+    left: 49.5vw;
+}
+
+.orange, .blue {
+    position: absolute;
+}
+
 .sc {
     font-size: 1.8vw;
     font-weight: 600;
