@@ -92,6 +92,7 @@ body {
 }
 
 .logoO, .logoB {
+    height: 13.15vw;
     width: 13vw;
 }
 
@@ -113,10 +114,6 @@ body {
     width: 34.5vw;
 }
 
-.name {
-    margin-left: 0.5vw;
-}
-
 .dat {
     width: 1.5vw;
     display: flex;
@@ -127,7 +124,7 @@ body {
 .data {
     display: flex;
     gap: 1.8vw;
-    margin-left: 11.1vw;
+    margin-left: 1.9vw;
 }
 
 .contain {
@@ -152,7 +149,7 @@ body {
 
 .datab {
     margin-left: 1.15vw;
-    margin-right: 9.9vw;
+    margin-right: 1.9vw;
 }
 
 .b {
@@ -163,6 +160,19 @@ body {
     display: flex;
     top: 37.9vw;
     left: 2vw;
+}
+
+.name {
+    width: 13vw;
+    display: flex;
+    justify-content: end;
+}
+
+.nameO {
+    width: 13vw;
+    display: flex;
+    justify-content: start;
+    margin-left: 0.5vw;
 }
 
 .teamB {
