@@ -14,7 +14,6 @@ window.addEventListener("load", (event) => {
     const teamPlayerB = document.getElementById('playersBlue')
 
     const fill = (arg) => {
-        console.log(arg)
         const season = document.getElementById('season')
         season.innerHTML =  `SEASON ${arg.season}`
         if(arg.teams.length === 0) {

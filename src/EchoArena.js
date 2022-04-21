@@ -3,12 +3,12 @@ const fetch = require('node-fetch');
 const GameData = require("./gameData");
 
 class EchoArena {
-    constructor({ip, port}, eventEmitter) {
+    constructor({ip, port}, eventEmitter, vrmlInfo) {
         this.eventEmitter = eventEmitter
         this.ip = ip
         this.port = port
         this.fails = 0
-        this.vrmlInfo = null
+        this.vrmlInfo = vrmlInfo
     }
     
     async listen() {

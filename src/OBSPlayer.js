@@ -19,6 +19,8 @@ class OBSPlayer {
         this.scenes = []
         this.eventHandler = null
         this.echoArena = null
+        this.vrmlInfo = null
+        this.vrmlInfoWS = []
 
         this.config = this.globalConfig.echoArena
         this.vrmlClient = new VRMLClient()
@@ -65,8 +67,7 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         this.eventEmitter.on('overlay.ready', (args, event) => {
-            let data = this.loadMatchDataFromTeam(this.globalConfig.vrml.teamId)
-            this.overlayWS.send('vrml.matchDataLoaded', data)
+            this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
         })
     }
 
@@ -233,10 +234,14 @@ class OBSPlayer {
 
     loadMatchDataFromTeam(teamId) {
         this.getMatchDataFromTeam(teamId).then((match) => {
-            if(this.echoArena !== null) this.echoArena.vrmlInfo = match
+            if(this.echoArena !== null) {
+                this.echoArena.vrmlInfo = match
+            } 
+            this.vrmlInfoWS = match
             this.eventEmitter.send('vrml.matchDataLoaded', match)
             
         }).catch(error => {
+            this.vrmlInfoWS = this.Allinfo
             this.eventEmitter.send('vrml.matchDataNotFound', {
                 teamId: teamId
             })
@@ -371,9 +376,10 @@ class OBSPlayer {
     }
         
     connectEchoArena(config) {
-        console.log(this.echoArena)
+        
         return new Promise((resolve,reject) => {
-            if(this.echoArena === null) this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo)
+            console.log(this.echoArena)
             this.echoArena.listen()
         })
     }

@@ -202,7 +202,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 const initVrmlMatchMode = (document) => {
   const matchDataBlock = document.getElementById('matchData')
-  const isVrmlMatchInput = document.getElementById('vrmlMatch')
   const autoLoad = document.getElementById('vrml-autoconnect')
   const teamSelect = document.getElementById('teams')
   
@@ -219,10 +218,6 @@ const initVrmlMatchMode = (document) => {
     }
 
   }
-
-  isVrmlMatchInput.addEventListener('change', (event) => {
-    vrmlNext(event.target.checked)
-  })
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
     autoLoad.checked = data.auto

@@ -18,14 +18,22 @@ window.addEventListener("load", (event) => {
     const teamPlayerB = document.getElementById('BoxBlue') 
 
     const fill = (arg) => {
+        if(arg.week == null) {
+            week.innerHTML = `MIXED GAME`
+        } else {
+            week.innerHTML = `VRML Week ${arg.week}`
+        }
+        
         if(arg.teams.length === 0) {
             vrml = false
+            return
         } else {
             vrml = true
         }
+
         orange = arg.teams.home
         blue = arg.teams.away
-        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+        if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
                 blue = arg.teams.home
                 orange = arg.teams.away
@@ -35,7 +43,7 @@ window.addEventListener("load", (event) => {
             }
         }
 
-        week.innerHTML = `VRML Week ${arg.week}`
+        
         nameA.innerHTML = orange.name
         nameB.innerHTML = blue.name
         imgA.src = `https://vrmasterleague.com/${blue.logo}`
