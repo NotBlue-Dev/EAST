@@ -46,6 +46,27 @@ window.addEventListener("load", (event) => {
         imgB.src = `https://vrmasterleague.com/${orange.logo}`
     }
 
+
+
+    socket.on('game.roundOver', (arg) => {  
+        arg.rounds.forEach(round => {
+            if(round.winner === 'orange') {
+                let r = document.getElementById(`R${round.currentRound}O`)
+                r.classList.add('winO')
+                let rB = document.getElementById(`R${round.currentRound}B`)
+                rB.classList.add('looseB')
+            } else {
+                let r = document.getElementById(`R${round.currentRound}B`)
+                r.classList.add('winB')
+                let rB = document.getElementById(`R${round.currentRound}O`)
+                rB.classList.add('looseO')
+            }
+            document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange
+            document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue
+        });
+          
+    })
+
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
             nameA.innerHTML = "ORANGE"

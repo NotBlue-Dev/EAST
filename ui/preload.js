@@ -216,7 +216,6 @@ const initVrmlMatchMode = (document) => {
         teamId: teamSelect.value
       })
     }
-
   }
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
