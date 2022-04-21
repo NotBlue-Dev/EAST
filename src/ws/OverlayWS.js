@@ -13,11 +13,7 @@ class OverlayWS {
         this.rootPath = rootPath
         this.initializeOverlayServer(app, config)
         this.server = http.createServer(app)
-        this.io = new Server(this.server);
-
-        this.io.on('connection', (socket) => {
-            this.socket = socket
-        })
+        this.io = new Server(this.server);        
     }
 
     initializeOverlayServer(app, config) {
@@ -33,15 +29,20 @@ class OverlayWS {
     startServer(port) {
         return new Promise((resolve) => {
             this.server.listen(port, () => {
-                resolve()
+                this.io.on('connection', (socket) => {
+                    resolve()
+                    this.socket = socket
+                })
+                
             })
         })
     }
 
     on = (channel, callable) => {
+        
         this.socket.on(channel, callable);
     }
-    
+
     send = (channel, args) => {
         this.io.emit(channel, args);
     }

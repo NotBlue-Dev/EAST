@@ -45,6 +45,27 @@ class OBSPlayer {
     }
 
     initializeListeners() {
+        this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
+            this.overlayWS.startServer(args.port).then(() => {
+                this.eventEmitter.add({send:this.overlayWS.send, on:this.overlayWS.on})
+                this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
+                this.globalConfig.overlayWs.port = args.port
+                this.configLoader.save(this.globalConfig)
+                this.eventEmitter.send('overlayWs.listening', args)
+                this.initializeListeners()
+            }).catch((error) => {
+                this.eventEmitter.send('overlayWs.launchFailed', {
+                    args,
+                    error
+                })
+            })
+        })
+
+        
+        this.eventEmitter.on('overlay.ready', (args, event) => {
+            this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)
+        })
+
         this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
             this.globalConfig.obs.autoBuffer = args
             this.configLoader.save(this.globalConfig)
@@ -166,32 +187,11 @@ class OBSPlayer {
             this.obsClient.send("StartReplayBuffer")
         })
 
-        this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
-            this.overlayWS.startServer(args.port).then(() => {
-                this.eventEmitter.add(this.overlayWS)
-                this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
-                this.globalConfig.overlayWs.port = args.port
-                this.configLoader.save(this.globalConfig)
-                this.eventEmitter.send('overlayWs.listening', args)
-
-            }).catch((error) => {
-                this.eventEmitter.send('overlayWs.launchFailed', {
-                    args,
-                    error
-                })
-            })
-        })
-
         this.eventEmitter.on('overlayWs.config', (args, event) => {
             this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
             this.globalConfig.overlayWs.port = args.port
             this.configLoader.save(this.globalConfig)
             this.eventEmitter.send('overlayWs.configEdited', this.globalConfig.overlayWs)
-        })
-        
-
-        this.eventEmitter.on('overlay.ready', (args, event) => {
-            this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)
         })
 
         this.eventEmitter.on('vrml.autoLoad', (args, event) => {
@@ -216,6 +216,10 @@ class OBSPlayer {
 
         this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
             this.loadMatchDataFromTeam(args.teamId)
+        })
+
+        this.eventEmitter.on('vrml.wichSeason', (args, event) => {
+            this.eventEmitter.send('vrml.season', this.vrmlClient.getSeason())
         })
     }
 

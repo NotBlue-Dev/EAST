@@ -37,6 +37,7 @@ const start = (webContents) => {
     const eventEmitter = new ChainEventEmitter()
     eventEmitter.add(stdEventEmitter())
     eventEmitter.add(uiEventEmitter(webContents))
+    
 
     const player = new OBSPlayer(
         __dirname,

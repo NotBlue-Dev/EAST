@@ -12,14 +12,14 @@ const PingTracking = require('./echo-arena-events/PingTracking');
 
 module.exports = [
     new Overtime(),
-    new PossessionChanged(),
+    // new PossessionChanged(),
     new RoundOver(),
     new RoundStart(),
     new TeamChange(),
-    new ScoreBoard(),
+    // new ScoreBoard(),
     new Restart(),
     // new RoundTimeChanged(),
-    new ScoreChanged(),
+    // new ScoreChanged(),
     // new Minimap()
     // new PingTracking(),
 ]

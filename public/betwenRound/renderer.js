@@ -217,4 +217,6 @@ function createBlue(playername) {
     container.appendChild(e_0);
 }
 
-
+socket.on('vrml.season', (arg) => {
+    console.log(arg)
+});
