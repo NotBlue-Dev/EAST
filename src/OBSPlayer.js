@@ -123,6 +123,11 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
+        this.eventEmitter.on('obsWebsocket.autoConnect', (args, event) => {
+            this.globalConfig.obs.autoConnect = args
+            this.configLoader.save(this.globalConfig)
+        })
+
         this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
             this.globalConfig.autoStream.end = {
                 ...this.globalConfig.autoStream.end,

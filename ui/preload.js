@@ -72,6 +72,10 @@ window.addEventListener('DOMContentLoaded', () => {
       autoBuffer:obsWebsocketAutoBufferInput.checked,
     })
   }
+
+  const editAutoOBS = () => {
+    ipcRenderer.send('obsWebsocket.autoConnect', obsWebsocketAutoConnectInput.checked)
+  }
   
   const startBuffer = () => {
     ipcRenderer.send('obsWebsocket.startBuffer')
@@ -90,6 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
   orangeCustom.addEventListener('change', customTeamName)
   obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
   obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
+  obsWebsocketAutoConnectInput.addEventListener('change',  editAutoOBS)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
 
   ipcRenderer.on('obsWebsocket.connected', () => {

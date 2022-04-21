@@ -56,21 +56,29 @@
           <div class="inline">
             <input type="password" class="obs" id="obs-websocket-password" />
           </div>
-          
-          <label for="obs-websocket-autoconnect">Auto-connect</label>
+        
+          <label for="obs-websocket-autoconnect">Auto-connect websocket</label>
           <div class="inline">
             <input type="checkbox" id="obs-websocket-autoconnect" /><a>Enable</a>
           </div>
-          
-          
+
           <label for="obs-buffer-autolaunch">Replay Buffer</label>
           <div class="inline">
             <input type="checkbox" id="obs-buffer-autolaunch" /><a>Auto-start</a>
           </div>
-          <div class="inline no-bottom">
+          <div class="inline">
             <button id="obs-start-buffer">Start</button>
           </div>
 
+          <label for="obs-websocket-password">OBS path</label>
+          <div class="inline">
+            <input type="text" class="txt" id="obs-path"/>
+          </div>
+          
+          <label for="obs-websocket-autoconnect">Auto-start OBS Software</label>
+          <div class="inline no-bottom">
+            <input type="checkbox" id="obs-software-auto" /><a>Enable</a>
+          </div>
 
         </article>
       </article>
