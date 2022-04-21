@@ -27,7 +27,8 @@
             {"path": "/game", "template": "game"},
             {"path": "/ot",   "template": "overTime"},
             {"path": "/possession", "template": "possess"},
-            {"path": "/shot",   "template": "shot"}
+            {"path": "/shot",   "template": "shot"},
+            {"path": "/halfTime",   "template": "halfTime"}
         ]
     },
     "autoStream": {
