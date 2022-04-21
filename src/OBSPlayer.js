@@ -6,6 +6,7 @@ const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
 const events = require('./EchoArenaEvents.js')
+const child = require('child_process').execFile;
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -134,6 +135,15 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
         
+        this.eventEmitter.on('obs.start', (args, event) => {
+            let executablePath = this.globalConfig.obs.path;
+
+            child(executablePath, function(err, data) {
+                if(err){
+                    console.log(err)
+                }
+            });
+        })
 
         this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
             this.globalConfig.autoStream.end = {

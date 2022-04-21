@@ -64,6 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsWebsocketStartBufferButton = document.getElementById('obs-start-buffer')
   const obsPath = document.getElementById('obs-path')
   const obsSoftAuto = document.getElementById('obs-software-auto')
+  const obsStart = document.getElementById('obs-start')
   
   const softOBS = () => {
     ipcRenderer.send('obs.soft', {path:obsPath.value, auto: obsSoftAuto.checked})
@@ -97,6 +98,11 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('mixed.customTeam', {blue: blueCustom.value, orange: orangeCustom.value})
   }
 
+  const startOBS = () => {
+    ipcRenderer.send('obs.start')
+    obsStart.disabled = true
+  }
+
   obsPath.addEventListener('change', softOBS)
   obsSoftAuto.addEventListener('click', softOBS)
   blueCustom.addEventListener('change', customTeamName)
@@ -105,6 +111,7 @@ window.addEventListener('DOMContentLoaded', () => {
   obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
   obsWebsocketAutoConnectInput.addEventListener('change',  editAutoOBS)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
+  obsStart.addEventListener('click', startOBS)
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true
