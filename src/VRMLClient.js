@@ -8,6 +8,7 @@ class VRMLClient {
     async getSeason() {
         await fetch(`${this.baseUrl}/EchoArena/Seasons`).then(resp => {
             resp.json().then(json => {
+                console.log(json)
                 json.forEach(item => {
                     if(item.isCurrent) {
                         return item.seasonName.match(/\d+/)[0]
