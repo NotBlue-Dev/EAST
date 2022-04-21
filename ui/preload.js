@@ -52,6 +52,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   initAutoStream(document)
 
+  const blueCustom = document.getElementById('customBlueName')
+  const orangeCustom = document.getElementById('customOrangeName')
+
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url')
   const obsWebsocketPortInput = document.getElementById('obs-websocket-port')
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
@@ -79,6 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('obsWebsocket.autoBuffer', obsWebsocketAutoBufferInput.checked)
   }
 
+  const customTeamName = () => {
+    ipcRenderer.send('mixed.customTeam', {blue: blueCustom.value, orange: orangeCustom.value})
+  }
+
+  blueCustom.addEventListener('change', customTeamName)
+  orangeCustom.addEventListener('change', customTeamName)
   obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
   obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
@@ -119,9 +128,10 @@ window.addEventListener('DOMContentLoaded', () => {
     log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
- 
-
   ipcRenderer.on('config.loaded', (event, data) => {
+    blueCustom.value = data.mixed.blue
+    orangeCustom.value = data.mixed.orange
+
     echoArenaUrlInput.value = data.echoArena.ip
     echoArenaAutoConnectInput.checked = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {

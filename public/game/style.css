@@ -16,6 +16,10 @@ body {
     font-size: 1vw;
 }
 
+.hide {
+    display: none;
+}
+
 .content {
     background-color: rgba(31, 33, 45, 0.71);
     width: 34vw;

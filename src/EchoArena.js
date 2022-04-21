@@ -3,10 +3,11 @@ const fetch = require('node-fetch');
 const GameData = require("./gameData");
 
 class EchoArena {
-    constructor({ip, port}, eventEmitter, vrmlInfo) {
+    constructor({ip, port}, eventEmitter, vrmlInfo, customData) {
         this.eventEmitter = eventEmitter
         this.ip = ip
         this.port = port
+        this.customData = customData
         this.fails = 0
         this.vrmlInfo = vrmlInfo
     }
@@ -33,7 +34,7 @@ class EchoArena {
 
     async request() {
         fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
-            const gameData = new GameData(json, this.vrmlInfo, true)
+            const gameData = new GameData(json, this.vrmlInfo, true, this.customData)
             events.forEach((event) => {
                 event.handle(gameData, this.eventEmitter)
             })

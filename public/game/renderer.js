@@ -2,10 +2,20 @@ let socket = io();
 
 window.addEventListener("load", (event) => {
     const imgA = document.getElementById('logoA')
-
+    let vrml = false
     const imgB = document.getElementById('logoB')
 
+    const nameA = document.getElementById('teamA')
+    const nameB = document.getElementById('teamB')
+
     const fill = (arg) => {
+        if(arg.teams.length === 0) {
+            vrml = false
+            return
+        } else {
+            vrml = true
+        }
+
         orange = arg.teams.home
         blue = arg.teams.away
 
@@ -19,8 +29,10 @@ window.addEventListener("load", (event) => {
             }
         }
 
-        document.getElementById('teamA').innerHTML = blue.name
-        document.getElementById('teamB').innerHTML = orange.name
+        nameA.innerHTML = blue.name
+        nameB.innerHTML = orange.name
+        imgA.classList.remove('hide')
+        imgB.classList.remove('hide')
         imgA.src = `https://vrmasterleague.com/${blue.logo}`
         imgB.src = `https://vrmasterleague.com/${orange.logo}`
     }
@@ -31,6 +43,25 @@ window.addEventListener("load", (event) => {
     socket.on('game.scoreChanged', (arg) => {
         document.getElementById('scoreB').innerHTML = arg.blue
         document.getElementById('scoreA').innerHTML = arg.orange
+    });
+
+    const mixed = (arg) => {
+        nameA.innerHTML = arg.teamName[1]
+        nameB.innerHTML = arg.teamName[0]
+        imgA.classList.add('hide')
+        imgB.classList.add('hide')
+    }
+
+    socket.on('game.ping', (arg) => {
+        if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
+            mixed(arg)
+        }
+    });
+
+    socket.on('game.teamChange', (arg) => {
+        if(!vrml) {
+            mixed(arg)
+        }
     });
 
     socket.on('game.roundTime', (arg) => {

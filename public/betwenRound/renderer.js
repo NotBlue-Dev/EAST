@@ -66,13 +66,38 @@ window.addEventListener("load", (event) => {
         });
           
     })
+    
+    socket.on('game.ping', (arg) => {
+        if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
+            mixed(arg)
+
+            while (teamPlayerA.firstChild) {
+                teamPlayerA.removeChild(teamPlayerA.firstChild);
+            }
+            while (teamPlayerB.firstChild) {
+                teamPlayerB.removeChild(teamPlayerB.firstChild);
+            }
+    
+            arg.pings.blue.forEach(player => {
+                createBlue(player.name)
+            });
+    
+            arg.pings.orange.forEach(player => {
+                createOrange(player.name)
+            });
+        }
+    });
+
+    const mixed = (arg) => {
+        nameA.innerHTML = arg.teamName[1]
+        nameB.innerHTML = arg.teamName[0]
+        imgA.classList.add('hide')
+        imgB.classList.add('hide')
+    }
 
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
-            nameA.innerHTML = "ORANGE"
-            nameB.innerHTML = "BLUE"
-            imgA.classList.add('hide')
-            imgB.classList.add('hide')
+            mixed(arg)
         }
 
         while (teamPlayerA.firstChild) {

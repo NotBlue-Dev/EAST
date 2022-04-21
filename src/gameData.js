@@ -1,5 +1,5 @@
 class GameData {
-    constructor(json, vrmlInfo, pingTracking = false) {
+    constructor(json, vrmlInfo, pingTracking = false, customData) {
         this.vrmlInfo = vrmlInfo
         this.pingTracking = pingTracking
         this.timestamp = Date.now()
@@ -7,6 +7,7 @@ class GameData {
         this.teams = json.teams
 
         this.blueTeam = {
+            teamName:customData.blue,
             blueTeamPlayers: [],
             blueReset: (json.blue_team_restart_request > 0),
             teamData:[],
@@ -17,6 +18,7 @@ class GameData {
         }
         this.blueTeam.blueTeamPlayers = json.teams[0].players
         this.orangeTeam = {
+            teamName:customData.orange,
             orangeTeamPlayers :[],
             orangeReset :(json.orange_team_restart_request > 0),
             teamData:[],
@@ -42,7 +44,7 @@ class GameData {
             return
         }
 
-        if(this.blueTeam.blueTeamPlayers.length !== 0) {
+        if(this.blueTeam.blueTeamPlayers.length !== 0 && this.blueTeam.blueTeamPlayers !== undefined) {
             for (let player of this.blueTeam.blueTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
                 this.blueTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})
@@ -52,7 +54,7 @@ class GameData {
             }
         }
  
-        if(this.orangeTeam.orangeTeamPlayers.length !== 0) {
+        if(this.orangeTeam.orangeTeamPlayers !== 0 && this.orangeTeam.orangeTeamPlayers !== undefined) {
             for (let player of this.orangeTeam.orangeTeamPlayers) {
                 player.stats.possession_time = Math.round(player.stats.possession_time)
                 this.orangeTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})

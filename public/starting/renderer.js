@@ -82,12 +82,45 @@ window.addEventListener("load", (event) => {
 
     socket.on('vrml.colorChanged', fill)
 
+    socket.on('game.ping', (arg) => {
+        if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
+            while (teamPlayerA.firstChild) {
+                teamPlayerA.removeChild(teamPlayerA.firstChild);
+            }
+            while (teamPlayerB.firstChild) {
+                teamPlayerB.removeChild(teamPlayerB.firstChild);
+            }  
+
+            arg.pings.blue.forEach(player => {
+                let a = document.createElement('a')
+                a.innerHTML = player.name
+                let div = document.createElement('div')
+                div.classList.add('row')
+                div.classList.add('b')
+                div.appendChild(a)
+                teamPlayerB.appendChild(div)
+            });
+            arg.pings.orange.forEach(player => {
+                let a = document.createElement('a')
+                a.innerHTML = player.name
+                let div = document.createElement('div')
+                div.classList.add('row')
+                div.classList.add('o')
+                div.appendChild(a)
+                teamPlayerA.appendChild(div)
+            });
+
+            nameA.innerHTML = arg.teamName[1]
+            nameB.innerHTML = arg.teamName[0]
+        }
+    });
+
     // for mixed
     socket.on('game.teamChange', (arg) => {
 
         if(!vrml) {
-            nameA.innerHTML = "Orange"
-            nameB.innerHTML = "Blue"
+            nameA.innerHTML = arg.teams.teamName[1]
+            nameB.innerHTML = arg.teams.teamName[0]
         }
         // clear player
         while (teamPlayerA.firstChild) {

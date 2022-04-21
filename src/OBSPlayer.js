@@ -68,6 +68,7 @@ class OBSPlayer {
     initializeListenersUsedByWS() {
         this.eventEmitter.on('overlay.ready', (args, event) => {
             this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
+            
         })
     }
 
@@ -195,6 +196,13 @@ class OBSPlayer {
 
         this.eventEmitter.on('obsWebsocket.startBuffer', (args, event) => {
             this.obsClient.send("StartReplayBuffer")
+        })
+
+        this.eventEmitter.on('mixed.customTeam', (args, event) => {
+            this.globalConfig.mixed.blue = args.blue
+            this.globalConfig.mixed.orange = args.orange
+            this.configLoader.save(this.globalConfig)
+            this.eventEmitter.send('mixed.customTeamChanged', this.globalConfig.mixed)
         })
 
         this.eventEmitter.on('overlayWs.config', (args, event) => {
@@ -378,8 +386,7 @@ class OBSPlayer {
     connectEchoArena(config) {
         
         return new Promise((resolve,reject) => {
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo)
-            console.log(this.echoArena)
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.globalConfig.mixed)
             this.echoArena.listen()
         })
     }

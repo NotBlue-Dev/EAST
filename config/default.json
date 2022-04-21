@@ -15,6 +15,10 @@
         "autoConnect": false,
         "autoBuffer":true
     },
+    "mixed":{
+        "blue":"BLUE",
+        "orange":"ORANGE"
+    },
     "overlayWs": {
         "port": 4545,
         "autoLaunch": false,

@@ -15,7 +15,8 @@ class PingTracking {
             pings: {
                 blue: gameData.blueTeam.playerPing,
                 orange: gameData.orangeTeam.playerPing,
-            }
+            },
+            teamName:[gameData.blueTeam.teamName, gameData.orangeTeam.teamName]
         })
     }
 }

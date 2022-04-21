@@ -7,10 +7,17 @@ window.addEventListener("load", () => {
     const imgB = document.getElementById('Orange')
     const TeamB = document.getElementById('OrangeName')
     const timer = document.getElementById('timer')
-
+    let vrml = false
     const week = document.getElementById('week')
 
     const fill = function (arg) {
+        if(arg.teams.length === 0) {
+            vrml = false
+            return
+        } else {
+            vrml = true
+        }
+
         orange = arg.teams.home
         blue = arg.teams.away
 
@@ -33,6 +40,20 @@ window.addEventListener("load", () => {
     socket.on('vrml.colorChanged' , (arg) => {
         fill(arg)
     })
+
+    socket.on('game.ping', (arg) => {
+        if(TeamA.innerHTML === "" && TeamB.innerHTML === "" && !vrml) {
+            TeamA.innerHTML = arg.teamName[1]
+            TeamB.innerHTML = arg.teamName[0]
+        }
+    });
+
+    socket.on('game.teamChange', (arg) => {
+        if(!vrml) {
+            TeamA.innerHTML = arg.teams.teamName[1]
+            TeamB.innerHTML = arg.teams.teamName[0]
+        }
+    });
 
     socket.on('vrml.matchDataLoaded', (arg) => {
         fill(arg)
