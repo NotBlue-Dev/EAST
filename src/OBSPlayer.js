@@ -128,6 +128,13 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
 
+        this.eventEmitter.on('obs.soft', (args, event) => {
+            this.globalConfig.obs.autoStart = args.auto
+            this.globalConfig.obs.path = args.path
+            this.configLoader.save(this.globalConfig)
+        })
+        
+
         this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
             this.globalConfig.autoStream.end = {
                 ...this.globalConfig.autoStream.end,

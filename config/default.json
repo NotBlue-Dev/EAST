@@ -13,7 +13,10 @@
         "port": 4444,
         "password": "toor",
         "autoConnect": false,
-        "autoBuffer":true
+        "autoBuffer":true,
+        "path": "",
+        "autoStart":true
+
     },
     "mixed":{
         "blue":"BLUE",

@@ -62,6 +62,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsWebsocketConnectButton = document.getElementById('obs-websocket-connect')
   const obsWebsocketAutoBufferInput = document.getElementById('obs-buffer-autolaunch')
   const obsWebsocketStartBufferButton = document.getElementById('obs-start-buffer')
+  const obsPath = document.getElementById('obs-path')
+  const obsSoftAuto = document.getElementById('obs-software-auto')
+  
+  const softOBS = () => {
+    ipcRenderer.send('obs.soft', {path:obsPath.value, auto: obsSoftAuto.checked})
+  }
+
   obsWebsocketStartBufferButton.disabled = true
   const obsWebsocketConnect = () => {
     ipcRenderer.send('obsWebsocket.connect', {
@@ -90,6 +97,8 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('mixed.customTeam', {blue: blueCustom.value, orange: orangeCustom.value})
   }
 
+  obsPath.addEventListener('change', softOBS)
+  obsSoftAuto.addEventListener('click', softOBS)
   blueCustom.addEventListener('change', customTeamName)
   orangeCustom.addEventListener('change', customTeamName)
   obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
@@ -124,9 +133,9 @@ window.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  overlayPortInput.addEventListener('change', edit,false)
-  overlayAutoLaunchInput.addEventListener('change', edit,false)
-  launchOverlayServerButton.addEventListener('click', launch,false)
+  overlayPortInput.addEventListener('change', edit)
+  overlayAutoLaunchInput.addEventListener('change', edit)
+  launchOverlayServerButton.addEventListener('click', launch)
 
   ipcRenderer.on('overlayWs.listening', (event, args) => {
     launchOverlayServerButton.disabled = true
@@ -137,6 +146,8 @@ window.addEventListener('DOMContentLoaded', () => {
     blueCustom.value = data.mixed.blue
     orangeCustom.value = data.mixed.orange
 
+    obsPath.value = data.obs.path
+    obsSoftAuto.checked = data.obs.autoStart
     echoArenaUrlInput.value = data.echoArena.ip
     echoArenaAutoConnectInput.checked = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {
@@ -360,24 +371,24 @@ const initAutoStream = (document) => {
         delayEvent.value = data.delay
       }
 
-      buffer.addEventListener('change',sendEvent, false)
+      buffer.addEventListener('change',sendEvent)
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })
-      betwen.addEventListener('change',sendStart, false)
-      state.addEventListener('change', sendEvent, false)
+      betwen.addEventListener('change',sendStart)
+      state.addEventListener('change', sendEvent)
       dur.oninput = () => {sendEvent()}
       delayEvent.oninput = () => {sendEvent()}
-      scene.addEventListener('change', sendEvent, false)
-      event.addEventListener('change', sendEvent, false)
-      end.addEventListener('change', sendEnd, false);
+      scene.addEventListener('change', sendEvent)
+      event.addEventListener('change', sendEvent)
+      end.addEventListener('change', sendEnd);
       durEnd.oninput = () => {sendEnd()}
       delay.oninput = () => {sendEnd()}
-      start.addEventListener('change', sendStart, false);
-      main.addEventListener('change', sendAuto, false);
-      wait.addEventListener('change', sendAuto, false);
+      start.addEventListener('change', sendStart);
+      main.addEventListener('change', sendAuto);
+      wait.addEventListener('change', sendAuto);
       launch.oninput = () => {sendAuto()}
-      autostream.addEventListener('change', sendAuto, false);
+      autostream.addEventListener('change', sendAuto);
 
       initAuto = true
 
