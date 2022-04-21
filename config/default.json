@@ -28,7 +28,8 @@
             {"path": "/ot",   "template": "overTime"},
             {"path": "/possession", "template": "possess"},
             {"path": "/shot",   "template": "shot"},
-            {"path": "/halfTime",   "template": "halfTime"}
+            {"path": "/halfTime",   "template": "halfTime"},
+            {"path": "/pingTracker","template": "pingTracker"}
         ]
     },
     "autoStream": {

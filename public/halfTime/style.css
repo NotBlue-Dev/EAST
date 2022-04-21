@@ -41,6 +41,10 @@
     font-size: 2vw;
 }
 
+.hide {
+    display: none;
+}
+
 .loading-box {
     background-color: rgba(31, 33, 45, 1) !important;
 }

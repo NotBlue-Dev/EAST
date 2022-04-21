@@ -48,7 +48,7 @@ class GameData {
                 this.blueTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})
                 this.blueTeam.teamData.push(player.name)
                 this.blueTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
-                this.blueTeam.playerPing.push({name: player.name, ping: player.ping})
+                this.blueTeam.playerPing.push({name: player.name, ping: player.ping, handL: player.holding_left, handR: player.holding_right})
             }
         }
  
@@ -58,7 +58,7 @@ class GameData {
                 this.orangeTeam.playerStats.push({name:player.name, stats:player.stats, stunned:player.stunned})
                 this.orangeTeam.teamData.push(player.name)
                 this.orangeTeam.playerPosition.push({name:player.name, position:[player.head.position[0],player.head.position[2]], nb:player.number})
-                this.orangeTeam.playerPing.push({name: player.name, ping: player.ping})
+                this.orangeTeam.playerPing.push({name: player.name, ping: player.ping, handL: player.holding_left, handR: player.holding_right})
             }
         }
 
