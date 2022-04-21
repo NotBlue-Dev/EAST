@@ -58,6 +58,14 @@ window.addEventListener("load", (event) => {
         }
     });
 
+    socket.on('vrml.hide', (arg) => {
+        vrml = false
+        imgA.classList.add('hide')
+        imgB.classList.add('hide')
+        nameA.innerHTML = ''
+        nameB.innerHTML = ''
+    })  
+
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
             mixed(arg)

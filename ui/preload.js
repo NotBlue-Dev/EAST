@@ -216,6 +216,9 @@ const initVrmlMatchMode = (document) => {
   const teamSelect = document.getElementById('teams')
   
   autoLoad.addEventListener('change', (event) => {
+    if(!autoLoad.checked) {
+      ipcRenderer.send('vrml.disabled')
+    }
     ipcRenderer.send('vrml.autoLoad', autoLoad.checked) 
     vrmlNext(event.target.checked)
   })

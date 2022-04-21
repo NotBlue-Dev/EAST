@@ -67,14 +67,19 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         this.eventEmitter.on('overlay.ready', (args, event) => {
-            this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
-            
+            if(this.globalConfig.vrml.autoLoad) {
+                this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
+            }
         })
     }
 
     initializeListeners() {
         this.vrmlClient.getSeason().then((data) => {
             this.Allinfo.season = data
+        })
+
+        this.eventEmitter.on('vrml.disabled', (args, event) => {
+            this.eventEmitter.send('vrml.hide')
         })
 
         this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {

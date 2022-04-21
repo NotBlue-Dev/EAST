@@ -10,6 +10,10 @@ body {
     background-color: #1B121E;
 }
 
+.hide {
+    display: none;
+}
+
 .logoOrange {
     width: 13.5vw;
 }

@@ -16,6 +16,10 @@ body {
     width: 14vw;
 }
 
+.hide {
+    display: none;
+}
+
 .content a {
     line-height: 2.5vw;
 }
@@ -90,10 +94,9 @@ body {
 }
 
 #timer {
-    
+    font-size: 2vw;
     top: 32vw;
     width: 15vw;
-    font-size: 39px;
     font-weight: 600;
     left: 42.5vw;
     text-align: center;

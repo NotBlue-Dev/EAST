@@ -7,7 +7,10 @@ window.addEventListener("load", () => {
     const imgB = document.getElementById('Orange')
     const TeamB = document.getElementById('OrangeName')
     const timer = document.getElementById('timer')
+    
     let vrml = false
+    let matchCountDown;
+
     const week = document.getElementById('week')
 
     const fill = function (arg) {
@@ -31,6 +34,8 @@ window.addEventListener("load", () => {
             }
         }
 
+        imgA.classList.remove('hide')
+        imgB.classList.remove('hide')
         imgB.src = `https://vrmasterleague.com/${orange.logo}`
         imgA.src = `https://vrmasterleague.com/${blue.logo}`
         TeamA.innerHTML = orange.name
@@ -48,6 +53,16 @@ window.addEventListener("load", () => {
         }
     });
 
+    socket.on('vrml.hide', (arg) => {
+        vrml = false
+        imgA.classList.add('hide')
+        imgB.classList.add('hide')
+        TeamA.innerHTML = ''
+        TeamB.innerHTML = ''
+        try {clearInterval(matchCountDown)} catch {}
+        timer.innerHTML = ''
+    })
+
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
             TeamA.innerHTML = arg.teams.teamName[1]
@@ -60,8 +75,6 @@ window.addEventListener("load", () => {
         
         week.innerHTML = `VRML Week ${arg.week}`
         
-        console.log(arg)
-
         try {clearInterval(matchCountDown)} catch {}
 
         let date = new Date()
@@ -90,7 +103,7 @@ window.addEventListener("load", () => {
                 clearInterval(matchCountDown);
             }
         }
-        let matchCountDown = setInterval(function() {timerFunc()}, 1000)
+        matchCountDown = setInterval(function() {timerFunc()}, 1000)
     })
 
     socket.emit('overlay.ready', {'overlay': 'wait'})

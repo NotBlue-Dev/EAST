@@ -46,6 +46,14 @@ window.addEventListener("load", (event) => {
         imgB.src = `https://vrmasterleague.com/${orange.logo}`
     }
 
+    const clear = () => {
+        while (teamPlayerA.firstChild) {
+            teamPlayerA.removeChild(teamPlayerA.firstChild);
+        }
+        while (teamPlayerB.firstChild) {
+            teamPlayerB.removeChild(teamPlayerB.firstChild);
+        }
+    }
 
 
     socket.on('game.roundOver', (arg) => {  
@@ -67,16 +75,20 @@ window.addEventListener("load", (event) => {
           
     })
     
+    socket.on('vrml.hide', (arg) => {
+        vrml = false
+        imgA.classList.add('hide')
+        imgB.classList.add('hide')
+        nameA.innerHTML = ''
+        nameB.innerHTML = ''
+
+    })  
+
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
             mixed(arg)
 
-            while (teamPlayerA.firstChild) {
-                teamPlayerA.removeChild(teamPlayerA.firstChild);
-            }
-            while (teamPlayerB.firstChild) {
-                teamPlayerB.removeChild(teamPlayerB.firstChild);
-            }
+            clear()
     
             arg.pings.blue.forEach(player => {
                 createBlue(player.name)
@@ -100,12 +112,7 @@ window.addEventListener("load", (event) => {
             mixed(arg)
         }
 
-        while (teamPlayerA.firstChild) {
-            teamPlayerA.removeChild(teamPlayerA.firstChild);
-        }
-        while (teamPlayerB.firstChild) {
-            teamPlayerB.removeChild(teamPlayerB.firstChild);
-        }
+        clear()
 
         arg.teams.blue.forEach(player => {
             createBlue(player)
