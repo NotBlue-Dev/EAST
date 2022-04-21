@@ -26,7 +26,8 @@ class OBSPlayer {
         this.Allinfo = {
             "teams":[],
             "times":[],
-            "week":null
+            "week":null,
+            "season":null,
         }
 
         
@@ -42,8 +43,6 @@ class OBSPlayer {
 
         this.obsConnectionState = false
         this.initializeListeners()
-        this.initializeWS()
-        
     }
 
     initializeWS() {
@@ -65,19 +64,17 @@ class OBSPlayer {
     } 
 
     initializeListenersUsedByWS() {
-        
         this.eventEmitter.on('overlay.ready', (args, event) => {
-            this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)
-        })
-
-        this.eventEmitter.on('vrml.wichSeason', (args, event) => {
-            this.vrmlClient.getSeason().then((data) => {
-                this.eventEmitter.send('vrml.season', data)
-            })
+            let data = this.loadMatchDataFromTeam(this.globalConfig.vrml.teamId)
+            this.overlayWS.send('vrml.matchDataLoaded', data)
         })
     }
 
     initializeListeners() {
+        this.vrmlClient.getSeason().then((data) => {
+            this.Allinfo.season = data
+        })
+
         this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
             this.globalConfig.obs.autoBuffer = args
             this.configLoader.save(this.globalConfig)
@@ -229,17 +226,23 @@ class OBSPlayer {
         this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
             this.loadMatchDataFromTeam(args.teamId)
         })
+        
+        this.initializeWS()
+        
     }
 
     loadMatchDataFromTeam(teamId) {
         this.getMatchDataFromTeam(teamId).then((match) => {
             if(this.echoArena !== null) this.echoArena.vrmlInfo = match
             this.eventEmitter.send('vrml.matchDataLoaded', match)
+            
         }).catch(error => {
             this.eventEmitter.send('vrml.matchDataNotFound', {
                 teamId: teamId
             })
+            
         })
+        
     }
 
     connectObsWebsocket(args) {
@@ -342,6 +345,7 @@ class OBSPlayer {
                 return {
                     time: newDate,
                     week:this.Allinfo.week,
+                    season:this.Allinfo.season,
                     teams: {
                         home: this.Allinfo.teams[0],
                         away: this.Allinfo.teams[1],
@@ -367,8 +371,9 @@ class OBSPlayer {
     }
         
     connectEchoArena(config) {
+        console.log(this.echoArena)
         return new Promise((resolve,reject) => {
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
+            if(this.echoArena === null) this.echoArena = new EchoArena(config, this.eventEmitter, this.Allinfo)
             this.echoArena.listen()
         })
     }

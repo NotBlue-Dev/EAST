@@ -1,6 +1,7 @@
 let socket = io();
 
 window.addEventListener("load", (event) => {
+    let vrml = false
 
     const imgA = document.getElementById('BLOGO')
 
@@ -17,6 +18,11 @@ window.addEventListener("load", (event) => {
     const teamPlayerB = document.getElementById('BoxBlue') 
 
     const fill = (arg) => {
+        if(arg.teams.length === 0) {
+            vrml = false
+        } else {
+            vrml = true
+        }
         orange = arg.teams.home
         blue = arg.teams.away
         if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
@@ -71,8 +77,10 @@ window.addEventListener("load", (event) => {
     // for mixed
     socket.on('game.teamChange', (arg) => {
 
-        nameA.innerHTML = "Orange"
-        nameB.innerHTML = "Blue"
+        if(!vrml) {
+            nameA.innerHTML = "Orange"
+            nameB.innerHTML = "Blue"
+        }
         // clear player
         while (teamPlayerA.firstChild) {
             teamPlayerA.removeChild(teamPlayerA.firstChild);
@@ -102,4 +110,5 @@ window.addEventListener("load", (event) => {
     });
 
     socket.emit('overlay.ready', {'overlay': 'starting'})
+
 });

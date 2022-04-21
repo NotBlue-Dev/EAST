@@ -14,12 +14,22 @@ window.addEventListener("load", (event) => {
     const teamPlayerB = document.getElementById('playersBlue')
 
     const fill = (arg) => {
-        vrml = true
+        console.log(arg)
+        const season = document.getElementById('season')
+        season.innerHTML =  `SEASON ${arg.season}`
+        if(arg.teams.length === 0) {
+            vrml = false
+            return
+        } else {
+            vrml = true
+        }
 
         orange = arg.teams.home
         blue = arg.teams.away
+        
+        
 
-        if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
+        if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
                 blue = arg.teams.home
                 orange = arg.teams.away
@@ -217,6 +227,3 @@ function createBlue(playername) {
     container.appendChild(e_0);
 }
 
-socket.on('vrml.season', (arg) => {
-    console.log(arg)
-});
