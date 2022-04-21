@@ -42,9 +42,11 @@ class OBSPlayer {
 
         this.obsConnectionState = false
         this.initializeListeners()
+        this.initializeWS()
+        
     }
 
-    initializeListeners() {
+    initializeWS() {
         this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
                 this.eventEmitter.add({send:this.overlayWS.send, on:this.overlayWS.on})
@@ -52,7 +54,7 @@ class OBSPlayer {
                 this.globalConfig.overlayWs.port = args.port
                 this.configLoader.save(this.globalConfig)
                 this.eventEmitter.send('overlayWs.listening', args)
-                this.initializeListeners()
+                this.initializeListenersUsedByWS()
             }).catch((error) => {
                 this.eventEmitter.send('overlayWs.launchFailed', {
                     args,
@@ -60,12 +62,22 @@ class OBSPlayer {
                 })
             })
         })
+    } 
 
+    initializeListenersUsedByWS() {
         
         this.eventEmitter.on('overlay.ready', (args, event) => {
             this.eventEmitter.send('vrml.matchDataLoaded', this.echoArena.vrmlInfo)
         })
 
+        this.eventEmitter.on('vrml.wichSeason', (args, event) => {
+            this.vrmlClient.getSeason().then((data) => {
+                this.eventEmitter.send('vrml.season', data)
+            })
+        })
+    }
+
+    initializeListeners() {
         this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
             this.globalConfig.obs.autoBuffer = args
             this.configLoader.save(this.globalConfig)
@@ -216,10 +228,6 @@ class OBSPlayer {
 
         this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
             this.loadMatchDataFromTeam(args.teamId)
-        })
-
-        this.eventEmitter.on('vrml.wichSeason', (args, event) => {
-            this.eventEmitter.send('vrml.season', this.vrmlClient.getSeason())
         })
     }
 

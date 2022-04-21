@@ -31,16 +31,15 @@ class OverlayWS {
             this.server.listen(port, () => {
                 this.io.on('connection', (socket) => {
                     resolve()
-                    this.socket = socket
                 })
-                
             })
         })
     }
 
     on = (channel, callable) => {
-        
-        this.socket.on(channel, callable);
+        this.io.on('connection', (socket) => {
+            socket.on(channel, callable)
+        })
     }
 
     send = (channel, args) => {

@@ -6,16 +6,10 @@ class VRMLClient {
     }
 
     async getSeason() {
-        await fetch(`${this.baseUrl}/EchoArena/Seasons`).then(resp => {
-            resp.json().then(json => {
-                console.log(json)
-                json.forEach(item => {
-                    if(item.isCurrent) {
-                        return item.seasonName.match(/\d+/)[0]
-                    }
-                });
-            })
-        })
+        const data = await fetch(`${this.baseUrl}/EchoArena/Seasons`)
+        const json = await data.json()
+        let season = json.find(x => x.isCurrent === true).seasonName;
+        return season.match(/\d+/)[0]
     }
 
     async getTeamPlace(teamId) {
