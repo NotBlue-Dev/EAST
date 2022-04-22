@@ -6,7 +6,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const scenes = document.getElementById('scenes')
   const dashWrapper = document.getElementById('dashboard-wrapper')
   const scenesWrapper = document.getElementById('autostream-wrapper')
-
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
@@ -54,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const blueCustom = document.getElementById('customBlueName')
   const orangeCustom = document.getElementById('customOrangeName')
-
+  const obsSceneCreate = document.getElementById('createScenes')
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url')
   const obsWebsocketPortInput = document.getElementById('obs-websocket-port')
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
@@ -112,6 +111,10 @@ window.addEventListener('DOMContentLoaded', () => {
   obsWebsocketAutoConnectInput.addEventListener('change',  editAutoOBS)
   obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
   obsStart.addEventListener('click', startOBS)
+
+  obsSceneCreate.addEventListener('click', () => {
+    ipcRenderer.send('obsWebsocket.createScenes', {})
+  })
 
   ipcRenderer.on('obsWebsocket.connected', () => {
     obsWebsocketConnectButton.disabled = true

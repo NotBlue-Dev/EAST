@@ -30,6 +30,30 @@ class OBSClient {
         return this
     }
 
+    async createScene(sceneName) {
+
+        const createSceneResponse = await this.send('CreateScene', {sceneName});
+        console.log(createSceneResponse)
+
+        this.createSource('source', 'browser_source', sceneName, {
+            width: 1920,
+            height: 1080, 
+            url: 'http://localhost:4545/game', 
+        })
+    }
+
+    async createSource(sourceName, sourceKind, sceneName, sourceSettings = {}) {
+        const response = await this.send('CreateSource', {
+            sourceName,
+            sourceKind,
+            sceneName,
+            sourceSettings,
+        });
+
+        console.log(response)
+
+    }
+
     async send(channel, arg) {
         return await this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
     }

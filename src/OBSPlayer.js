@@ -137,6 +137,10 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
         
+        this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
+            // CONFIG OBS.SCENES, crée auto
+        })
+        
         this.eventEmitter.on('obs.start', (args, event) => {
             let executablePath = this.globalConfig.obs.path;
 

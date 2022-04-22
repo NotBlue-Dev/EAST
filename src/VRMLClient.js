@@ -18,7 +18,9 @@ class VRMLClient {
 
     async getTeams(region = 'eu', rank = 0) {
         try {
-            const resp = await fetch(`${this.baseUrl}/EchoArena/Standings/?region=${region}&rank=${rank}`)
+            const resp = await fetchWithTimeout(`${this.baseUrl}/EchoArena/Standings/?region=${region}&rank=${rank}`, {
+                timeout: 8000
+            })
             const json = await resp.json()
             if (!json.teams) {
                 return []
