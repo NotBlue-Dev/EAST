@@ -331,6 +331,7 @@ class OBSPlayer {
 
     async loadTeamList(region) {
         const json = await this.vrmlClient.getTeams()
+        console.log(json)
         const teams = json.filter(team => team.isActive).map((team) => {
             return {
                 name: team.teamName,
