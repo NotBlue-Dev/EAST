@@ -6,55 +6,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const scenes = document.getElementById('scenes')
   const dashWrapper = document.getElementById('dashboard-wrapper')
   const scenesWrapper = document.getElementById('autostream-wrapper')
-
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
-  const echoArenaConfig = () => {
-    ipcRenderer.send('echoArena.edit', {
-      ip: echoArenaUrlInput.value,
-      autoConnect: echoArenaAutoConnectInput.checked,
-    })
-
-  }
-  
-  echoArenaUrlInput.addEventListener('change', echoArenaConfig,false)
-  echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig,false)
-
-  const echoArenaConnect = () => {
-    ipcRenderer.send('echoArena.connect', {
-      ip: echoArenaUrlInput.value,
-      port: 6721,
-      autoConnect: echoArenaAutoConnectInput.checked,
-    })
-  }
-
-  dashboard.addEventListener('click', (event) => {
-    dashWrapper.classList.remove('hidden')
-    scenesWrapper.classList.add('hidden')
-    dashboard.classList.add('active')
-    scenes.classList.remove('active')
-  })
-
-  scenes.addEventListener('click', (event) => {
-    scenesWrapper.classList.remove('hidden')
-    dashboard.classList.remove('active')
-    scenes.classList.add('active')
-    dashWrapper.classList.add('hidden')
-  })
-  
-  echoArenaConnectButton.addEventListener('click', echoArenaConnect)
-
-  ipcRenderer.on('echoArena.connected', () => {
-    echoArenaConnectButton.disabled = true
-    log(`Echo Arena connected`)
-  })
-
-  initAutoStream(document)
-
   const blueCustom = document.getElementById('customBlueName')
   const orangeCustom = document.getElementById('customOrangeName')
-
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url')
   const obsWebsocketPortInput = document.getElementById('obs-websocket-port')
   const obsWebsocketPasswordInput = document.getElementById('obs-websocket-password')
@@ -65,12 +21,30 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsPath = document.getElementById('obs-path')
   const obsSoftAuto = document.getElementById('obs-software-auto')
   const obsStart = document.getElementById('obs-start')
+  const obsSceneCreate = document.getElementById('createScenes')
+  const overlayPortInput = document.getElementById('overlay-port')
+  const overlayAutoLaunchInput = document.getElementById('overlay-autolaunch')
+  const launchOverlayServerButton = document.getElementById('launch-overlay-server')
+
+  const echoArenaConfig = () => {
+    ipcRenderer.send('echoArena.edit', {
+      ip: echoArenaUrlInput.value,
+      autoConnect: echoArenaAutoConnectInput.checked,
+    })
+  }
   
+  const echoArenaConnect = () => {
+    ipcRenderer.send('echoArena.connect', {
+      ip: echoArenaUrlInput.value,
+      port: 6721,
+      autoConnect: echoArenaAutoConnectInput.checked,
+    })
+  }
+
   const softOBS = () => {
     ipcRenderer.send('obs.soft', {path:obsPath.value, auto: obsSoftAuto.checked})
   }
 
-  obsWebsocketStartBufferButton.disabled = true
   const obsWebsocketConnect = () => {
     ipcRenderer.send('obsWebsocket.connect', {
       ip: obsWebsocketUrlInput.value,
@@ -103,29 +77,6 @@ window.addEventListener('DOMContentLoaded', () => {
     obsStart.disabled = true
   }
 
-  obsPath.addEventListener('change', softOBS)
-  obsSoftAuto.addEventListener('click', softOBS)
-  blueCustom.addEventListener('change', customTeamName)
-  orangeCustom.addEventListener('change', customTeamName)
-  obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
-  obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
-  obsWebsocketAutoConnectInput.addEventListener('change',  editAutoOBS)
-  obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
-  obsStart.addEventListener('click', startOBS)
-
-  ipcRenderer.on('obsWebsocket.connected', () => {
-    obsWebsocketConnectButton.disabled = true
-    obsWebsocketStartBufferButton.disabled = false
-    if(obsWebsocketAutoBufferInput.checked) {
-      startBuffer()
-      obsWebsocketStartBufferButton.disabled = true
-    }
-    log(`OBS Websocket connected`)
-  })
-
-  const overlayPortInput = document.getElementById('overlay-port')
-  const overlayAutoLaunchInput = document.getElementById('overlay-autolaunch')
-  const launchOverlayServerButton = document.getElementById('launch-overlay-server')
   const launch = () => {
     ipcRenderer.send('overlayWs.launchServer', {
       autoLaunch: overlayAutoLaunchInput.checked,
@@ -140,9 +91,57 @@ window.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  echoArenaUrlInput.addEventListener('change', echoArenaConfig)
+  echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig)
+  echoArenaConnectButton.addEventListener('click', echoArenaConnect)
+  obsWebsocketStartBufferButton.disabled = true
+  obsPath.addEventListener('change', softOBS)
+  obsSoftAuto.addEventListener('click', softOBS)
+  blueCustom.addEventListener('change', customTeamName)
+  orangeCustom.addEventListener('change', customTeamName)
+  obsWebsocketStartBufferButton.addEventListener('click', startBuffer)
+  obsWebsocketAutoBufferInput.addEventListener('change',  autoBuffer)
+  obsWebsocketAutoConnectInput.addEventListener('change',  editAutoOBS)
+  obsWebsocketConnectButton.addEventListener('click', obsWebsocketConnect)
+  obsStart.addEventListener('click', startOBS)
   overlayPortInput.addEventListener('change', edit)
   overlayAutoLaunchInput.addEventListener('change', edit)
   launchOverlayServerButton.addEventListener('click', launch)
+
+  initAutoStream(document)
+
+  obsSceneCreate.addEventListener('click', () => {
+    ipcRenderer.send('obsWebsocket.createScenes', {})
+  })
+
+  dashboard.addEventListener('click', (event) => {
+    dashWrapper.classList.remove('hidden')
+    scenesWrapper.classList.add('hidden')
+    dashboard.classList.add('active')
+    scenes.classList.remove('active')
+  })
+
+  scenes.addEventListener('click', (event) => {
+    scenesWrapper.classList.remove('hidden')
+    dashboard.classList.remove('active')
+    scenes.classList.add('active')
+    dashWrapper.classList.add('hidden')
+  })
+  
+  ipcRenderer.on('echoArena.connected', () => {
+    echoArenaConnectButton.disabled = true
+    log(`Echo Arena connected`)
+  })
+
+  ipcRenderer.on('obsWebsocket.connected', () => {
+    obsWebsocketConnectButton.disabled = true
+    obsWebsocketStartBufferButton.disabled = false
+    if(obsWebsocketAutoBufferInput.checked) {
+      startBuffer()
+      obsWebsocketStartBufferButton.disabled = true
+    }
+    log(`OBS Websocket connected`)
+  })
 
   ipcRenderer.on('overlayWs.listening', (event, args) => {
     launchOverlayServerButton.disabled = true
@@ -302,7 +301,6 @@ let initAuto = false
 const initAutoStream = (document) => {
   ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
     if(!initAuto) {
-      const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
       const main = document.getElementById('main-scene')
       const wait = document.getElementById('wait-scene')
       const autostream = document.getElementById('autostream')
@@ -320,13 +318,13 @@ const initAutoStream = (document) => {
       const clips = document.getElementById('clips')
       const buffer = document.getElementById('buffer')
 
-        data.events.map((eventName) => {    
-          const opt = document.createElement('option');
-          opt.value = eventName;
-          opt.innerHTML = eventName;
-          console.log(opt)
-          event.appendChild(opt);
-        })
+      data.events.map((eventName) => {    
+        const opt = document.createElement('option');
+        opt.value = eventName;
+        opt.innerHTML = eventName;
+        console.log(opt)
+        event.appendChild(opt);
+      })
 
       const sendAuto = () => {
         ipcRenderer.send('scenes.autoStart', {
@@ -387,6 +385,7 @@ const initAutoStream = (document) => {
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })
+      
       betwen.addEventListener('change',sendStart)
       state.addEventListener('change', sendEvent)
       dur.oninput = () => {sendEvent()}
@@ -401,9 +400,7 @@ const initAutoStream = (document) => {
       wait.addEventListener('change', sendAuto);
       launch.oninput = () => {sendAuto()}
       autostream.addEventListener('change', sendAuto);
-
       initAuto = true
-
     }
   })
 }
