@@ -18,8 +18,10 @@ class EchoArena {
  
     async testConnection() {
         try {
-            await fetch(`http://${this.ip}:${this.port}/session`)
+            let data = await fetch(`http://${this.ip}:${this.port}/session`)
+            const json = await data.json()
             this.eventEmitter.send('echoArena.connected')
+            this.eventEmitter.send('echoArena.sessionID', json.sessionid)
             return true
         } catch(error) {
             if (error.response) {

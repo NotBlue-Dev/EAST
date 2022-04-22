@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
+  const echoArenaSession = document.getElementById('echo-arena-session')
   const echoArenaConfig = () => {
     ipcRenderer.send('echoArena.edit', {
       ip: echoArenaUrlInput.value,
@@ -17,6 +18,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   }
   
+  ipcRenderer.on('echoArena.sessionID', (event, data) => {
+    echoArenaSession.value = data
+  })
+
   echoArenaUrlInput.addEventListener('change', echoArenaConfig,false)
   echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig,false)
 
