@@ -31,15 +31,8 @@ class OBSClient {
     }
 
     async createScene(sceneName) {
-
-        const createSceneResponse = await this.send('CreateScene', {sceneName});
-        console.log(createSceneResponse)
-
-        this.createSource('source', 'browser_source', sceneName, {
-            width: 1920,
-            height: 1080, 
-            url: 'http://localhost:4545/game', 
-        })
+        const response = await this.send('CreateScene', {sceneName});
+        return response
     }
 
     async createSource(sourceName, sourceKind, sceneName, sourceSettings = {}) {
@@ -49,9 +42,7 @@ class OBSClient {
             sceneName,
             sourceSettings,
         });
-
-        console.log(response)
-
+        return response
     }
 
     async send(channel, arg) {

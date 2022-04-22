@@ -138,7 +138,16 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
-            // CONFIG OBS.SCENES, crée auto
+            this.globalConfig.obs.scenes.forEach(scene => {
+                let name = `[Echo Overlay] ${scene.name}` 
+                this.obsClient.createScene(name).then(() => {
+                    scene.sources.forEach(source => {
+                        let settings = {width:1920,height:1080}
+                        if(source.url !== undefined) settings.url = source.url
+                        this.obsClient.createSource(source.name, source.type, name, settings)
+                    })
+                })
+            });
         })
         
         this.eventEmitter.on('obs.start', (args, event) => {

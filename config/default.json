@@ -24,14 +24,14 @@
                     "url":"http://localhost:4545/starting/"
                 },
                 {
-                    "name":"EchoCapture",
+                    "name":"EchoCaptureStart",
                     "type":"game_capture"
                 }]
             },
             {
                 "name":"Waiting",
                 "sources":[{
-                    "name":"startingOverlay",
+                    "name":"waitingOverlay",
                     "type":"browser_source",
                     "url":"http://localhost:4545/wait/"
                 }]
@@ -101,12 +101,12 @@
                     "url":"http://localhost:4545/minimap/"
                 },
                 {
-                    "name":"EchoCapture",
+                    "name":"EchoCaptureMain",
                     "type":"game_capture"
                 },
                 {
                     "name":"Replay",
-                    "type":"media_source"
+                    "type":"vlc_source"
                 }
             ]}
         ]
