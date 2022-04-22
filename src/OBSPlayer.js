@@ -6,7 +6,7 @@ const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
 const events = require('./EchoArenaEvents.js')
-const child = require('child_process').execFile;
+const { exec } = require('child_process');
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -64,6 +64,8 @@ class OBSPlayer {
                 })
             })
         })
+
+        this.eventEmitter.send('all.ready')
     } 
 
     initializeListenersUsedByWS() {
@@ -138,11 +140,17 @@ class OBSPlayer {
         this.eventEmitter.on('obs.start', (args, event) => {
             let executablePath = this.globalConfig.obs.path;
 
-            child(executablePath, function(err, data) {
-                if(err){
-                    console.log(err)
-                }
+            if(executablePath.endsWith('obs64.exe')) {
+                executablePath = executablePath.substring(0, executablePath.length - 10);
+            }
+            if(!executablePath.endsWith('\\')) {
+                executablePath += '\\';
+            }
+
+            exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
+                console.log(error)
             });
+
         })
 
         this.eventEmitter.on('obsWebsocket.clip', (args, event) => {

@@ -155,6 +155,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     obsPath.value = data.obs.path
     obsSoftAuto.checked = data.obs.autoStart
+    if(obsSoftAuto.checked) {
+      ipcRenderer.on('all.ready', (event, data) => {
+        startOBS()
+      })
+    }
     echoArenaUrlInput.value = data.echoArena.ip
     echoArenaAutoConnectInput.checked = data.echoArena.autoConnect
     if (data.echoArena.autoConnect) {
@@ -180,12 +185,12 @@ window.addEventListener('DOMContentLoaded', () => {
     overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch
     overlayPortInput.value = data.overlayWs.port
     if (data.overlayWs.autoLaunch) {
-      setTimeout(() => {
+      ipcRenderer.on('all.ready', (event, data) => {
         ipcRenderer.send('overlayWs.launchServer', {
           autoLaunch: overlayAutoLaunchInput.checked,
           port: overlayPortInput.value
         })
-      }, 5000);
+      })
     }
   })
 
