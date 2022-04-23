@@ -9,6 +9,7 @@ const ScoreBoard = require("./echo-arena-events/ScoreBoard");
 const Restart = require("./echo-arena-events/Restart");
 const Minimap= require('./echo-arena-events/Minimap');
 const PingTracking = require('./echo-arena-events/PingTracking');
+const sessionID = require('./echo-arena-events/SessionID');
 
 module.exports = [
     new Overtime(),
@@ -16,10 +17,11 @@ module.exports = [
     new RoundOver(),
     new RoundStart(),
     new TeamChange(),
-    new ScoreBoard(),
+    // new ScoreBoard(),
     new Restart(),
-    new RoundTimeChanged(),
+    // new RoundTimeChanged(),
     new ScoreChanged(),
-    new Minimap(),
-    new PingTracking(),
+    new sessionID(),
+    // new Minimap(),
+    // new PingTracking(),
 ]

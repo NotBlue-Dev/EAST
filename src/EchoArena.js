@@ -21,7 +21,6 @@ class EchoArena {
             let data = await fetch(`http://${this.ip}:${this.port}/session`)
             const json = await data.json()
             this.eventEmitter.send('echoArena.connected')
-            this.eventEmitter.send('echoArena.sessionID', json.sessionid)
             return true
         } catch(error) {
             if (error.response) {
@@ -58,8 +57,6 @@ class EchoArena {
                 this.eventEmitter.send('echoArena.error', {error});
                 this.fails++
             }
-
-            // ca fais pas long feux quand on switch de serv fails dépassent 5 en 2s
             if (this.fails < 5) {
                 setTimeout(() => {
                     this.request()

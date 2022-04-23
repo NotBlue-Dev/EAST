@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   
   ipcRenderer.on('echoArena.sessionID', (event, data) => {
-    echoArenaSession.value = data
+    echoArenaSession.value = data.sessionID
   })
 
   echoArenaUrlInput.addEventListener('change', echoArenaConfig,false)
