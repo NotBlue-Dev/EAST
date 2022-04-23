@@ -56,6 +56,7 @@ class OBSPlayer {
                 this.globalConfig.overlayWs.port = args.port
                 this.configLoader.save(this.globalConfig)
                 this.eventEmitter.send('overlayWs.listening', args)
+
                 this.initializeListenersUsedByWS()
             }).catch((error) => {
                 this.eventEmitter.send('overlayWs.launchFailed', {
@@ -66,6 +67,7 @@ class OBSPlayer {
         })
 
         this.eventEmitter.send('all.ready')
+        
     } 
 
     initializeListenersUsedByWS() {
@@ -73,6 +75,7 @@ class OBSPlayer {
             if(this.globalConfig.vrml.autoLoad) {
                 this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
             }
+            this.obsClient.refresh('StartingOverlay')
         })
     }
 
@@ -151,7 +154,6 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obs.start', (args, event) => {
-
             let executablePath = this.globalConfig.obs.path;
             let self = this
 
@@ -219,7 +221,7 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }
- 
+                this.obsClient.refresh('StartingOverlay')
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {

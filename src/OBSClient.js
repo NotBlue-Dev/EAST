@@ -23,6 +23,7 @@ class OBSClient {
             address: `${ip}:${port}`,
             password
         })
+        
     }  
 
     on(channel, callback) {
@@ -32,6 +33,11 @@ class OBSClient {
 
     async createScene(sceneName) {
         const response = await this.send('CreateScene', {sceneName});
+        return response
+    }
+
+    async refresh(sourceName) {
+        const response = await this.send('RefreshBrowserSource', {sourceName});
         return response
     }
 
