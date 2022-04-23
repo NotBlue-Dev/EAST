@@ -4,13 +4,12 @@ body {
 }
 
 #content {
-    position: absolute;
+	position: absolute;
     width: 565px;
     height: 190px;
-    bottom: 9px;
-    right: 10px;
+    top: 1vw;
     overflow: hidden;
-	margin-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .minimap_disc {

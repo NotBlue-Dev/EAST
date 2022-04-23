@@ -151,8 +151,9 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obs.start', (args, event) => {
-            
+
             let executablePath = this.globalConfig.obs.path;
+            let self = this
 
             exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
                 if(stdout.indexOf('obs64.exe') === -1) {
@@ -164,7 +165,7 @@ class OBSPlayer {
                     }
 
                     exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
-                        console.log(error)
+                        if(error !== null) self.eventEmitter.send('obs.error', error)
                     });
                 }
             });

@@ -10,6 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
   const echoArenaSession = document.getElementById('echo-arena-session')
+
   const echoArenaConfig = () => {
     ipcRenderer.send('echoArena.edit', {
       ip: echoArenaUrlInput.value,
@@ -106,6 +107,11 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('obs.start')
     obsStart.disabled = true
   }
+
+  ipcRenderer.on('obs.error', (event, data) => {
+    obsStart.disabled = false
+    log(`OBS Error: ${data.error}`)
+  })
 
   obsPath.addEventListener('change', softOBS)
   obsSoftAuto.addEventListener('click', softOBS)

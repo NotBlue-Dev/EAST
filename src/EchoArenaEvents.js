@@ -23,5 +23,5 @@ module.exports = [
     new ScoreChanged(),
     new sessionID(),
     // new Minimap(),
-    // new PingTracking(),
+    new PingTracking(),
 ]
