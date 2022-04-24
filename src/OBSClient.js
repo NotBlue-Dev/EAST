@@ -1,7 +1,8 @@
 const OBSWebSocket = require('obs-websocket-js');
-
+const exec = require('child_process').exec;
 class OBSClient {
-    constructor() {
+    constructor(eventEmitter) {
+        this.eventEmitter = eventEmitter;
         this.obsWebSocket = new OBSWebSocket();
         this.handleConnected = () => {}
         this.handleDisconnected = () => {}
@@ -11,6 +12,34 @@ class OBSClient {
     onConnected(callback) {
         this.handleConnected = callback
         return this
+    }
+
+    isLaunched() {
+        return new Promise((resolve,reject) => {
+            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
+                if(stdout.indexOf('obs64.exe') === -1) {
+                    resolve(false)
+                }
+                resolve(true)
+            });
+        })
+
+    }
+
+    launch(executablePath) {
+        let self = this
+        if(executablePath.endsWith('obs64.exe')) {
+            executablePath = executablePath.substring(0, executablePath.length - 10);
+        }
+        if(!executablePath.endsWith('\\')) {
+            executablePath += '\\';
+        }
+
+        exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
+            if(error !== null) self.eventEmitter.send('obs.error', error)
+
+            self.eventEmitter.send('obs.started')
+        });
     }
 
     onDisconnected(callback) {

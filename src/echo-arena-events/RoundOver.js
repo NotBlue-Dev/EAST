@@ -7,6 +7,7 @@ class RoundOver {
     }
 
     handle (gameData, eventEmitter) {
+        gameData.roundData = this.rounds
         if (gameData.status !== 'round_over') {
             this.roundIsOver = false
             return

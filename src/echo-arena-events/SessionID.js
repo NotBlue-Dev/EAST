@@ -6,7 +6,6 @@ class sessionID {
     }
 
     handle(gameData, eventEmitter) {
-        // faudra test quand meme
         if (gameData.sessionID === this.sessionID) {
             return
         }

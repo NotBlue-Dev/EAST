@@ -6,6 +6,7 @@ class GameData {
         this.clock = json.game_clock
         this.teams = json.teams
         this.sessionID = json.sessionid
+        this.roundData = []
         this.blueTeam = {
             teamName:customData.blue,
             blueTeamPlayers: [],

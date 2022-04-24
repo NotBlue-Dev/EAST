@@ -6,7 +6,8 @@ const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
 const events = require('./EchoArenaEvents.js')
-const exec = require('child_process').exec;
+
+// REFRESH MARCHE PAS OBS
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -15,7 +16,7 @@ class OBSPlayer {
         this.eventEmitter = eventEmitter
         this.eventEmitter.send('config.loaded', this.globalConfig)
 
-        this.obsClient = new OBSClient()
+        this.obsClient = new OBSClient(eventEmitter)
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
         this.scenes = []
         this.eventHandler = null
@@ -71,11 +72,20 @@ class OBSPlayer {
     } 
 
     initializeListenersUsedByWS() {
+        if(this.obsConnectionState) {
+            this.globalConfig.obs.scenes.forEach(scene => {
+                scene.sources.forEach(source => {
+                    if(source.type === 'browser_source') {
+                        this.obsClient.refresh(source.name)
+                    }
+                });
+            });
+        }
         this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
                 this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
             }
-            this.obsClient.refresh('StartingOverlay')
+            this.overlayWS.send('roundData', this.echoArena.rounds)
         })
     }
 
@@ -151,26 +161,25 @@ class OBSPlayer {
                     })
                 })
             });
+            if(this.obsConnectionState) {
+                this.globalConfig.obs.scenes.forEach(scene => {
+                    scene.sources.forEach(source => {
+                        if(source.type === 'browser_source') {
+                            this.obsClient.refresh(source.name)
+                        }
+                    });
+                });
+            }
+
         })
         
         this.eventEmitter.on('obs.start', (args, event) => {
             let executablePath = this.globalConfig.obs.path;
-            let self = this
-
-            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
-                if(stdout.indexOf('obs64.exe') === -1) {
-                    if(executablePath.endsWith('obs64.exe')) {
-                        executablePath = executablePath.substring(0, executablePath.length - 10);
-                    }
-                    if(!executablePath.endsWith('\\')) {
-                        executablePath += '\\';
-                    }
-
-                    exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
-                        if(error !== null) self.eventEmitter.send('obs.error', error)
-                    });
+            this.obsClient.isLaunched().then((isLaunched) => {
+                if(!isLaunched) {
+                    this.obsClient.launch(executablePath)
                 }
-            });
+            })
         })
 
         this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
@@ -221,7 +230,13 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }
-                this.obsClient.refresh('StartingOverlay')
+                this.globalConfig.obs.scenes.forEach(scene => {
+                    scene.sources.forEach(source => {
+                        if(source.type === 'browser_source') {
+                            this.obsClient.refresh(source.name)
+                        }
+                    });
+                });
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
@@ -450,3 +465,12 @@ class OBSPlayer {
 }
 
 module.exports = OBSPlayer
+
+// starting : 1152 658 px
+// x 382 y 186
+
+// betwen 1083 599
+// 56 71
+
+// main 1920 1080
+// 0 0

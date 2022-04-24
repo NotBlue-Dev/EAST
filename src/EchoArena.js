@@ -9,6 +9,7 @@ class EchoArena {
         this.port = port
         this.customData = customData
         this.fails = 0
+        this.rounds = []
         this.vrmlInfo = vrmlInfo
     }
     
@@ -19,7 +20,6 @@ class EchoArena {
     async testConnection() {
         try {
             let data = await fetch(`http://${this.ip}:${this.port}/session`)
-            const json = await data.json()
             this.eventEmitter.send('echoArena.connected')
             return true
         } catch(error) {
@@ -39,7 +39,7 @@ class EchoArena {
             events.forEach((event) => {
                 event.handle(gameData, this.eventEmitter)
             })
-
+            this.rounds = gameData.roundData
             this.request()
         }).catch(error => {
             if (error.response) {

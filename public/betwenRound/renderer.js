@@ -55,8 +55,7 @@ window.addEventListener("load", (event) => {
         }
     }
 
-
-    socket.on('game.roundOver', (arg) => {  
+    const fillRound = (arg) => {
         arg.rounds.forEach(round => {
             if(round.winner === 'orange') {
                 let r = document.getElementById(`R${round.currentRound}O`)
@@ -71,8 +70,15 @@ window.addEventListener("load", (event) => {
             }
             document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange
             document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue
-        });
-          
+        }); 
+    }
+
+    socket.on('game.roundOver', (arg) => {  
+        fillRound(arg)
+    })
+
+    socket.on('roundData', (arg) => {
+        fillRound(arg)
     })
     
     socket.on('vrml.hide', (arg) => {
