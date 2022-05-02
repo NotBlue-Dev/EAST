@@ -85,7 +85,9 @@ class OBSPlayer {
             if(this.globalConfig.vrml.autoLoad) {
                 this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
             }
-            this.overlayWS.send('roundData', this.echoArena.rounds)
+            if(this.obsConnectionState) {
+                this.overlayWS.send('roundData', this.echoArena.rounds)
+            }
         })
     }
 
@@ -311,6 +313,7 @@ class OBSPlayer {
     }
 
     loadMatchDataFromTeam(teamId) {
+
         this.getMatchDataFromTeam(teamId).then((match) => {
             if(this.echoArena !== null) {
                 this.echoArena.vrmlInfo = match
@@ -382,7 +385,7 @@ class OBSPlayer {
             if(dt.getDay() === 1 && dt.getHours() === 13) {
                 this.Allinfo.times.push('TBD');
             } else {
-                dt.setHours(dt.getHours()+2);
+                // dt.setHours(dt.getHours()+2);
                 this.Allinfo.times.push(dt);
             }
         });
@@ -420,14 +423,15 @@ class OBSPlayer {
             
                 await this.getPlayers()
 
-                let date = new Date(this.Allinfo.times[i])
-                let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
-                let offset = date.getTimezoneOffset() / 60;
-                let hours = date.getHours();
-                newDate.setHours(hours - offset);
-
+                // let newDate = new Date()
+                // let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+                // let offset = date.getTimezoneOffset() / 60;
+                // let hours = date.getHours();
+                // newDate.setHours(hours - offset);
+                
                 return {
-                    time: newDate,
+                    // time: newDate,
+                    time: this.Allinfo.times[i],
                     week:this.Allinfo.week,
                     season:this.Allinfo.season,
                     teams: {
