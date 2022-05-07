@@ -18,7 +18,7 @@ class EventHandler {
         clearTimeout(this.delay)
         clearTimeout(this.dur)
         this.delay = setTimeout(() => {
-            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.ending.scene})
+            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.end.ending.scene})
             this.dur = setTimeout(() => {
                 this.obsClient.send('StopStreaming')
             }, this.config.ending.duration * 1000);
