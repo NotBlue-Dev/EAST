@@ -3,6 +3,7 @@ body {
     font-weight: 600;
     font-size: 2.2vw;
     color: white;
+    background-color: rgba(209, 20, 20, 0.1);
 }
 
 .mainDiv {
@@ -14,11 +15,15 @@ body {
     right: -102vw !important;
 }
 
+#background-video {
+    position: absolute;
+    width: 100vw;
+}
+
 .content {
-    filter: blur(100px);
     width: 100%;
     height: 100%;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50))
+    position: absolute;
 }
 
 #discDiv {
@@ -27,6 +32,14 @@ body {
     position: relative;
     margin: 0;
     transition: var(--dur);
+}
+
+.wrap {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.50));
+    position: absolute;
+    backdrop-filter: blur(6px);
 }
 
 .closed {

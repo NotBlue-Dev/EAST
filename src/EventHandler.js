@@ -95,7 +95,6 @@ class EventHandler {
     }
 
     switchWindowEvent(event) {
-        console.log(event)
         if(event.used) {
             setTimeout(() => {
                 this.obsClient.send('SetCurrentScene',{"scene-name":event.scene})
@@ -125,7 +124,9 @@ class EventHandler {
         this.eventEmitter.on('game.restart', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
-            this.switchWindowEvent(gameEvent)
+            setTimeout(() => {
+                this.switchWindowEvent(gameEvent)
+            }, gameEvent.delay * 1000);
             this.roundData = {orange:0,blue:0}
         })
 
@@ -133,6 +134,9 @@ class EventHandler {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
+            setTimeout(() => {
+                this.eventEmitter.send('animation.triggerOT')
+            }, gameEvent.delay * 1000);
         })
 
         this.eventEmitter.on('game.possessionChange', (args, event) => {
@@ -144,8 +148,11 @@ class EventHandler {
         this.eventEmitter.on('game.roundOver', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
-            this.switchWindowEvent(gameEvent)
             this.roundData[args.winner]++
+            this.switchWindowEvent(gameEvent)
+            setTimeout(() => {
+                this.eventEmitter.send('animation.triggerRoundOver', {rounds:args.rounds, winner:args.winner})
+            }, gameEvent.delay * 1000);
             if(this.roundData.blue-this.roundData.orange >= 2 || this.roundData.orange-this.roundData.blue >= 2) {
                 this.endStream()
             }
@@ -154,6 +161,10 @@ class EventHandler {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
+            setTimeout(() => {
+                this.eventEmitter.send('animation.triggerRoundStart', {round:args.round})
+            }, gameEvent.delay * 1000);
+            
         })
         this.eventEmitter.on('game.teamChange', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)

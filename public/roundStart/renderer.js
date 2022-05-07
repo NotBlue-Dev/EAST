@@ -1,6 +1,6 @@
 let socket = io();
 
-socket.on('game.roundStart', (arg) => {
+socket.on('animation.triggerRoundStart', (arg) => {
     animate(`ROUND ${arg.round}`)
 });
 
@@ -49,5 +49,3 @@ function animate(text) {
 }
 
 socket.emit('overlay.ready', {'overlay': 'roundStart'})
-
-// nothing will be emit from here, emit will be in api.js
