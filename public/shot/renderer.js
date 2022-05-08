@@ -10,8 +10,22 @@ window.addEventListener("load", (event) => {
 
     let comp = document.getElementById('comp')
 
-    comp.classList.add('hide')
-    
+    // display
+    function display() {
+        comp.classList.remove('hidden');
+        setTimeout(function () {
+            comp.classList.remove('visuallyhidden');
+        }, 20);
+    }
+
+    // hide
+    function hide() {
+        comp.classList.add('visuallyhidden');    
+        comp.addEventListener('transitionend', function(e) {
+            comp.classList.add('hidden');
+        });
+    }
+
     socket.on('game.scoreChanged', (arg) => {
         if(arg.data.team === 'blue') {
             document.getElementById('box').classList.add('b')
@@ -29,11 +43,11 @@ window.addEventListener("load", (event) => {
             assist.innerHTML = `Assisted by ${arg.data.assist}`
         }
 
-        comp.classList.remove('hide')
+        display()
     })
 
     socket.on('game.endScore', (arg) => {
-        comp.classList.add('hide')
+        hide()
     })
     
     socket.emit('overlay.ready', {'overlay': 'shot'})

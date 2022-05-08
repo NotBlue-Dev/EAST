@@ -5,6 +5,7 @@ socket.on('animation.triggerRoundStart', (arg) => {
 });
 
 function animate(text) {
+    document.getElementById('background-video').play()
     let roundDiv = document.getElementById('roundDiv')
     let disc = document.getElementById('disc')
     let round = document.getElementById('round')

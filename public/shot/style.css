@@ -50,7 +50,11 @@ body {
 }
 
 .hide {
-    display: none;
+    display: none !important;
+}
+
+.visuallyhidden {
+    opacity: 0;
 }
 
 .container {
@@ -64,6 +68,11 @@ body {
     top: 19vw;
     font-weight: 600;
     font-size: 2vw;
+}
+
+#comp {
+    transition: all 1s ease-in-out;
+    display: block;
 }
 
 .txt {

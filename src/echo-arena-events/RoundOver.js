@@ -19,7 +19,6 @@ class RoundOver {
             const winner = (gameData.blueTeam.points == gameData.orangeTeam.points) ? null : (gameData.blueTeam.points > gameData.orangeTeam.points) ? 'blue' : 'orange'
             this.rounds.push({blue: gameData.blueTeam.points, orange: gameData.orangeTeam.points, currentRound: gameData.round, winner:winner})
             
-
             eventEmitter.send('game.roundOver', {
                 rounds: this.rounds,
                 name:this.name,
