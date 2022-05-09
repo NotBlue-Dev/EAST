@@ -142,6 +142,20 @@ window.addEventListener("load", (event) => {
 
 
     socket.on('game.scoreBoard', (arg) => {
+        if (document.getElementById('playersBlue').childElementCount === 0) {
+            let bl = arg.blue
+            for(let i =0; i<bl.length; i++) {
+                createBlue(bl[i].name)
+            }
+        }
+
+        if (document.getElementById('playersOrange').childElementCount === 0) {
+            let or = arg.orange
+            for(let x =0; x<or.length; x++) {
+                createOrange(or[x].name)
+            }
+        }
+        
         for(let i = 0; i<arg.orange.length; i++) {
             let ass = document.getElementById(`${arg.orange[i].name}_ASS`)
             let pts = document.getElementById(`${arg.orange[i].name}_PTS`)

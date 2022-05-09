@@ -8,6 +8,7 @@ class EventHandler {
         this.autoStream = null
         this.vrml = false
         this.left = 0
+        this.halfTimeShown = 0
         // round win counter
         this.roundData = {orange:0,blue:0}
         this.listenGameEvents()
@@ -145,6 +146,14 @@ class EventHandler {
             this.switchWindowEvent(gameEvent)
         })
 
+        this.eventEmitter.on('local.halfTimeStats', (args, event) => {
+            if(!this.halfTimeShown > 2) {
+                this.halfTimeShown++;
+                this.eventEmitter.send('animation.triggerHalfTime', args)
+            }
+            
+        })
+
         this.eventEmitter.on('game.roundOver', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
@@ -152,10 +161,12 @@ class EventHandler {
             this.switchWindowEvent(gameEvent)
             setTimeout(() => {
                 this.eventEmitter.send('animation.triggerRoundOver', {rounds:args.rounds, winner:args.winner})
+                this.halfTimeShown = 0
             }, gameEvent.delay * 1000);
             if(this.roundData.blue-this.roundData.orange >= 2 || this.roundData.orange-this.roundData.blue >= 2) {
                 this.endStream()
             }
+            
         })
         this.eventEmitter.on('game.roundStart', (args, event) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)

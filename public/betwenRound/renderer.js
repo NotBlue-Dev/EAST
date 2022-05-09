@@ -135,6 +135,18 @@ window.addEventListener("load", (event) => {
     socket.on('vrml.matchDataLoaded', fill)
     
     socket.on('game.scoreBoard', (arg) => {
+        if(document.getElementById('playersOrange').childElementCount === 0) {
+            arg.orange.forEach(player => {
+                createOrange(player.name)
+            });
+        }
+
+        if(document.getElementById('playersBlue').childElementCount === 0) {
+            arg.blue.forEach(player => {
+                createBlue(player.name)
+            });
+        }
+        
         arg.blue.forEach(player => {
             let pts = document.getElementById(`${player.name}_PTS`)
             pts.innerHTML = player.stats.points

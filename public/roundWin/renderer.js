@@ -1,9 +1,14 @@
 let socket = io();
 let VRMLDATA = [];
 
-socket.on('vrml.matchDataLoaded', VRMLDATA = data)
+socket.on('vrml.matchDataLoaded', (arg) => {
+    VRMLDATA = arg
+});
 
-socket.on('vrml.colorChanged', VRMLDATA = data)
+socket.on('vrml.colorChanged', (arg) => {
+    VRMLDATA = arg
+});
+
 
 socket.on('animation.triggerRoundOver', (arg) => {
     animate(VRMLDATA, arg.winner)

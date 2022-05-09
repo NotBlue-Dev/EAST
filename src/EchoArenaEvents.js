@@ -17,7 +17,7 @@ module.exports = [
     new RoundOver(),
     new RoundStart(),
     new TeamChange(),
-    // new ScoreBoard(),
+    new ScoreBoard(),
     new Restart(),
     // new RoundTimeChanged(),
     new ScoreChanged(),
