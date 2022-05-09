@@ -147,7 +147,7 @@ class EventHandler {
         })
 
         this.eventEmitter.on('local.halfTimeStats', (args, event) => {
-            if(!this.halfTimeShown > 2) {
+            if(this.halfTimeShown < 2) {
                 this.halfTimeShown++;
                 this.eventEmitter.send('animation.triggerHalfTime', args)
             }

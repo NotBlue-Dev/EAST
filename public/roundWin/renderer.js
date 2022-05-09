@@ -6,7 +6,9 @@ socket.on('vrml.matchDataLoaded', (arg) => {
 });
 
 socket.on('vrml.colorChanged', (arg) => {
-    VRMLDATA = arg
+    if(arg !== undefined) {
+        VRMLDATA = arg
+    }
 });
 
 

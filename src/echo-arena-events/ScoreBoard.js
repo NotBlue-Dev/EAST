@@ -5,8 +5,6 @@ class ScoreBoard {
         this.orange = []
         this.customizable = false
         this.lastHalf = null
-        this.orangeStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
-        this.blueStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
     }
 
     handle(gameData, eventEmitter) {
@@ -14,15 +12,19 @@ class ScoreBoard {
             return 
         }
 
+        let orangeStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
+        let blueStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
+
         this.blue = gameData.blueTeam.playerStats
         this.orange = gameData.orangeTeam.playerStats
-
+        
         const send = (orange, blue) => {
-            eventEmitter.send('local.halfTimeStats', {
-                blue:blue,
-                orange:orange
-            })
-            console.log(orange,blue)
+            if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now()))/1000)/60) >= 1) {
+                eventEmitter.send('local.halfTimeStats', {
+                    blue:blue,
+                    orange:orange
+                })
+            }
             this.lastHalf = Date.now()
         }
 
@@ -44,26 +46,24 @@ class ScoreBoard {
                 color[goals].name = player.name
             }
 
-            if(player.stats.stuns > 2) {
-                send(this.orangeStats[stuns], this.blueStats[stuns])
+            if(player.stats.stuns >= 45) {
+                send(orangeStats[stuns], blueStats[stuns])
             }
-            if(player.stats.saves > 1) { 
-                send(this.orangeStats[saves], this.blueStats[saves])
+            if(player.stats.saves >= 5) { 
+                send(orangeStats[saves], blueStats[saves])
             }
-            if(player.stats.goals > 1) { 
-                send(this.orangeStats[goals], this.blueStats[goals])
+            if(player.stats.goals >= 5) { 
+                send(orangeStats[goals], blueStats[goals])
             }
         }
 
-        // pause for 2m
-        console.log(Math.floor(((Math.abs(this.lastHalf - Date.now()))/1000)/60), this.lastHalf)
         if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now()))/1000)/60) >= 1) {
             this.orange.forEach(player => {
-                fill(this.orangeStats, player)
+                fill(orangeStats, player)
             });
     
             this.blue.forEach(player => {
-                fill(this.blueStats, player)
+                fill(blueStats, player)
             });
         }
 
