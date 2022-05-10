@@ -70,6 +70,16 @@ class OBSClient {
         return response
     }
 
+    async addSourceToScene(sceneName, sourceName) {
+        const response = await this.send('AddSceneItem', {sourceName, sceneName});
+        return response
+    }
+
+    async setSourceOrder(sceneName, sceneItem) {
+        const response = await this.send('ReorderSceneItems', {scene:sceneName, items:sceneItem});
+        return response
+    }
+
     async createSource(sourceName, sourceKind, sceneName, sourceSettings = {}) {
         const response = await this.send('CreateSource', {
             sourceName,

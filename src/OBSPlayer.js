@@ -154,16 +154,72 @@ class OBSPlayer {
         
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
             let scenesList;
+            let sources = [];
             this.obsClient.send('GetSceneList').then((arg) => {
                 scenesList = arg.scenes
                 this.globalConfig.obs.scenesNames.forEach(scene => {
                     let name = `[Echo Overlay] ${scene}`  
                     if(!scenesList.some(obj => obj.name === name)) {
-                        this.obsClient.createScene(name).then(() => {
-
-                        })
+                        this.obsClient.createScene(name)
                     }
                 });
+
+                setTimeout(() => {
+                    this.globalConfig.obs.sources.forEach(source => {
+                        let settings = {}
+                        scenesList.forEach(item => {
+                            item.sources.forEach(source => {
+                                if(!sources.some(obj => obj.name === source.name)) {
+                                    sources.push({name:source.name, type:source.type})
+                                }
+                            });
+                        });
+                        
+                        source.scene.forEach(scene => {
+                            let name = `[Echo Overlay] ${scene.name}`  
+                            let index = scenesList.findIndex(obj => obj.name === name)
+                            if(!sources.some(obj => obj.name === source.name && obj.type === source.type)) {
+                                if(scene.data !== undefined) {
+                                    settings = scene.data
+                                }
+                                if(source.url !== undefined) {
+                                    settings.url = source.url
+                                }
+                                this.obsClient.createSource(source.name, source.type, name, scene.data)
+                            } else {
+                                if(index === -1 || scenesList[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
+                                    this.obsClient.addSourceToScene(name, source.name)
+                                }
+                            }
+                        });
+                        
+                        setTimeout(() => {
+                            source.scene.forEach(scene => {
+                                let name = `[Echo Overlay] ${scene.name}`
+                                let order = []  
+                                if(scene.order !== undefined) {
+                                    this.obsClient.send('GetSceneItemList', {sceneName:name}).then((arg) => {
+                                        arg.sceneItems.forEach(item => {
+                                            if(item.sourceName !== source.name) {
+                                                order.push({name:item.sourceName})
+                                            }
+                                        });
+                                        if(scene.order === 'first') {
+                                            order = [{name:source.name}].concat(order)
+                                        }
+                                        
+                                        if(scene.order === 'last') {
+                                            order.push({name:source.name})
+                                        }
+                                        console.log(order)
+                                        this.obsClient.setSourceOrder(name, order)
+                                    })
+                                }
+                            })
+                        }, 500);
+                    });
+
+                }, 500);
             })
             if(this.obsConnectionState) {
                 // this.globalConfig.obs.scenesNames.forEach(scene => {
@@ -269,7 +325,12 @@ class OBSPlayer {
         })
 
         this.eventEmitter.on('obsWebsocket.startBuffer', (args, event) => {
-            this.obsClient.send("StartReplayBuffer")
+            this.obsClient.send('GetReplayBufferStatus').then(arg => {
+                if(!arg.isReplayBufferActive) {
+                    this.obsClient.send("StartReplayBuffer")
+                }
+            })
+            
         })
 
         this.eventEmitter.on('mixed.customTeam', (args, event) => {
