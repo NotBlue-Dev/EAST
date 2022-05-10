@@ -16,13 +16,14 @@
         "autoBuffer":true,
         "path": "",
         "autoStart":true,
-        "scenes": [
+        "scenesNames":["Betwen Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
+        "sources":[
             {
-                "name": "Starting",
-                "sources": [
+                "name": "EchoCapture",
+                "type": "game_capture",
+                "scene":[
                     {
-                        "name": "EchoCaptureStarting",
-                        "type": "game_capture",
+                        "name": "Starting",
                         "data":{
                             "width": 1152,
                             "height": 658,
@@ -31,29 +32,8 @@
                         }
                     },
                     {
-                        "name": "StartingOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/starting/"
-                    }
-                ]
-            },
-            {
-                "name": "Waiting",
-                "sources": [
-                    {
-                        "name": "waitingOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/wait/"
-                    }
-                ]
-            },
-            {
-                "name": "Betwen Round",
-                "sources": [
-                    {
-                        "name": "EchoCaptureBetwen",
-                        "type": "game_capture",
-                        "data":{
+                        "name": "Betwen Round",
+                        "data": {
                             "width": 1083,
                             "height": 599,
                             "x": 56,
@@ -61,82 +41,7 @@
                         }
                     },
                     {
-                        "name": "betwenRoundOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/betwenRound/"
-                    }
-                ]
-            },
-            {
-                "name": "OT",
-                "sources": [
-                    {
-                        "name": "OTOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/OT/"
-                    }
-                ]
-            },
-            {
-                "name": "RoundStart",
-                "sources": [
-                    {
-                        "name": "RoundStartOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/roundStart/"
-                    }
-                ]
-            },
-            {
-                "name": "RoundOver",
-                "sources": [
-                    {
-                        "name": "RoundOverOverlay",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/roundWin/"
-                    }
-                ]
-            },
-            {
-                "name": "MainScene",
-                "sources": [
-                    {
-                        "name": "PingMonitor",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/pingTracker/"
-                    },
-                    {
-                        "name": "HalfTimeStats",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/halfTime/"
-                    },
-                    {
-                        "name": "Shot",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/shot/"
-                    },
-                    {
-                        "name": "Possession",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/possess/"
-                    },
-                    {
-                        "name": "GameTime",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/game/"
-                    },
-                    {
-                        "name": "Minimap",
-                        "type": "browser_source",
-                        "url": "http://localhost:4545/minimap/"
-                    },
-                    {
-                        "name": "Replay",
-                        "type": "vlc_source"
-                    },
-                    {
-                        "name": "EchoCaptureMain",
-                        "type": "game_capture",
+                        "name": "MainScene",
                         "data":{
                             "width": 1920,
                             "height": 1080,
@@ -145,6 +50,140 @@
                         }
                     }
                 ]
+            },
+            {
+                "name": "StartingOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/starting/",
+                "scene":[
+                    {
+                        "name": "Starting"
+                    }
+                ]
+            },
+            {
+                "name": "waitingOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/wait/",
+                "scene":[
+                    {
+                        "name": "Waiting"
+                    }
+                ]
+            },
+            {
+                "name": "betwenRoundOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/betwenRound/",
+                "scene":[
+                    {
+                        "name": "Betwen Round"
+                    }
+                ]
+            },
+            {
+                "name": "OTOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/OT/",
+                "scene":[
+                    {
+                        "name": "OT"
+                    }
+                ]
+            },
+            {
+                "name": "RoundStartOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/roundStart/",
+                "scene":[
+                    {
+                        "name": "RoundStart"
+                    }
+                ]
+            },
+            {
+                "name": "RoundOverOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/roundWin/",
+                "scene":[
+                    {
+                        "name": "RoundOver"
+                    }
+                ]
+            },
+            {
+                "name": "PingMonitor",
+                "type": "browser_source",
+                "url": "http://localhost:4545/pingTracker/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+            },
+            {
+                "name": "HalfTimeStats",
+                "type": "browser_source",
+                "url": "http://localhost:4545/halfTime/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+                
+            },
+            {
+                "name": "Shot",
+                "type": "browser_source",
+                "url": "http://localhost:4545/shot/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+                
+            },
+            {
+                "name": "Possession",
+                "type": "browser_source",
+                "url": "http://localhost:4545/possess/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+                
+            },
+            {
+                "name": "GameTime",
+                "type": "browser_source",
+                "url": "http://localhost:4545/game/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+                
+            },
+            {
+                "name": "Minimap",
+                "type": "browser_source",
+                "url": "http://localhost:4545/minimap/",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+            },
+            {
+                "name": "Replay",
+                "type": "vlc_source",
+                "scene":[
+                    {
+                        "name": "MainScene"
+                    }
+                ]
+                
             }
         ]
     },

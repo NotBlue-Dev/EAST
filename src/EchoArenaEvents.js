@@ -19,9 +19,9 @@ module.exports = [
     new TeamChange(),
     new ScoreBoard(),
     new Restart(),
-    // new RoundTimeChanged(),
+    new RoundTimeChanged(),
     new ScoreChanged(),
     new sessionID(),
-    // new Minimap(),
-    // new PingTracking(),
+    new Minimap(),
+    new PingTracking(),
 ]

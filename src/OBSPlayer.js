@@ -73,13 +73,13 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
-            this.globalConfig.obs.scenes.forEach(scene => {
-                scene.sources.forEach(source => {
-                    if(source.type === 'browser_source') {
-                        this.obsClient.refresh(source.name)
-                    }
-                });
-            });
+            // this.globalConfig.obs.scenes.forEach(scene => {
+            //     scene.sources.forEach(source => {
+            //         if(source.type === 'browser_source') {
+            //             this.obsClient.refresh(source.name)
+            //         }
+            //     });
+            // });
         }
         this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
@@ -153,24 +153,26 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
-            this.globalConfig.obs.scenes.forEach(scene => {
-                let name = `[Echo Overlay] ${scene.name}` 
-                this.obsClient.createScene(name).then(() => {
-                    scene.sources.forEach(source => {
-                        let settings = {width:1920,height:1080}
-                        if(source.url !== undefined) settings.url = source.url
-                        this.obsClient.createSource(source.name, source.type, name, settings)
-                    })
-                })
-            });
-            if(this.obsConnectionState) {
-                this.globalConfig.obs.scenes.forEach(scene => {
-                    scene.sources.forEach(source => {
-                        if(source.type === 'browser_source') {
-                            this.obsClient.refresh(source.name)
-                        }
-                    });
+            let scenesList;
+            this.obsClient.send('GetSceneList').then((arg) => {
+                scenesList = arg.scenes
+                this.globalConfig.obs.scenesNames.forEach(scene => {
+                    let name = `[Echo Overlay] ${scene}`  
+                    if(!scenesList.some(obj => obj.name === name)) {
+                        this.obsClient.createScene(name).then(() => {
+
+                        })
+                    }
                 });
+            })
+            if(this.obsConnectionState) {
+                // this.globalConfig.obs.scenesNames.forEach(scene => {
+                //     scene.sources.forEach(source => {
+                //         if(source.type === 'browser_source') {
+                //             this.obsClient.refresh(source.name)
+                //         }
+                //     });
+                // });
             }
 
         })
@@ -232,13 +234,13 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }
-                this.globalConfig.obs.scenes.forEach(scene => {
-                    scene.sources.forEach(source => {
-                        if(source.type === 'browser_source') {
-                            this.obsClient.refresh(source.name)
-                        }
-                    });
-                });
+                // this.globalConfig.obs.scenes.forEach(scene => {
+                //     scene.sources.forEach(source => {
+                //         if(source.type === 'browser_source') {
+                //             this.obsClient.refresh(source.name)
+                //         }
+                //     });
+                // });
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
