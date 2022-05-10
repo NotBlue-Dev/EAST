@@ -73,13 +73,11 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
-            // this.globalConfig.obs.scenes.forEach(scene => {
-            //     scene.sources.forEach(source => {
-            //         if(source.type === 'browser_source') {
-            //             this.obsClient.refresh(source.name)
-            //         }
-            //     });
-            // });
+            this.globalConfig.obs.sources.forEach(source => {
+                if(source.type === 'browser_source') {
+                    this.obsClient.refresh(source.name)
+                }
+            });
         }
         this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
@@ -166,7 +164,7 @@ class OBSPlayer {
 
                 setTimeout(() => {
                     this.globalConfig.obs.sources.forEach(source => {
-                        let settings = {}
+                        let settings = {width:1920,height:1080}
                         scenesList.forEach(item => {
                             item.sources.forEach(source => {
                                 if(!sources.some(obj => obj.name === source.name)) {
@@ -184,8 +182,9 @@ class OBSPlayer {
                                 }
                                 if(source.url !== undefined) {
                                     settings.url = source.url
+                                    settings.restart_when_active = true
                                 }
-                                this.obsClient.createSource(source.name, source.type, name, scene.data)
+                                this.obsClient.createSource(source.name, source.type, name, settings)
                             } else {
                                 if(index === -1 || scenesList[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
                                     this.obsClient.addSourceToScene(name, source.name)
@@ -211,7 +210,6 @@ class OBSPlayer {
                                         if(scene.order === 'last') {
                                             order.push({name:source.name})
                                         }
-                                        console.log(order)
                                         this.obsClient.setSourceOrder(name, order)
                                     })
                                 }
@@ -221,14 +219,13 @@ class OBSPlayer {
 
                 }, 500);
             })
+
             if(this.obsConnectionState) {
-                // this.globalConfig.obs.scenesNames.forEach(scene => {
-                //     scene.sources.forEach(source => {
-                //         if(source.type === 'browser_source') {
-                //             this.obsClient.refresh(source.name)
-                //         }
-                //     });
-                // });
+                this.globalConfig.obs.sources.forEach(source => {
+                    if(source.type === 'browser_source') {
+                        this.obsClient.refresh(source.name)
+                    }
+                });
             }
 
         })
@@ -290,13 +287,15 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }
-                // this.globalConfig.obs.scenes.forEach(scene => {
-                //     scene.sources.forEach(source => {
-                //         if(source.type === 'browser_source') {
-                //             this.obsClient.refresh(source.name)
-                //         }
-                //     });
-                // });
+                this.obsClient.send('GetSourceSettings', { 'sourceName': 'betwenRoundOverlay' }).then(data => {
+                    console.log('GetSourceSettings', data);
+                });
+                
+                this.globalConfig.obs.sources.forEach(source => {
+                    if(source.type === 'browser_source') {
+                        this.obsClient.refresh(source.name)
+                    }
+                });
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
