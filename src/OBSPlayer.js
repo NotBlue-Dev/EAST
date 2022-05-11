@@ -72,7 +72,7 @@ class OBSPlayer {
     } 
 
     createScenesAndContent() {
-                    let scenesListandSourcesData;
+            let scenesListandSourcesData;
             let OBSsources = [];
             this.obsClient.send('GetSceneList').then((arg) => {
                 scenesListandSourcesData = arg.scenes
@@ -99,10 +99,6 @@ class OBSPlayer {
                             let index = scenesListandSourcesData.findIndex(obj => obj.name === sceneName)
                             if(scene.data !== undefined) {
                                 settings.capture_mode = 'window'
-                                settings.width = scene.data.width
-                                settings.height = scene.data.height
-                                settings.x = scene.data.x
-                                settings.y = scene.data.y
                                 settings.window = 'Echo VR:WindowsClass:echovr.exe'
                             }
                             if(source.url !== undefined) {
@@ -116,27 +112,9 @@ class OBSPlayer {
                                     this.obsClient.addSourceToScene(sceneName, source.name)
                                 }
                             }
-                            // setTimeout(() => {
-                            //     this.obsClient.send('SetSceneItemTransform', {
-                            //         'scene-name': sceneName,
-                            //         'item': source.name,
-                            //         "x-scale": 1,
-                            //         "y-scale": 1,
-                            //         'rotation':0,
-                            //         'bounds':{
-                            //             'type':'OBS_BOUNDS_STRETCH',
-                            //             'alignment':0,
-                            //             "x":100,
-                            //             'y':100
-                            //         },
-                            //         'x':100,
-                            //         'y':100
-                           
-                                    
-                            //     })
-                            //     console.log(settings.width)
-                            //     settings = {width:1920,height:1080}
-                            // }, 2000);
+                            if(scene.data !== undefined) {
+                                
+                            }    
                             
                         });
                         
@@ -167,7 +145,27 @@ class OBSPlayer {
                                         this.obsClient.setSourceOrder(sceneName, order)
                                     })
                                 }
+
+                                if(scene.data !== undefined) {
+                                    this.obsClient.send('SetSceneItemTransform', {
+                                        'scene-name': sceneName,
+                                        'item': source.name,
+                                        "x-scale": scene.data.scaleX,
+                                        "y-scale": scene.data.scaleY,
+                                        'rotation':0,
+                                    })
+                                    this.obsClient.send('SetSceneItemPosition', {
+                                        'scene-name': sceneName,
+                                        'item': source.name,
+                                        'x': scene.data.x,
+                                        'y': scene.data.y
+                                    })
+                                    
+                                    settings = {width:1920,height:1080}
+                                }
                             })
+
+                            
                         }, 500);
                     });
 
@@ -187,7 +185,7 @@ class OBSPlayer {
             if(this.globalConfig.vrml.autoLoad) {
                 this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
             }
-            if(this.obsConnectionState) {
+            if(this.obsConnectionState && this.echoArena !== null) {
                 this.overlayWS.send('roundData', this.echoArena.rounds)
             }
         })

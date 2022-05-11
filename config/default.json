@@ -19,50 +19,38 @@
         "scenesNames":["Betwen Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
         "sources":[
             {
-                "name": "EchoCaptureStarting",
+                "name": "EchoCapture",
                 "type": "game_capture",
                 "scene":[
                     {
                         "name": "Starting",
                         "data":{
-                            "width": 1152,
-                            "height": 658,
+                            "scaleX": 0.6,
+                            "scaleY": 0.61,
                             "x": 382,
                             "y": 186,
                             "capture_mode":"window",
                             "window":"Echo VR:WindowsClass:echovr.exe"
                         },
                         "order":"first"
-                    }
-                ]
-            },
-            {
-                "name": "EchoCaptureMain",
-                "type": "game_capture",
-                "scene":[
+                    },
                     {
                         "name": "MainScene",
                         "data":{
-                            "width": 1920,
-                            "height": 1080,
+                            "scaleX": 1,
+                            "scaleY": 1,
                             "x": 0,
                             "y": 0,
                             "capture_mode":"window",
                             "window":"Echo VR:WindowsClass:echovr.exe"
                         },
                         "order":"last"
-                    }
-                ]
-            },
-            {
-                "name": "EchoCaptureBetwen",
-                "type": "game_capture",
-                "scene":[
+                    },
                     {
                         "name": "Betwen Round",
                         "data": {
-                            "width": 1083,
-                            "height": 599,
+                            "scaleX": 0.564,
+                            "scaleY": 0.555,
                             "x": 56,
                             "y": 71,
                             "capture_mode":"window",
