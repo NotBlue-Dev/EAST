@@ -112,10 +112,6 @@ class OBSPlayer {
                                     this.obsClient.addSourceToScene(sceneName, source.name)
                                 }
                             }
-                            if(scene.data !== undefined) {
-                                
-                            }    
-                            
                         });
                         
                         setTimeout(() => {
@@ -164,8 +160,6 @@ class OBSPlayer {
                                     settings = {width:1920,height:1080}
                                 }
                             })
-
-                            
                         }, 500);
                     });
 
@@ -175,11 +169,13 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
-            this.globalConfig.obs.sources.forEach(source => {
-                if(source.type === 'browser_source') {
-                    this.obsClient.refresh(source.name)
-                }
-            });
+            this.obsClient.send('GetSourcesList').then((arg) => {
+                arg.sources.forEach(source => {
+                    if(source.typeId === 'browser_source') {
+                        this.obsClient.refresh(source.name)
+                    }
+                });
+            })
         }
         this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
@@ -253,13 +249,15 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
-            this.createScenesAndContent() 
+            this.createScenesAndContent()
             if(this.obsConnectionState) {
-                this.globalConfig.obs.sources.forEach(source => {
-                    if(source.type === 'browser_source') {
-                        this.obsClient.refresh(source.name)
-                    }
-                });
+                this.obsClient.send('GetSourcesList').then((arg) => {
+                    arg.sources.forEach(source => {
+                        if(source.typeId === 'browser_source') {
+                            this.obsClient.refresh(source.name)
+                        }
+                    });
+                })
             }
 
         })
@@ -321,14 +319,13 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }        
-                this.obsClient.send('GetVersion', {sourceName:'EchoCaptureBetwen', sceneName:'[Echo Overlay] Betwen Round'}).then((arg) => {
-                    console.log(arg)
+                this.obsClient.send('GetSourcesList').then((arg) => {
+                    arg.sources.forEach(source => {
+                        if(source.typeId === 'browser_source') {
+                            this.obsClient.refresh(source.name)
+                        }
+                    });
                 })
-                this.globalConfig.obs.sources.forEach(source => {
-                    if(source.type === 'browser_source') {
-                        this.obsClient.refresh(source.name)
-                    }
-                });
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
