@@ -28,6 +28,7 @@ class GameData {
             playerPing:[],
             points:json.orange_points
         }
+        this.scoreData = {blue:this.blueTeam.points, orange:this.orangeTeam.points}
         this.orangeTeam.orangeTeamPlayers=json.teams[1].players
         this.discPosition = [json.disc.position[0], json.disc.position[2]]
         

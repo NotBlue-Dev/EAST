@@ -40,6 +40,11 @@ window.addEventListener("load", (event) => {
     socket.on('vrml.colorChanged', fill)
     socket.on('vrml.matchDataLoaded', fill)
     
+    socket.on('game.updateScore', (arg) => {
+        document.getElementById('scoreB').innerHTML = arg.blue
+        document.getElementById('scoreA').innerHTML = arg.orange
+    });
+
     socket.on('game.scoreChanged', (arg) => {
         document.getElementById('scoreB').innerHTML = arg.blue
         document.getElementById('scoreA').innerHTML = arg.orange
@@ -74,7 +79,6 @@ window.addEventListener("load", (event) => {
 
     socket.on('game.roundTime', (arg) => {
         let split = arg.time.split('.')
-
         document.getElementById('ms').innerHTML = `.${split[1]}`
         document.getElementById('minutes').innerHTML = `${split[0]}`
     });

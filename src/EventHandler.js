@@ -151,7 +151,6 @@ class EventHandler {
                 this.halfTimeShown++;
                 this.eventEmitter.send('animation.triggerHalfTime', args)
             }
-            
         })
 
         this.eventEmitter.on('game.roundOver', (args, event) => {

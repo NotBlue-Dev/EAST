@@ -183,6 +183,7 @@ class OBSPlayer {
             }
             if(this.obsConnectionState && this.echoArena !== null) {
                 this.overlayWS.send('roundData', this.echoArena.rounds)
+                this.overlayWS.send('game.updateScore', this.echoArena.scoreData)
             }
         })
     }
@@ -244,7 +245,9 @@ class OBSPlayer {
 
         this.eventEmitter.on('obs.soft', (args, event) => {
             this.globalConfig.obs.autoStart = args.auto
-            this.globalConfig.obs.path = args.path
+            let parts = args.path.split('\\');
+            let output = parts.join('/');
+            this.globalConfig.obs.path = output
             this.configLoader.save(this.globalConfig)
         })
         

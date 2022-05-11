@@ -10,6 +10,7 @@ class EchoArena {
         this.customData = customData
         this.fails = 0
         this.rounds = []
+        this.scoreData = []
         this.vrmlInfo = vrmlInfo
     }
     
@@ -40,6 +41,7 @@ class EchoArena {
                 event.handle(gameData, this.eventEmitter)
             })
             this.rounds = gameData.roundData
+            this.scoreData = gameData.scoreData
             this.request()
         }).catch(error => {
             if (error.response) {
