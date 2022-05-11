@@ -71,6 +71,110 @@ class OBSPlayer {
         
     } 
 
+    createScenesAndContent() {
+                    let scenesListandSourcesData;
+            let OBSsources = [];
+            this.obsClient.send('GetSceneList').then((arg) => {
+                scenesListandSourcesData = arg.scenes
+                this.globalConfig.obs.scenesNames.forEach(scene => {
+                    let sceneName = `[Echo Overlay] ${scene}`  
+                    if(!scenesListandSourcesData.some(obj => obj.name === sceneName)) {
+                        this.obsClient.createScene(sceneName)
+                    }
+                });
+
+                setTimeout(() => {
+                    this.globalConfig.obs.sources.forEach(source => {
+                        let settings = {width:1920,height:1080}
+                        scenesListandSourcesData.forEach(item => {
+                            item.sources.forEach(source => {
+                                if(!OBSsources.some(obj => obj.name === source.name)) {
+                                    OBSsources.push({name:source.name, type:source.type})
+                                }
+                            });
+                        });
+                        
+                        source.scene.forEach(scene => {
+                            let sceneName = `[Echo Overlay] ${scene.name}`  
+                            let index = scenesListandSourcesData.findIndex(obj => obj.name === sceneName)
+                            if(scene.data !== undefined) {
+                                settings.capture_mode = 'window'
+                                settings.width = scene.data.width
+                                settings.height = scene.data.height
+                                settings.x = scene.data.x
+                                settings.y = scene.data.y
+                                settings.window = 'Echo VR:WindowsClass:echovr.exe'
+                            }
+                            if(source.url !== undefined) {
+                                settings.url = source.url
+                                settings.restart_when_active = true
+                            }
+                            if(!OBSsources.some(obj => obj.name === source.name && obj.type === source.type)) {
+                                this.obsClient.createSource(source.name, source.type, sceneName, settings)
+                            } else {
+                                if(index === -1 || scenesListandSourcesData[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
+                                    this.obsClient.addSourceToScene(sceneName, source.name)
+                                }
+                            }
+                            // setTimeout(() => {
+                            //     this.obsClient.send('SetSceneItemTransform', {
+                            //         'scene-name': sceneName,
+                            //         'item': source.name,
+                            //         "x-scale": 1,
+                            //         "y-scale": 1,
+                            //         'rotation':0,
+                            //         'bounds':{
+                            //             'type':'OBS_BOUNDS_STRETCH',
+                            //             'alignment':0,
+                            //             "x":100,
+                            //             'y':100
+                            //         },
+                            //         'x':100,
+                            //         'y':100
+                           
+                                    
+                            //     })
+                            //     console.log(settings.width)
+                            //     settings = {width:1920,height:1080}
+                            // }, 2000);
+                            
+                        });
+                        
+                        setTimeout(() => {
+                            source.scene.forEach(scene => {
+                                let sceneName = `[Echo Overlay] ${scene.name}`
+                                let order = []  
+                                if(scene.order !== undefined) {
+                                    this.obsClient.send('GetSceneItemList', {sceneName:sceneName}).then((arg) => {
+                                        arg.sceneItems.forEach(item => {
+                                            if(item.sourceName !== source.name) {
+                                                order.push({name:item.sourceName})
+                                            }
+                                        });
+
+                                        // si la liste est renvoyer a l'envers on la retourne
+                                        if(order[order.length-1].name === 'Replay') {
+                                            order = order.reverse()
+                                        }
+                                        
+                                        if(scene.order === 'first') {
+                                            order = [{name:source.name}].concat(order)
+                                        }
+                                        
+                                        if(scene.order === 'last') {
+                                            order.push({name:source.name})
+                                        }
+                                        this.obsClient.setSourceOrder(sceneName, order)
+                                    })
+                                }
+                            })
+                        }, 500);
+                    });
+
+                }, 500);
+            })
+    }
+
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
             this.globalConfig.obs.sources.forEach(source => {
@@ -151,75 +255,7 @@ class OBSPlayer {
         })
         
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
-            let scenesList;
-            let sources = [];
-            this.obsClient.send('GetSceneList').then((arg) => {
-                scenesList = arg.scenes
-                this.globalConfig.obs.scenesNames.forEach(scene => {
-                    let name = `[Echo Overlay] ${scene}`  
-                    if(!scenesList.some(obj => obj.name === name)) {
-                        this.obsClient.createScene(name)
-                    }
-                });
-
-                setTimeout(() => {
-                    this.globalConfig.obs.sources.forEach(source => {
-                        let settings = {width:1920,height:1080}
-                        scenesList.forEach(item => {
-                            item.sources.forEach(source => {
-                                if(!sources.some(obj => obj.name === source.name)) {
-                                    sources.push({name:source.name, type:source.type})
-                                }
-                            });
-                        });
-                        
-                        source.scene.forEach(scene => {
-                            let name = `[Echo Overlay] ${scene.name}`  
-                            let index = scenesList.findIndex(obj => obj.name === name)
-                            if(!sources.some(obj => obj.name === source.name && obj.type === source.type)) {
-                                if(scene.data !== undefined) {
-                                    settings = scene.data
-                                }
-                                if(source.url !== undefined) {
-                                    settings.url = source.url
-                                    settings.restart_when_active = true
-                                }
-                                this.obsClient.createSource(source.name, source.type, name, settings)
-                            } else {
-                                if(index === -1 || scenesList[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
-                                    this.obsClient.addSourceToScene(name, source.name)
-                                }
-                            }
-                        });
-                        
-                        setTimeout(() => {
-                            source.scene.forEach(scene => {
-                                let name = `[Echo Overlay] ${scene.name}`
-                                let order = []  
-                                if(scene.order !== undefined) {
-                                    this.obsClient.send('GetSceneItemList', {sceneName:name}).then((arg) => {
-                                        arg.sceneItems.forEach(item => {
-                                            if(item.sourceName !== source.name) {
-                                                order.push({name:item.sourceName})
-                                            }
-                                        });
-                                        if(scene.order === 'first') {
-                                            order = [{name:source.name}].concat(order)
-                                        }
-                                        
-                                        if(scene.order === 'last') {
-                                            order.push({name:source.name})
-                                        }
-                                        this.obsClient.setSourceOrder(name, order)
-                                    })
-                                }
-                            })
-                        }, 500);
-                    });
-
-                }, 500);
-            })
-
+            this.createScenesAndContent() 
             if(this.obsConnectionState) {
                 this.globalConfig.obs.sources.forEach(source => {
                     if(source.type === 'browser_source') {
@@ -286,11 +322,10 @@ class OBSPlayer {
                 this.globalConfig.obs = {
                     ...this.globalConfig.obs,
                     ...args,
-                }
-                this.obsClient.send('GetSourceSettings', { 'sourceName': 'betwenRoundOverlay' }).then(data => {
-                    console.log('GetSourceSettings', data);
-                });
-                
+                }        
+                this.obsClient.send('GetVersion', {sourceName:'EchoCaptureBetwen', sceneName:'[Echo Overlay] Betwen Round'}).then((arg) => {
+                    console.log(arg)
+                })
                 this.globalConfig.obs.sources.forEach(source => {
                     if(source.type === 'browser_source') {
                         this.obsClient.refresh(source.name)

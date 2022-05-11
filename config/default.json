@@ -19,7 +19,7 @@
         "scenesNames":["Betwen Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
         "sources":[
             {
-                "name": "EchoCapture",
+                "name": "EchoCaptureStarting",
                 "type": "game_capture",
                 "scene":[
                     {
@@ -28,29 +28,47 @@
                             "width": 1152,
                             "height": 658,
                             "x": 382,
-                            "y": 186
+                            "y": 186,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe"
                         },
                         "order":"first"
-                    },
-                    {
-                        "name": "Betwen Round",
-                        "data": {
-                            "width": 1083,
-                            "height": 599,
-                            "x": 56,
-                            "y": 71
-                        },
-                        "order":"first"
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "EchoCaptureMain",
+                "type": "game_capture",
+                "scene":[
                     {
                         "name": "MainScene",
                         "data":{
                             "width": 1920,
                             "height": 1080,
                             "x": 0,
-                            "y": 0
+                            "y": 0,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe"
                         },
                         "order":"last"
+                    }
+                ]
+            },
+            {
+                "name": "EchoCaptureBetwen",
+                "type": "game_capture",
+                "scene":[
+                    {
+                        "name": "Betwen Round",
+                        "data": {
+                            "width": 1083,
+                            "height": 599,
+                            "x": 56,
+                            "y": 71,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe"
+                        },
+                        "order":"first"
                     }
                 ]
             },
