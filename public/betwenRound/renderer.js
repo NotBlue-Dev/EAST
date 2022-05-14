@@ -25,8 +25,6 @@ window.addEventListener("load", (event) => {
 
         orange = arg.teams.home
         blue = arg.teams.away
-        
-        
 
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
@@ -55,8 +53,8 @@ window.addEventListener("load", (event) => {
         }
     }
 
-    const fillRound = (arg) => {
-        arg.rounds.forEach(round => {
+    const fillRound = (arg) => { 
+        arg.forEach(round => {
             if(round.winner === 'orange') {
                 let r = document.getElementById(`R${round.currentRound}O`)
                 r.classList.add('winO')
@@ -74,7 +72,7 @@ window.addEventListener("load", (event) => {
     }
 
     socket.on('game.roundOver', (arg) => {  
-        fillRound(arg)
+        fillRound(arg.rounds)
     })
 
     socket.on('roundData', (arg) => {

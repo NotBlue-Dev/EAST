@@ -5,6 +5,10 @@ socket.on('animation.triggerOT', (arg) => {
 });
 
 function animate() {
+    let video =  document.getElementById('background-video')
+    video.pause();
+    video.currentTime = 0;
+    video.play()
     let roundDiv = document.getElementById('roundDiv')
     let disc = document.getElementById('disc')
     let round = document.getElementById('round')

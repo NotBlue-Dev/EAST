@@ -29,8 +29,10 @@
                             "scaleY": 0.61,
                             "x": 382,
                             "y": 186,
+                            "visible":true,
                             "capture_mode":"window",
-                            "window":"Echo VR:WindowsClass:echovr.exe"
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
                         },
                         "order":"first"
                     },
@@ -41,8 +43,10 @@
                             "scaleY": 1,
                             "x": 0,
                             "y": 0,
+                            "visible":true,
                             "capture_mode":"window",
-                            "window":"Echo VR:WindowsClass:echovr.exe"
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
                         },
                         "order":"last"
                     },
@@ -53,8 +57,10 @@
                             "scaleY": 0.555,
                             "x": 56,
                             "y": 71,
+                            "visible":true,
                             "capture_mode":"window",
-                            "window":"Echo VR:WindowsClass:echovr.exe"
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
                         },
                         "order":"first"
                     }
@@ -66,7 +72,38 @@
                 "url": "http://localhost:4545/starting/",
                 "scene":[
                     {
-                        "name": "Starting"
+                        "name": "Starting",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "AudioPC",
+                "type": "wasapi_output_capture",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "refresh":false
+                    },
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    },
+                    {
+                        "name": "Betwen Round",
+                        "refresh":false
+                    },
+                    {
+                        "name": "OT",
+                        "refresh":false
+                    },
+                    {
+                        "name": "RoundStart",
+                        "refresh":false
+                    },
+                    {
+                        "name": "RoundOver",
+                        "refresh":false
                     }
                 ]
             },
@@ -76,7 +113,8 @@
                 "url": "http://localhost:4545/wait/",
                 "scene":[
                     {
-                        "name": "Waiting"
+                        "name": "Waiting",
+                        "refresh":false
                     }
                 ]
             },
@@ -86,7 +124,8 @@
                 "url": "http://localhost:4545/betwenRound/",
                 "scene":[
                     {
-                        "name": "Betwen Round"
+                        "name": "Betwen Round",
+                        "refresh":false
                     }
                 ]
             },
@@ -96,7 +135,8 @@
                 "url": "http://localhost:4545/OT/",
                 "scene":[
                     {
-                        "name": "OT"
+                        "name": "OT",
+                        "refresh":false
                     }
                 ]
             },
@@ -106,7 +146,8 @@
                 "url": "http://localhost:4545/roundStart/",
                 "scene":[
                     {
-                        "name": "RoundStart"
+                        "name": "RoundStart",
+                        "refresh":false
                     }
                 ]
             },
@@ -116,7 +157,8 @@
                 "url": "http://localhost:4545/roundWin/",
                 "scene":[
                     {
-                        "name": "RoundOver"
+                        "name": "RoundOver",
+                        "refresh":false
                     }
                 ]
             },
@@ -125,10 +167,17 @@
                 "type": "vlc_source",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "data": {
+                            "scaleX": 0.26,
+                            "scaleY": 0.254,
+                            "x": 1372,
+                            "y": 43,
+                            "visible":false,
+                            "mute":true
+                        }
                     }
                 ]
-                
             },
             {
                 "name": "PingMonitor",
@@ -136,7 +185,8 @@
                 "url": "http://localhost:4545/pingTracker/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
             },
@@ -146,7 +196,8 @@
                 "url": "http://localhost:4545/halfTime/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
                 
@@ -157,7 +208,19 @@
                 "url": "http://localhost:4545/shot/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "ShotReplayOverlay",
+                "type": "browser_source",
+                "url": "http://localhost:4545/replay/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
                 
@@ -168,7 +231,8 @@
                 "url": "http://localhost:4545/possess/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
                 
@@ -179,7 +243,8 @@
                 "url": "http://localhost:4545/game/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
                 
@@ -190,7 +255,8 @@
                 "url": "http://localhost:4545/minimap/",
                 "scene":[
                     {
-                        "name": "MainScene"
+                        "name": "MainScene",
+                        "refresh":false
                     }
                 ]
             }
@@ -215,7 +281,8 @@
             {"path": "/possession", "template": "possess"},
             {"path": "/shot",   "template": "shot"},
             {"path": "/halfTime",   "template": "halfTime"},
-            {"path": "/pingTracker","template": "pingTracker"}
+            {"path": "/pingTracker","template": "pingTracker"},
+            {"path": "/replay","template": "replay"}
         ]
     },
     "autoStream": {

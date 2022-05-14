@@ -7,6 +7,7 @@ class GameData {
         this.teams = json.teams
         this.sessionID = json.sessionid
         this.roundData = []
+        this.betwenRound = false
         this.blueTeam = {
             teamName:customData.blue,
             blueTeamPlayers: [],
@@ -41,7 +42,8 @@ class GameData {
         
         this.distance_thrown = this.lastscore.distance_thrown
         this.round = json.blue_round_score + json.orange_round_score + 1
-        
+        this.totalRound = json.total_round_count
+
         if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {
             return
         }

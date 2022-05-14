@@ -9,7 +9,7 @@ window.addEventListener("load", (event) => {
     const nameB = document.getElementById('teamB')
 
     const fill = (arg) => {
-        if(arg.teams.length === 0) {
+        if(arg.teams === null || arg.teams.length === 0) {
             vrml = false
             return
         } else {
@@ -41,8 +41,10 @@ window.addEventListener("load", (event) => {
     socket.on('vrml.matchDataLoaded', fill)
     
     socket.on('game.updateScore', (arg) => {
-        document.getElementById('scoreB').innerHTML = arg.blue
-        document.getElementById('scoreA').innerHTML = arg.orange
+        if(arg.blue !== undefined && arg.orange !== undefined) {
+            document.getElementById('scoreB').innerHTML = arg.blue
+            document.getElementById('scoreA').innerHTML = arg.orange
+        }
     });
 
     socket.on('game.scoreChanged', (arg) => {
@@ -85,6 +87,7 @@ window.addEventListener("load", (event) => {
 
     socket.on('game.roundOver', (arg) => {
         if(arg.winner !== null) {
+            console.log(arg.winner,arg.rounds[arg.rounds.length-1],arg.rounds[arg.rounds.length-1].currentRound)
             if(arg.winner === 'orange') {
                 let current = document.getElementById(`OrangeR${arg.rounds[arg.rounds.length-1].currentRound}`)
                 current.classList.add('winO')

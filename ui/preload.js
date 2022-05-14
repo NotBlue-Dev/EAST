@@ -221,6 +221,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const betwen = document.getElementById('betwen-scene[0]')
 
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
+      const noSwitch = document.createElement('option');
+      noSwitch.value = 'DO NOT SWITCH SCENE';
+      noSwitch.innerHTML = 'DO NOT SWITCH SCENE';
+      sceneSelect.appendChild(noSwitch)
+
       data.scenes.map((scene) => {
         const opt = document.createElement('option');
         opt.value = scene;

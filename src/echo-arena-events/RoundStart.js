@@ -8,7 +8,7 @@ class RoundStart {
 
     handle(gameData, eventEmitter) {
         const status = gameData.status
-
+    
         if (status === 'pre_match' || status === 'round_over') {
             this.roundStarted = false
             return
@@ -17,10 +17,8 @@ class RoundStart {
         if (this.roundStarted) {
             return
         }
-
-        if (status === 'round_start' && (gameData.round != this.lastRound)) {
+        if ((status === 'round_start' && (gameData.round != this.lastRound)) && !gameData.betwenRound) {
             this.roundStarted = true
-            this.lastRound = gameData.round
             eventEmitter.send('game.roundStart', {
                 round: gameData.round,
                 name: this.name

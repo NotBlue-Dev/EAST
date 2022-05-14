@@ -42,8 +42,13 @@
 }
 
 .hide {
-    display: none;
+    display: none !important;
 }
+
+.visuallyhidden {
+    opacity: 0;
+}
+
 
 .loading-box {
     background-color: rgba(31, 33, 45, 1) !important;

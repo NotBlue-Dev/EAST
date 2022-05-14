@@ -10,11 +10,13 @@ const Restart = require("./echo-arena-events/Restart");
 const Minimap= require('./echo-arena-events/Minimap');
 const PingTracking = require('./echo-arena-events/PingTracking');
 const sessionID = require('./echo-arena-events/SessionID');
+const RoundBetwen = require('./echo-arena-events/RoundBetwen');
 
 module.exports = [
     new Overtime(),
     new PossessionChanged(),
     new RoundOver(),
+    new RoundBetwen(),
     new RoundStart(),
     new TeamChange(),
     new ScoreBoard(),

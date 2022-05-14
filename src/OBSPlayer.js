@@ -83,6 +83,8 @@ class OBSPlayer {
                     }
                 });
 
+                this.obsClient.send('SetCurrentTransition', {"transition-name":'Fade'})
+
                 setTimeout(() => {
                     this.globalConfig.obs.sources.forEach(source => {
                         let settings = {width:1920,height:1080}
@@ -103,7 +105,7 @@ class OBSPlayer {
                             }
                             if(source.url !== undefined) {
                                 settings.url = source.url
-                                settings.restart_when_active = true
+                                settings.restart_when_active = scene.refresh
                             }
                             if(!OBSsources.some(obj => obj.name === source.name && obj.type === source.type)) {
                                 this.obsClient.createSource(source.name, source.type, sceneName, settings)
@@ -117,7 +119,13 @@ class OBSPlayer {
                         setTimeout(() => {
                             source.scene.forEach(scene => {
                                 let sceneName = `[Echo Overlay] ${scene.name}`
-                                let order = []  
+                                let order = []
+                                if(scene.data !== undefined) {
+                                    if(scene.data.mute) {
+                                        this.obsClient.send('SetMute', {source:source.name, mute:true})
+                                    }
+                                }
+                                
                                 if(scene.order !== undefined) {
                                     this.obsClient.send('GetSceneItemList', {sceneName:sceneName}).then((arg) => {
                                         arg.sceneItems.forEach(item => {
@@ -155,6 +163,11 @@ class OBSPlayer {
                                         'item': source.name,
                                         'x': scene.data.x,
                                         'y': scene.data.y
+                                    })
+                                    this.obsClient.send('SetSceneItemProperties', {
+                                        "scene-name": sceneName,
+                                        "item": source.name,
+                                        "visible":scene.data.visible
                                     })
                                     
                                     settings = {width:1920,height:1080}
@@ -290,8 +303,14 @@ class OBSPlayer {
                     ...this.globalConfig.echoArena,
                     ...args,
                 }
-                
                 this.configLoader.save(this.globalConfig)
+                this.obsClient.send('GetSourcesList').then((arg) => {
+                    arg.sources.forEach(source => {
+                        if(source.typeId === 'browser_source') {
+                            this.obsClient.refresh(source.name)
+                        }
+                    });
+                })
             }).catch((error) => {
                 this.eventEmitter.send('echoArena.connectionFailed', {
                     args,
@@ -328,6 +347,9 @@ class OBSPlayer {
                             this.obsClient.refresh(source.name)
                         }
                     });
+                })
+                this.obsClient.send('GetSourceFilters', {sourceName:'Replay'}).then((arg) => {
+                    console.log(arg)
                 })
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
@@ -451,7 +473,6 @@ class OBSPlayer {
 
     async loadTeamList(region) {
         const json = await this.vrmlClient.getTeams()
-        console.log(json)
         const teams = json.filter(team => team.isActive).map((team) => {
             return {
                 name: team.teamName,
@@ -554,7 +575,6 @@ class OBSPlayer {
     }
         
     connectEchoArena(config) {
-        
         return new Promise((resolve,reject) => {
             this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.globalConfig.mixed)
             this.echoArena.listen()

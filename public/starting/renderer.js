@@ -114,7 +114,7 @@ window.addEventListener("load", (event) => {
                 div.classList.add('row')
                 div.classList.add('b')
                 div.appendChild(a)
-                teamPlayerA.appendChild(div)
+                teamPlayerB.appendChild(div)
             });
             arg.pings.orange.forEach(player => {
                 let a = document.createElement('a')
@@ -123,7 +123,7 @@ window.addEventListener("load", (event) => {
                 div.classList.add('row')
                 div.classList.add('o')
                 div.appendChild(a)
-                teamPlayerB.appendChild(div)
+                teamPlayerA.appendChild(div)
             });
 
             nameA.innerHTML = arg.teamName[1]

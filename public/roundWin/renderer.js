@@ -17,7 +17,10 @@ socket.on('animation.triggerRoundOver', (arg) => {
 });
 
 function animate(arg, winner) {
-    document.getElementById('background-video').play()
+    let video =  document.getElementById('background-video')
+    video.pause();
+    video.currentTime = 0;
+    video.play()
     let roundDiv = document.getElementById('roundDiv')
     let teamName = document.getElementById('teamName')
     let img = document.getElementById('img')
@@ -31,7 +34,7 @@ function animate(arg, winner) {
         roundDiv.classList.add('orange') 
     }
 
-    if(arg.length === 0 || arg.teams.length === 0) {
+    if(arg === undefined || arg === null || arg.length === 0 || arg.teams.length === 0) {
         img.classList.add('hide')
     } else {
         img.classList.remove('hide')

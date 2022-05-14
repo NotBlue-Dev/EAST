@@ -6,7 +6,6 @@ class Restart {
     }
 
     handle(gameData, eventEmitter) {
-        // faudra test quand meme
         if (!gameData.blueTeam.blueReset && !gameData.orangeTeam.orangeReset) {
             this.Restart = false
             return

@@ -1,0 +1,75 @@
+body {
+    overflow: hidden;
+}
+
+#gradient {
+    --size: 26vw;
+    --radius: 0.4vw;
+    --gradient:conic-gradient(#DC872C, #FA3F10);
+    position: relative;
+    width: var(--size);
+    height: 14vw;
+    margin: 2vw 71vw;
+    padding: var(--radius);
+    overflow: hidden;
+}
+
+.replay-box {
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #1B121E;
+}
+
+.here {
+    font-size: 2vw;
+}
+
+.replay {
+    position: fixed;
+    top: 13vw;
+    font-weight: 600;
+    font-size: 3vw;
+}
+
+.hide {
+    display: none !important;
+}
+
+.visuallyhidden {
+    opacity: 0;
+}
+
+.container {
+    position: relative;
+    top: 0;
+}
+
+#comp {
+    transition: all 1s ease-in-out;
+    display: block;
+}
+
+.o {
+    background-image: linear-gradient(to left, rgb(250, 63, 16), rgb(220, 135, 44));
+}
+
+.b {
+    background-image: linear-gradient(to right, rgb(3, 117, 255), rgb(3, 185, 224));
+}
+
+#gradient::before {
+    content: '';
+    width: 150%;
+    height: 119vw;
+    position: absolute;
+    top: -351%;
+    background: var(--gradient);
+    left: -25%;
+    animation: rotate-border 5s linear infinite;
+}

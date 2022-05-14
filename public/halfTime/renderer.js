@@ -7,10 +7,26 @@ window.addEventListener("load", (event) => {
     let nameBlue = document.getElementById('nameBlue')
     let nameOrange = document.getElementById('nameOrange')
     let halfTime = document.getElementById('comp')
+    let comp = document.getElementById('comp')
 
     socket.on('game.scoreChanged', (arg) => {
         halfTime.classList.add('hide')
     })
+
+    function display() {
+        comp.classList.remove('hidden');
+        setTimeout(function () {
+            comp.classList.remove('visuallyhidden');
+        }, 20);
+    }
+
+    // hide
+    function hide() {
+        comp.classList.add('visuallyhidden');    
+        comp.addEventListener('transitionend', function(e) {
+            comp.classList.add('hidden');
+        });
+    }
 
     socket.on('animation.triggerHalfTime', (arg) => {
         console.log(arg)
@@ -28,9 +44,9 @@ window.addEventListener("load", (event) => {
             nameOrange.innerHTML = arg.orange.name
         }
 
-        halfTime.classList.remove('hide')
+        display()
         setTimeout(() => {
-            halfTime.classList.add('hide')
+            hide()
         }, 6000);
     })
     

@@ -26,13 +26,13 @@ window.addEventListener("load", (event) => {
         });
     }
 
-    socket.on('game.scoreChanged', (arg) => {
+    socket.on('game.showScore', (arg) => {
         if(arg.data.team === 'blue') {
+            document.getElementById('box').classList.remove('o')
             document.getElementById('box').classList.add('b')
-            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(rgb(3, 117, 255), rgb(3, 185, 224))")
         } else {
+            document.getElementById('box').classList.remove('b')
             document.getElementById('box').classList.add('o')
-            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(#DC872C, #FA3F10)");
         }
         
         speed.innerHTML = `${arg.data.speed}m/s`

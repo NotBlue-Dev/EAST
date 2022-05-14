@@ -10,14 +10,14 @@ const uiEventEmitter = (webContents) => {
     send: (channel, args) => {
       if ((typeof webContents.send) === 'function') {
         webContents.send(channel, args)
-        console.log('event send ', channel, args)
+        // console.log('event send ', channel, args)
       } else {
         console.log('can not send event')
       }
     },
     on: (channel, callable) => {
       ipcMain.on(channel, function (event, args) {
-        console.log('event received ', channel)
+        // console.log('event received ', channel)
         callable(args, event)
       })
     }
