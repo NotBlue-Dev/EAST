@@ -1,6 +1,10 @@
 # EchoArena-Overlay
 echo arena overlay
 
+NOTES :
+
+Crée transition stinger a la main pour avoir la transition custom
+Effet fade a add a la main pour replay buffer vlc
 
 ## Events
 
