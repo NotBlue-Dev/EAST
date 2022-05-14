@@ -6,8 +6,7 @@ const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
 const events = require('./EchoArenaEvents.js')
-
-// REFRESH MARCHE PAS OBS
+const path = require('path');
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -82,8 +81,12 @@ class OBSPlayer {
                         this.obsClient.createScene(sceneName)
                     }
                 });
+                this.obsClient.send('SetTransitionSettings', {transitionName:'Stinger', transitionSettings: {
+                    audio_fade_style: 0,
+                    path: path.join(__dirname, '../public/assets/transition/transition.mov')
+                }})
 
-                this.obsClient.send('SetCurrentTransition', {"transition-name":'Fade'})
+                this.obsClient.send('SetCurrentTransition', {"transition-name":'Stinger'})
 
                 setTimeout(() => {
                     this.globalConfig.obs.sources.forEach(source => {
@@ -175,7 +178,6 @@ class OBSPlayer {
                             })
                         }, 500);
                     });
-
                 }, 500);
             })
     }
@@ -348,7 +350,8 @@ class OBSPlayer {
                         }
                     });
                 })
-                this.obsClient.send('GetSourceFilters', {sourceName:'Replay'}).then((arg) => {
+                
+                this.obsClient.send('GetTransitionSettings', {transitionName:'Stinger'}).then((arg) => {
                     console.log(arg)
                 })
                 this.configLoader.save(this.globalConfig)
