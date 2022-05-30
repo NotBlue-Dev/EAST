@@ -108,6 +108,55 @@
                 ]
             },
             {
+                "name":"Gameplay",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/gameplay.mp3",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    },
+                    {
+                        "name":"OT",
+                        "refresh":false
+                    },
+                    {
+                        "name":"RoundStart",
+                        "refresh":false
+                    }, 
+                    {
+                        "name":"RoundOver",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name":"Betwen",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/betwen.mp3",
+                "scene":[
+                    {
+                        "name": "Betwen Round",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name":"preMatch",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/startingWaiting.mp3",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "refresh":false
+                    },
+                    {
+                        "name": "Waiting",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
                 "name": "waitingOverlay",
                 "type": "browser_source",
                 "url": "http://localhost:4545/wait/",

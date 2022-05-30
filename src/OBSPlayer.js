@@ -110,6 +110,10 @@ class OBSPlayer {
                                 settings.url = source.url
                                 settings.restart_when_active = scene.refresh
                             }
+                            if(source.type === 'ffmpeg_source') {
+                                settings.local_file = path.join(__dirname, source.file),
+                                settings.looping = true
+                            }
                             if(!OBSsources.some(obj => obj.name === source.name && obj.type === source.type)) {
                                 this.obsClient.createSource(source.name, source.type, sceneName, settings)
                             } else {
@@ -351,7 +355,7 @@ class OBSPlayer {
                     });
                 })
                 
-                this.obsClient.send('GetTransitionSettings', {transitionName:'Stinger'}).then((arg) => {
+                this.obsClient.send('GetSourceSettings', {sourceName:'Gameplay'}).then((arg) => {
                     console.log(arg)
                 })
                 this.configLoader.save(this.globalConfig)
