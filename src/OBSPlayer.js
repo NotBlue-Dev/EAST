@@ -262,6 +262,21 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
 
+        this.eventEmitter.on('spectate.start', (args, event) => {
+            // TO IMPLEMENT (start echoVR)
+        })
+
+        this.eventEmitter.on('spectate.updateConfig', (args, event) => {
+            this.globalConfig.echoArena.settings = {
+                ...this.globalConfig.echoArena.settings,
+                ...args.settings
+            }
+            this.globalConfig.echoArena.path = args.path
+            this.globalConfig.echoArena.autoStart = args.spectateMe
+            this.configLoader.save(this.globalConfig)
+        })
+        
+
         this.eventEmitter.on('obs.soft', (args, event) => {
             this.globalConfig.obs.autoStart = args.auto
             let parts = args.path.split('\\');
@@ -283,7 +298,7 @@ class OBSPlayer {
             }
 
         })
-        
+
         this.eventEmitter.on('obs.start', (args, event) => {
             let executablePath = this.globalConfig.obs.path;
             this.obsClient.isLaunched().then((isLaunched) => {
@@ -327,6 +342,7 @@ class OBSPlayer {
 
         this.eventEmitter.on('echoArena.edit', (args, event) => {
             this.globalConfig.echoArena.ip = args.ip
+            this.globalConfig.echoArena.port = args.port
             this.globalConfig.echoArena.autoConnect = args.autoConnect
             this.configLoader.save(this.globalConfig)
             this.eventEmitter.send('echoArena.configEdited', this.globalConfig.echoArena)
@@ -353,10 +369,6 @@ class OBSPlayer {
                             this.obsClient.refresh(source.name)
                         }
                     });
-                })
-                
-                this.obsClient.send('GetSourceSettings', {sourceName:'Gameplay'}).then((arg) => {
-                    console.log(arg)
                 })
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {

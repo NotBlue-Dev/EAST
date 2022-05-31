@@ -26,7 +26,6 @@ const uiEventEmitter = (webContents) => {
 
 const stdEventEmitter = () => {
   const eventEmitter = new EventEmitter()
-  
   return {
     send: eventEmitter.emit,
     on: eventEmitter.on,

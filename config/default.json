@@ -6,7 +6,16 @@
     "echoArena": {
         "ip": "127.0.0.1",
         "port": 6721,
-        "autoConnect": false
+        "autoConnect": false,
+        "path":"C:/Program Files/Oculus/Software/Software/ready-at-dawn-echo-arena/bin/win10/echovr.exe",
+        "autoStart":true,
+        "settings": {
+            "ui":true,
+            "map":true,
+            "mute":true,
+            "plate":true,
+            "camera":"side"
+        }
     },
     "obs": {
         "ip": "127.0.0.1",

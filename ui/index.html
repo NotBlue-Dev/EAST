@@ -27,7 +27,8 @@
           <div>
             <label for="echo-arena-url">Echo VR IP</label>
             <div class="inline">
-              <input class="txt" type="text" id="echo-arena-url" />
+              <input type="text" class="obs" id="echo-arena-url" />
+              <input type="text" class="obs" id="echo-arena-port" />
               <button id="echo-arena-connect">Connect</button>
             </div>
           </div>
@@ -40,8 +41,66 @@
           </div>
 
           <label for="echo-arena-session">Session ID</label>
-          <div class="inline no-bottom">
+          <div class="inline">
             <input class="txt" type="text" id="echo-arena-session" readonly/>
+          </div>
+
+          <!-- TOIMPLEMENT -->
+          <label for="echo-arena-joinSession">Join Session</label>
+          <div class="inline">
+            <input class="txt" type="text" id="echo-arena-joinSession"/>
+            <button id="echo-arena-joinSessionButton">Join</button>
+          </div>
+        </article>
+      </article>
+
+      <article>
+        <h2>SpectatorStream (Spark)</h2>
+        <article class="block">
+          <label for="echo-path">EchoVR Executable path</label>
+          <div class="inline">
+            <input type="text" class="txt" id="echo-path"/>
+          </div>
+
+          <label for="echo-spectateMe">Auto-start EchoVR spectator</label>
+          <div class="inline no-bottom">
+            <input type="checkbox" id="echo-spectateMe" /><a>Spectate me</a>
+          </div>
+          <div class="inline">
+            <button id="echo-start">Start EchoVR</button>
+          </div>
+
+          <h4>Settings</h4>
+          <label for="UI">Hide UI</label>
+          <div class="inline">
+            <input type="checkbox" id="UI" /><a>Enable</a>
+          </div>
+
+          <label for="namePlates">Hide NamePlates</label>
+          <div class="inline">
+            <input type="checkbox" id="namePlates" /><a>Enable</a>
+          </div>
+
+          <label for="minimap">Hide MiniMap</label>
+          <div class="inline">
+            <input type="checkbox" id="minimap" /><a>Enable</a>
+          </div>
+
+          <label for="muteTeams">Mute Teams</label>
+          <div class="inline">
+            <input type="checkbox" id="muteTeams" /><a>Enable</a>
+          </div>
+
+          <label for="cameraMode">Camera Mode</label>
+          <div class="inline no-bottom">
+            <select id="cameraMode">
+              <option value="pov">pov</option>
+              <option value="level">level</option>
+              <option value="follow">follow</option>
+              <option value="disc">disc</option>
+              <option value="side">side</option>
+              <option value="free">free</option>
+            </select>
           </div>
         </article>
       </article>

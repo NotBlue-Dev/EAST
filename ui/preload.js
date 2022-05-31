@@ -6,30 +6,70 @@ window.addEventListener('DOMContentLoaded', () => {
   const scenes = document.getElementById('scenes')
   const dashWrapper = document.getElementById('dashboard-wrapper')
   const scenesWrapper = document.getElementById('autostream-wrapper')
+  const echoArenaPortInput = document.getElementById('echo-arena-port')
   const echoArenaUrlInput = document.getElementById('echo-arena-url')
   const echoArenaAutoConnectInput = document.getElementById('echo-arena-autoconnect')
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
   const echoArenaSession = document.getElementById('echo-arena-session')
 
+  const echoPath = document.getElementById('echo-path')
+  const spectateMe = document.getElementById('echo-spectateMe')
+  const echoStart = document.getElementById('echo-start')
+  const ui = document.getElementById('UI')
+  const plates = document.getElementById('namePlates')
+  const minimap = document.getElementById('minimap')
+  const mute = document.getElementById('muteTeams')
+  const camera = document.getElementById('cameraMode')
+
+
+
+  const startEchoArena = () => {
+    ipcRenderer.send('spectate.start')
+  }
+
+  echoStart.addEventListener('click', startEchoArena)
+  
+  const updateSpectate = () => {
+    ipcRenderer.send('spectate.updateConfig', {
+      spectateMe: spectateMe.checked,
+      path: echoPath.value,
+      settings: {
+        ui: ui.checked,
+        plate: plates.checked,
+        map: minimap.checked,
+        mute: mute.checked,
+        camera: camera.value
+      }
+    })
+  } 
+
   const echoArenaConfig = () => {
     ipcRenderer.send('echoArena.edit', {
       ip: echoArenaUrlInput.value,
+      port: echoArenaPortInput.value,
       autoConnect: echoArenaAutoConnectInput.checked,
     })
-
   }
   
   ipcRenderer.on('echoArena.sessionID', (event, data) => {
     echoArenaSession.value = data.sessionID
   })
 
-  echoArenaUrlInput.addEventListener('change', echoArenaConfig,false)
-  echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig,false)
+  echoArenaUrlInput.addEventListener('change', echoArenaConfig)
+  echoArenaPortInput.addEventListener('change', echoArenaConfig)
+  echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig)
+
+  ui.addEventListener('click', updateSpectate)
+  plates.addEventListener('click', updateSpectate)
+  minimap.addEventListener('click', updateSpectate)
+  mute.addEventListener('click', updateSpectate)
+  camera.addEventListener('change', updateSpectate)
+  echoPath.addEventListener('change', updateSpectate)
 
   const echoArenaConnect = () => {
     ipcRenderer.send('echoArena.connect', {
       ip: echoArenaUrlInput.value,
-      port: 6721,
+      port: echoArenaPortInput.value,
       autoConnect: echoArenaAutoConnectInput.checked,
     })
   }
@@ -175,7 +215,18 @@ window.addEventListener('DOMContentLoaded', () => {
       })
     }
     echoArenaUrlInput.value = data.echoArena.ip
+    echoArenaPortInput.value = data.echoArena.port
     echoArenaAutoConnectInput.checked = data.echoArena.autoConnect
+
+    echoPath.value = data.echoArena.path
+    spectateMe.checked = data.echoArena.autoStart
+    camera.value = data.echoArena.settings.camera
+    ui.checked = data.echoArena.settings.ui
+    minimap.checked = data.echoArena.settings.map
+    plates.checked = data.echoArena.settings.plate
+    mute.checked = data.echoArena.settings.mute
+    camera.checked = data.echoArena.settings.camera
+    
     if (data.echoArena.autoConnect) {
       const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)
       ipcRenderer.on('echoArena.connected', () => {
