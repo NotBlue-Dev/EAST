@@ -12,23 +12,25 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
   const echoArenaSession = document.getElementById('echo-arena-session')
 
+  const anonymous = document.getElementById('anonymous')
   const echoPath = document.getElementById('echo-path')
   const spectateMe = document.getElementById('echo-spectateMe')
-  const echoStart = document.getElementById('echo-start')
   const ui = document.getElementById('UI')
   const plates = document.getElementById('namePlates')
   const minimap = document.getElementById('minimap')
   const mute = document.getElementById('muteTeams')
   const camera = document.getElementById('cameraMode')
-
-
+  const join = document.getElementById('echo-arena-joinSessionButton')
+  const idJoin = document.getElementById('echo-arena-joinSession')
 
   const startEchoArena = () => {
-    ipcRenderer.send('spectate.start')
+    ipcRenderer.send('spectate.start', {
+      id:idJoin.value
+    })
   }
 
-  echoStart.addEventListener('click', startEchoArena)
-  
+  join.addEventListener('click', startEchoArena)
+
   const updateSpectate = () => {
     ipcRenderer.send('spectate.updateConfig', {
       spectateMe: spectateMe.checked,
@@ -38,6 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
         plate: plates.checked,
         map: minimap.checked,
         mute: mute.checked,
+        anonymous: anonymous.checked,
         camera: camera.value
       }
     })
@@ -59,12 +62,23 @@ window.addEventListener('DOMContentLoaded', () => {
   echoArenaPortInput.addEventListener('change', echoArenaConfig)
   echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig)
 
+  anonymous.addEventListener('click', updateSpectate)
   ui.addEventListener('click', updateSpectate)
   plates.addEventListener('click', updateSpectate)
   minimap.addEventListener('click', updateSpectate)
   mute.addEventListener('click', updateSpectate)
   camera.addEventListener('change', updateSpectate)
   echoPath.addEventListener('change', updateSpectate)
+  spectateMe.addEventListener('click', () => {
+    if(spectateMe.checked) {
+      updateSpectate()
+      if (echoArenaSession.value !== '') {
+        ipcRenderer.send('spectate.start', {
+          id:echoArenaSession.value
+        })
+      }
+    }
+  })
 
   const echoArenaConnect = () => {
     ipcRenderer.send('echoArena.connect', {
@@ -93,6 +107,11 @@ window.addEventListener('DOMContentLoaded', () => {
   ipcRenderer.on('echoArena.connected', () => {
     echoArenaConnectButton.disabled = true
     log(`Echo Arena connected`)
+  })
+
+  ipcRenderer.on('echoArena.disconnected', () => {
+    echoArenaConnectButton.disabled = false
+    log(`Echo Arena disconnected`)
   })
 
   initAutoStream(document)
@@ -135,6 +154,10 @@ window.addEventListener('DOMContentLoaded', () => {
     obsWebsocketStartBufferButton.disabled = true
   }
 
+  ipcRenderer.on('obsWebsocket.replayBufferStopped', () => {
+    obsWebsocketStartBufferButton.disabled = false
+  })
+
   const autoBuffer = () => {
     ipcRenderer.send('obsWebsocket.autoBuffer', obsWebsocketAutoBufferInput.checked)
   }
@@ -147,6 +170,10 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('obs.start')
     obsStart.disabled = true
   }
+
+  ipcRenderer.on('obs.disconnected', () => {
+    obsStart.disabled = false
+  })
 
   ipcRenderer.on('obs.error', (event, data) => {
     obsStart.disabled = false
@@ -203,6 +230,10 @@ window.addEventListener('DOMContentLoaded', () => {
     log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
+  ipcRenderer.on('overlayWs.launchFailed', (event, data) => {
+    launchOverlayServerButton.disabled = false
+  })
+
   ipcRenderer.on('config.loaded', (event, data) => {
     blueCustom.value = data.mixed.blue
     orangeCustom.value = data.mixed.orange
@@ -226,6 +257,7 @@ window.addEventListener('DOMContentLoaded', () => {
     plates.checked = data.echoArena.settings.plate
     mute.checked = data.echoArena.settings.mute
     camera.checked = data.echoArena.settings.camera
+    anonymous.checked = data.echoArena.settings.anonymous
     
     if (data.echoArena.autoConnect) {
       const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)

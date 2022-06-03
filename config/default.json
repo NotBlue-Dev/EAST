@@ -14,6 +14,7 @@
             "map":true,
             "mute":true,
             "plate":true,
+            "anonymous":true,
             "camera":"side"
         }
     },

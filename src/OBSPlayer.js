@@ -1,12 +1,12 @@
 const ConfigLoader = require('./ConfigLoader')
 const OBSClient = require('./OBSClient')
 const OverlayWS = require('./ws/OverlayWS')
-const fetch = require('node-fetch');
 const VRMLClient = require('./VRMLClient')
 const EchoArena = require('./EchoArena')
 const EventHandler = require('./EventHandler')
 const events = require('./EchoArenaEvents.js')
 const path = require('path');
+const exec = require('child_process').exec;
 
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
@@ -14,7 +14,7 @@ class OBSPlayer {
         this.globalConfig = this.configLoader.load();
         this.eventEmitter = eventEmitter
         this.eventEmitter.send('config.loaded', this.globalConfig)
-
+        this.spectateStarted = false
         this.obsClient = new OBSClient(eventEmitter)
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath)
         this.scenes = []
@@ -186,6 +186,16 @@ class OBSPlayer {
             })
     }
 
+    startEchoVR(executablePath, sessionID) {
+        let self = this
+        exec(`start /d "${executablePath}" echovr.exe -spectatorstream 
+        ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} 
+        ${sessionID !== null ? `-lobbyid ${sessionID}` : ""}`, (error, stdout, stderr) => { 
+            if(error !== null) self.eventEmitter.send('spectate.error', error), console.log(error)
+            self.eventEmitter.send('spectate.started')
+        });
+    }
+
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
             this.obsClient.send('GetSourcesList').then((arg) => {
@@ -263,7 +273,23 @@ class OBSPlayer {
         })
 
         this.eventEmitter.on('spectate.start', (args, event) => {
-            // TO IMPLEMENT (start echoVR)
+            this.startEchoVR(this.globalConfig.echoArena.path, args.id)
+            this.spectateStarted = true
+        })
+
+        this.eventEmitter.on('echoArena.sessionID', (args, event) => {
+            let self = this
+            exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout, stderr) {
+                if(stdout.indexOf('echovr.exe') === -1) {
+                    self.spectateStarted = false
+                } else {
+                    self.spectateStarted = true
+                }
+            });
+
+            if(this.globalConfig.echoArena.autoStart && !this.spectateStarted) {
+                this.startEchoVR(this.globalConfig.echoArena.path, args.sessionID)
+            }
         })
 
         this.eventEmitter.on('spectate.updateConfig', (args, event) => {
@@ -271,7 +297,15 @@ class OBSPlayer {
                 ...this.globalConfig.echoArena.settings,
                 ...args.settings
             }
-            this.globalConfig.echoArena.path = args.path
+            let parts = args.path.split('\\');
+            let output = parts.join('/');
+            if(output.endsWith('echovr.exe')) {
+                output = output.substring(0, output.length - 11);
+            }
+            if(!output.endsWith('/')) {
+                output += '/';
+            }
+            this.globalConfig.echoArena.path = output
             this.globalConfig.echoArena.autoStart = args.spectateMe
             this.configLoader.save(this.globalConfig)
         })
@@ -304,6 +338,8 @@ class OBSPlayer {
             this.obsClient.isLaunched().then((isLaunched) => {
                 if(!isLaunched) {
                     this.obsClient.launch(executablePath)
+                } else {
+                    this.eventEmitter.send('obs.disconnected')
                 }
             })
         })
@@ -401,6 +437,8 @@ class OBSPlayer {
             this.obsClient.send('GetReplayBufferStatus').then(arg => {
                 if(!arg.isReplayBufferActive) {
                     this.obsClient.send("StartReplayBuffer")
+                } else {
+                    this.eventEmitter.send('obsWebsocket.replayBufferStopped')
                 }
             })
             

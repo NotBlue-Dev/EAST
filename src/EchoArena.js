@@ -1,7 +1,7 @@
 const events = require('./EchoArenaEvents.js')
 const fetch = require('node-fetch');
 const GameData = require("./gameData");
-
+const exec = require('child_process').exec;
 class EchoArena {
     constructor({ip, port}, eventEmitter, vrmlInfo, customData) {
         this.eventEmitter = eventEmitter
