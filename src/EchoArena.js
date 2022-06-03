@@ -22,7 +22,6 @@ class EchoArena {
         let res = await axios.post(`http://127.0.0.1:${this.port}/${url}`, data).catch(function (error) {
             console.log(error.toJSON());
         });
-        console.log(res.data)
     }
 
     setSettingsEchoVR(settings) {

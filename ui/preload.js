@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 let events;
 
 window.addEventListener('DOMContentLoaded', () => {
+  const body = document.getElementById('body')
   const dashboard = document.getElementById('dashboard')
   const scenes = document.getElementById('scenes')
   const dashWrapper = document.getElementById('dashboard-wrapper')
@@ -12,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaConnectButton = document.getElementById('echo-arena-connect')
   const echoArenaSession = document.getElementById('echo-arena-session')
 
+  const loader = document.getElementById('loader')
   const anonymous = document.getElementById('anonymous')
   const echoPath = document.getElementById('echo-path')
   const spectateMe = document.getElementById('echo-spectateMe')
@@ -23,11 +25,19 @@ window.addEventListener('DOMContentLoaded', () => {
   const join = document.getElementById('echo-arena-joinSessionButton')
   const idJoin = document.getElementById('echo-arena-joinSession')
 
+  body.style.overflow = "hidden"
+  loader.style.display = "flex"
+
   const startEchoArena = () => {
     ipcRenderer.send('spectate.start', {
       id:idJoin.value
     })
   }
+
+  ipcRenderer.on('echoArena.eventsLoaded', () => {
+    loader.style.display = "none"
+    body.style.overflow = "auto"
+  })
 
   join.addEventListener('click', startEchoArena)
 

@@ -107,7 +107,7 @@ class OBSPlayer {
                                 settings.window = 'Echo VR:WindowsClass:echovr.exe'
                             }
                             if(source.url !== undefined) {
-                                settings.url = source.url
+                                settings.url = `http://localhost:${this.globalConfig.overlayWs.port}/${source.url}`
                                 settings.restart_when_active = scene.refresh
                             }
                             if(source.type === 'ffmpeg_source') {

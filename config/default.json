@@ -79,7 +79,7 @@
             {
                 "name": "StartingOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/starting/",
+                "url": "starting/",
                 "scene":[
                     {
                         "name": "Starting",
@@ -169,7 +169,7 @@
             {
                 "name": "waitingOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/wait/",
+                "url": "wait/",
                 "scene":[
                     {
                         "name": "Waiting",
@@ -180,7 +180,7 @@
             {
                 "name": "betwenRoundOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/betwenRound/",
+                "url": "betwenRound/",
                 "scene":[
                     {
                         "name": "Betwen Round",
@@ -191,7 +191,7 @@
             {
                 "name": "OTOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/OT/",
+                "url": "OT/",
                 "scene":[
                     {
                         "name": "OT",
@@ -202,7 +202,7 @@
             {
                 "name": "RoundStartOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/roundStart/",
+                "url": "roundStart/",
                 "scene":[
                     {
                         "name": "RoundStart",
@@ -213,7 +213,7 @@
             {
                 "name": "RoundOverOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/roundWin/",
+                "url": "roundWin/",
                 "scene":[
                     {
                         "name": "RoundOver",
@@ -241,7 +241,7 @@
             {
                 "name": "PingMonitor",
                 "type": "browser_source",
-                "url": "http://localhost:4545/pingTracker/",
+                "url": "pingTracker/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -252,7 +252,7 @@
             {
                 "name": "HalfTimeStats",
                 "type": "browser_source",
-                "url": "http://localhost:4545/halfTime/",
+                "url": "halfTime/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -264,7 +264,7 @@
             {
                 "name": "Shot",
                 "type": "browser_source",
-                "url": "http://localhost:4545/shot/",
+                "url": "shot/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -275,7 +275,7 @@
             {
                 "name": "ShotReplayOverlay",
                 "type": "browser_source",
-                "url": "http://localhost:4545/replay/",
+                "url": "replay/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -287,7 +287,7 @@
             {
                 "name": "Possession",
                 "type": "browser_source",
-                "url": "http://localhost:4545/possess/",
+                "url": "possess/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -299,7 +299,7 @@
             {
                 "name": "GameTime",
                 "type": "browser_source",
-                "url": "http://localhost:4545/game/",
+                "url": "game/",
                 "scene":[
                     {
                         "name": "MainScene",
@@ -311,7 +311,7 @@
             {
                 "name": "Minimap",
                 "type": "browser_source",
-                "url": "http://localhost:4545/minimap/",
+                "url": "minimap/",
                 "scene":[
                     {
                         "name": "MainScene",

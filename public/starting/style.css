@@ -48,6 +48,10 @@ body {
     margin-top: -1px;
 }
 
+.powered {
+    bottom: -52.2vw !important;
+}
+
 .boxBlue {
     background: linear-gradient(to right, #0376FF, #03BAE0);
     height: 2.5vw;

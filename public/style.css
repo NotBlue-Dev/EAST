@@ -35,7 +35,17 @@ body {
     justify-content: center;
     color: #fff;
     background: #1B121E;
+}
 
+.boxPow {
+    position:relative;
+}
+
+.powered {
+    position: absolute;
+    bottom: -16.5vw;
+    right: 1vw;
+    font-size: 1.3vw;
 }
 
 .loading-box-container::before {

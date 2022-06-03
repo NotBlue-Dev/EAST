@@ -5,6 +5,10 @@ body {
     font-family: 'Kanit', sans-serif;
 }
 
+.powered {
+    bottom: -52.2vw !important;
+}
+
 .background {
     width: 100%;
     position: absolute;
@@ -101,3 +105,4 @@ body {
     left: 42.5vw;
     text-align: center;
 }
+
