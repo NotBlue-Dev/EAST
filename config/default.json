@@ -353,7 +353,8 @@
         },
         "start": {
             "scene": "Starting",
-            "betwen":"Round Betwen"
+            "betwen":"Round Betwen",
+            "dur":78
         },
         "game":{
             "events":[

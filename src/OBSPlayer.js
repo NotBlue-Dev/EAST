@@ -275,6 +275,11 @@ class OBSPlayer {
             this.spectateStarted = true
         })
 
+        this.eventEmitter.on('echoArena.updateDurBetwenRound', (args, event) => {
+            this.globalConfig.autoStream.start.dur = args.dur
+            this.configLoader.save(this.globalConfig)
+        })
+
         this.eventEmitter.on('echoArena.sessionID', (args, event) => {
             let self = this
             exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout, stderr) {
@@ -510,8 +515,8 @@ class OBSPlayer {
             .onConnected((name) => {
                 if(this.obsConnectionState !== true) {
                     this.obsConnectionState = true
-                    console.log('Connected')
                     setTimeout(() => {
+                        this.eventEmitter.send('obs.connected')
                         this.obsClient.send('GetSceneList').then((scenesData) => {
                             this.eventEmitter.send('scenes.loaded', {
                                 scenes: scenesData.scenes.map(scene => scene.name)
@@ -524,7 +529,6 @@ class OBSPlayer {
             .onDisconnected((message) => {
                 this.obsConnectionState = false
                 this.eventEmitter.send('obs.disconnected')
-                console.log('Disconnected', message)
             })
         .connect(args)
     }
@@ -634,7 +638,8 @@ class OBSPlayer {
         
     connectEchoArena(config) {
         return new Promise((resolve,reject) => {
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.globalConfig.mixed)
+            let custom = {mixed:this.globalConfig.mixed, bet:this.globalConfig.autoStream.start.dur}
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, custom)
             this.echoArena.listen()
         })
     }
@@ -642,12 +647,3 @@ class OBSPlayer {
 }
 
 module.exports = OBSPlayer
-
-// starting : 1152 658 px
-// x 382 y 186
-
-// betwen 1083 599
-// 56 71
-
-// main 1920 1080
-// 0 0

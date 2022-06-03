@@ -29,7 +29,7 @@ class RoundBetwen {
             this.timeout = setTimeout(() => {
                 this.betwenRound = false
                 eventEmitter.send('game.play')
-            }, 78000)
+            }, gameData.durBet * 1000)
 
         }
     }

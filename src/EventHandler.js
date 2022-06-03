@@ -90,7 +90,6 @@ class EventHandler {
                     this.obsClient.send('StartStreaming')
                     clearInterval(this.autoStream)
                 }
-                console.log(currentTime)
             }, 1000);
         } else {
             clearInterval(this.autoStream)
@@ -195,7 +194,6 @@ class EventHandler {
         })
 
         this.eventEmitter.on('game.play', (args, event) => {
-            console.log('PLAYYYYYYYYY')
             this.obsClient.send('SetCurrentScene',{"scene-name":this.config.autoStart.main})
         })
 

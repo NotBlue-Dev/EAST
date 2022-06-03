@@ -5,11 +5,12 @@ class GameData {
         this.timestamp = Date.now()
         this.clock = json.game_clock
         this.teams = json.teams
+        this.durBet = customData.bet
         this.sessionID = json.sessionid
         this.roundData = []
         this.betwenRound = false
         this.blueTeam = {
-            teamName:customData.blue,
+            teamName:customData.mixed.blue,
             blueTeamPlayers: [],
             blueReset: (json.blue_team_restart_request > 0),
             teamData:[],
@@ -20,7 +21,7 @@ class GameData {
         }
         this.blueTeam.blueTeamPlayers = json.teams[0].players
         this.orangeTeam = {
-            teamName:customData.orange,
+            teamName:customData.mixed.orange,
             orangeTeamPlayers :[],
             orangeReset :(json.orange_team_restart_request > 0),
             teamData:[],

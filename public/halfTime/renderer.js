@@ -29,7 +29,6 @@ window.addEventListener("load", (event) => {
     }
 
     socket.on('animation.triggerHalfTime', (arg) => {
-        console.log(arg)
         if(arg.blue.data === null) {
             dataBlue.innerHTML = 'No data'
         } else {

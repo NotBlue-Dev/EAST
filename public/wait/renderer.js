@@ -99,7 +99,6 @@ window.addEventListener("load", () => {
             } else {
                 timer.innerHTML = `${minutes}:${seconds}`
             }
-            console.log(timer)
             if (time < 1) {
                 // switch scene send event to obs
                 clearInterval(matchCountDown);

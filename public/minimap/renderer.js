@@ -35,7 +35,6 @@ window.addEventListener('load', function() {
     function createPlayers(team, color) {
         if (players.length === 0) {
             for (let i = 0; i < team.length; i++) {
-                console.log(team[i])
                 createPlayer({
                     name: team[i].name,
                     number: team[i].nb,
