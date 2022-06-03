@@ -25,16 +25,16 @@ Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Softwa
 Run OBS, Go to Tools, Websocket, and set a password
 Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 
-# How to use
+## How to use
 
-OBS Configuration
+### OBS Configuration
 
 Create a stinger transition if you want EAST transition
 To create the scene/overlays sources click create in OBS section on EAST
 To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s
 When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700mss
 
-EchoVR Configuration
+### EchoVR Configuration
 
 PC :
 - Input your pc IP (default is 127.0.0.1), and change the port if you need it
@@ -45,12 +45,12 @@ Quest :
 You can join a session with the session id
 You can spectate your game by clicking spectate me
 
-MIXED
+### MIXED
 
 Input team name in the last section
 You can program stream to start at a precise time in Scenes tab, Timer (EAST)
 
-VRML
+### VRML
 
 Select a team and click stream incoming match
 
