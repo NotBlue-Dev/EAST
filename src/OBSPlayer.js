@@ -188,9 +188,7 @@ class OBSPlayer {
 
     startEchoVR(executablePath, sessionID) {
         let self = this
-        exec(`start /d "${executablePath}" echovr.exe -spectatorstream 
-        ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} 
-        ${sessionID !== null ? `-lobbyid ${sessionID}` : ""}`, (error, stdout, stderr) => { 
+        exec(`start /d "${executablePath}" echovr.exe -spectatorstream ${sessionID !== null ? `-lobbyid "${sessionID}"` : ""} ${this.globalConfig.echoArena.settings.anonymous ? "-noovr" : ""} ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} `, (error, stdout, stderr) => { 
             if(error !== null) self.eventEmitter.send('spectate.error', error), console.log(error)
             self.eventEmitter.send('spectate.started')
         });
@@ -338,8 +336,6 @@ class OBSPlayer {
             this.obsClient.isLaunched().then((isLaunched) => {
                 if(!isLaunched) {
                     this.obsClient.launch(executablePath)
-                } else {
-                    this.eventEmitter.send('obs.disconnected')
                 }
             })
         })
@@ -437,8 +433,6 @@ class OBSPlayer {
             this.obsClient.send('GetReplayBufferStatus').then(arg => {
                 if(!arg.isReplayBufferActive) {
                     this.obsClient.send("StartReplayBuffer")
-                } else {
-                    this.eventEmitter.send('obsWebsocket.replayBufferStopped')
                 }
             })
             
@@ -523,6 +517,7 @@ class OBSPlayer {
             })
             .onDisconnected((message) => {
                 this.obsConnectionState = false
+                this.eventEmitter.send('obs.disconnected')
                 console.log('Disconnected', message)
             })
         .connect(args)

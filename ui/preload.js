@@ -154,10 +154,6 @@ window.addEventListener('DOMContentLoaded', () => {
     obsWebsocketStartBufferButton.disabled = true
   }
 
-  ipcRenderer.on('obsWebsocket.replayBufferStopped', () => {
-    obsWebsocketStartBufferButton.disabled = false
-  })
-
   const autoBuffer = () => {
     ipcRenderer.send('obsWebsocket.autoBuffer', obsWebsocketAutoBufferInput.checked)
   }
