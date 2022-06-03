@@ -1,261 +1,66 @@
-# EchoArena-Overlay
-echo arena overlay
+# Echo Arena Streaming Tool
 
-NOTES :
+## About 
 
-Crée transition stinger a la main pour avoir la transition custom
-Effet fade a add a la main pour replay buffer vlc
+EAST is an open source project to help streamers around the echo arena community to cast.
+This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support
 
-## Events
+## DEMO
 
-### Configuration
+(To do)
 
-#### `config.loaded`
+## How to install
 
-```
-{
-    vrml: {}
-    echoArena: {}
-    obs: {}
-    overlay: {}
-}
-```
+Prerequisites : 
+- Enable echo arena API
 
-### VRML events
+Download and install :
+- EAST latest release (https://github.com/NotBlue-Dev/EAST/releases)
+- OBS (https://obsproject.com/fr/download)
+- ECHOVR (https://www.oculus.com/echo-vr/?locale=fr_FR)
+- OBS WEBSOCKET 4.9.1 (https://github.com/obsproject/obs-websocket/releases/tag/4.9.1)
 
-#### `vrml.isVrmlMatch`
+Then
 
-```js
-{
-    teamId: string
-}
-```
+- Extract and run EAST executable
+- Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
+- Run OBS, Go to Tools, Websocket, and set a password
+- Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 
-#### `vrml.teamListLoaded`
+## How to use
 
-```js
-{
-    teams: Array({
-        id: string,
-        name: string
-    })
-}
-```
+### OBS Configuration
 
-#### `vrml.teamSelected`
+Create a stinger transition if you want EAST transition,<br />
+To create the scene/overlays sources click create in OBS section on EAST,<br />
+To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s,<br />
+When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700ms,<br />
 
-```js
-{
-    teamId: string
-}
-```
+### EchoVR Configuration
 
-#### `vrml.matchDataLoaded`
+PC :
+- Input your pc IP (default is 127.0.0.1), and change the port if you need it
 
-```js
-{
-    time: Date,
-    teams: {
-        home: {
-            name: string,
-            logo: string,
-        },
-        away: {…}
-    },
-}
-```
+Quest :
+- Input your quest IP
 
-#### `vrml.matchDataNotFound`
+You can join a session with the session id <br />
+You can spectate your game by clicking spectate me
 
-```js
-{
-    teamId: string
-}
-```
+### MIXED
 
-### Overlay WebService
+Input team name in the last section<br />
+You can program stream to start at a precise time in Scenes tab, Timer (EAST)
 
-#### `overlayWs.launchServer`
+### VRML
 
-```js
-{
-    autoLaunch: bool,
-    port: int
-}
-```
+Select a team and click stream incoming match
 
-#### `overlayWs.listening`
+### Spectate
 
-```js
-{}
-```
+Click connect next to EchoVR IP to start 
+Click launch for overlays
+Click start replay buffer
+...
 
-### OBS WebSocket
-
-#### `obsWebsocket.connect`
-
-```js
-{
-    ip: string,
-    port: int,
-    password: string,
-    autoConnect: bool,
-}
-```
-
-### Echo Arena
-
-#### `echoArena.connect`
-
-```js
-{
-    ip: string,
-    port: int,
-    autoConnect: bool,
-}
-```
-
-#### `echoArena.connected`
-
-```js
-{}
-```
-
-#### `obs request`
-```
-AddFilterToSource
-AddSceneItem
-Authenticate
-BroadcastCustomMessage
-CreateScene
-CreateSource
-DeleteSceneItem
-DisableStudioMode
-DuplicateSceneItem
-EnableStudioMode
-ExecuteBatch
-GetAudioActive
-GetAudioMonitorType
-GetAudioTracks
-GetAuthRequired
-GetBrowserSourceProperties
-GetCurrentProfile
-GetCurrentScene
-GetCurrentSceneCollection
-GetCurrentTransition
-GetFilenameFormatting
-GetMediaDuration
-GetMediaSourcesList
-GetMediaState
-GetMediaTime
-GetMute
-GetOutputInfo
-GetPreviewScene
-GetRecordingFolder
-GetRecordingStatus
-GetReplayBufferStatus
-GetSceneItemList
-GetSceneItemProperties
-GetSceneList
-GetSceneTransitionOverride
-GetSourceActive
-GetSourceDefaultSettings
-GetSourceFilterInfo
-GetSourceFilters
-GetSourceSettings
-GetSourcesList
-GetSourceTypesList
-GetSpecialSources
-GetStats
-GetStreamingStatus
-GetStreamSettings
-GetStudioModeStatus
-GetSyncOffset
-GetTextFreetype2Properties
-GetTextGDIPlusProperties
-GetTransitionDuration
-GetTransitionList
-GetTransitionPosition
-GetTransitionSettings
-GetVersion
-GetVideoInfo
-GetVirtualCamStatus
-GetVolume
-ListOutputs
-ListProfiles
-ListSceneCollections
-MoveSourceFilter
-NextMedia
-OpenProjector
-PauseRecording
-PlayPauseMedia
-PreviousMedia
-RefreshBrowserSource
-ReleaseTBar
-RemoveFilterFromSource
-RemoveSceneTransitionOverride
-ReorderSceneItems
-ReorderSourceFilter
-ResetSceneItem
-RestartMedia
-ResumeRecording
-SaveReplayBuffer
-SaveStreamSettings
-ScrubMedia
-SendCaptions
-SetAudioMonitorType
-SetAudioTracks
-SetBrowserSourceProperties
-SetCurrentProfile
-SetCurrentScene
-SetCurrentSceneCollection
-SetCurrentTransition
-SetFilenameFormatting
-SetHeartbeat
-SetMediaTime
-SetMute
-SetPreviewScene
-SetRecordingFolder
-SetSceneItemCrop
-SetSceneItemPosition
-SetSceneItemProperties
-SetSceneItemRender
-SetSceneItemTransform
-SetSceneTransitionOverride
-SetSourceFilterSettings
-SetSourceFilterVisibility
-SetSourceName
-SetSourceRender
-SetSourceSettings
-SetStreamSettings
-SetSyncOffset
-SetTBarPosition
-SetTextFreetype2Properties
-SetTextGDIPlusProperties
-SetTransitionDuration
-SetTransitionSettings
-SetVolume
-Sleep
-StartOutput
-StartRecording
-StartReplayBuffer
-StartStopRecording
-StartStopReplayBuffer
-StartStopStreaming
-StartStopVirtualCam
-StartStreaming
-StartVirtualCam
-StopMedia
-StopOutput
-StopRecording
-StopReplayBuffer
-StopStreaming
-StopVirtualCam
-TakeSourceScreenshot
-ToggleMute
-ToggleStudioMode
-TransitionToProgram
-TriggerHotkeyByName
-TriggerHotkeyBySequence
-```
-
+(you can enable auto connect for almost every component)
