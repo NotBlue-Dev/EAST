@@ -71,13 +71,13 @@ window.addEventListener('DOMContentLoaded', () => {
   echoPath.addEventListener('change', updateSpectate)
   spectateMe.addEventListener('click', () => {
     if(spectateMe.checked) {
-      updateSpectate()
       if (echoArenaSession.value !== '') {
         ipcRenderer.send('spectate.start', {
           id:echoArenaSession.value
         })
       }
     }
+    updateSpectate()
   })
 
   const echoArenaConnect = () => {
@@ -107,11 +107,6 @@ window.addEventListener('DOMContentLoaded', () => {
   ipcRenderer.on('echoArena.connected', () => {
     echoArenaConnectButton.disabled = true
     log(`Echo Arena connected`)
-  })
-
-  ipcRenderer.on('echoArena.disconnected', () => {
-    echoArenaConnectButton.disabled = false
-    log(`Echo Arena disconnected`)
   })
 
   initAutoStream(document)
@@ -166,10 +161,6 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('obs.start')
     obsStart.disabled = true
   }
-
-  ipcRenderer.on('obs.disconnected', () => {
-    obsStart.disabled = false
-  })
 
   ipcRenderer.on('obs.error', (event, data) => {
     obsStart.disabled = false

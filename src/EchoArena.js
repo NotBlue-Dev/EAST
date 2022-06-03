@@ -1,7 +1,7 @@
 const events = require('./EchoArenaEvents.js')
 const fetch = require('node-fetch');
 const GameData = require("./gameData");
-const exec = require('child_process').exec;
+const axios = require('axios');
 class EchoArena {
     constructor({ip, port}, eventEmitter, vrmlInfo, customData) {
         this.eventEmitter = eventEmitter
@@ -17,7 +17,22 @@ class EchoArena {
     async listen() {
         return this.testConnection().then(this.request.bind(this)).catch(console.error)
     }
- 
+
+    async requestEchoVR(url, data) {
+        let res = await axios.post(`http://127.0.0.1:${this.port}/${url}`, data).catch(function (error) {
+            console.log(error.toJSON());
+        });
+        console.log(res.data)
+    }
+
+    setSettingsEchoVR(settings) {
+        this.requestEchoVR("ui_visibility", {enabled: !settings.ui})
+        this.requestEchoVR("minimap_visibility", {enabled: !settings.map})
+        this.requestEchoVR("team_muted", {blue_team_muted: settings.mute, orange_team_muted: settings.mute})
+        this.requestEchoVR("nameplates_visibility", {enabled: !settings.plate})
+        this.requestEchoVR("camera_mode", {mode: settings.camera, num: 0})
+    }
+
     async testConnection() {
         try {
             let data = await fetch(`http://${this.ip}:${this.port}/session`)

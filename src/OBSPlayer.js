@@ -284,10 +284,12 @@ class OBSPlayer {
                     self.spectateStarted = true
                 }
             });
-
+            
             if(this.globalConfig.echoArena.autoStart && !this.spectateStarted) {
                 this.startEchoVR(this.globalConfig.echoArena.path, args.sessionID)
             }
+
+            this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
         })
 
         this.eventEmitter.on('spectate.updateConfig', (args, event) => {
@@ -306,6 +308,7 @@ class OBSPlayer {
             this.globalConfig.echoArena.path = output
             this.globalConfig.echoArena.autoStart = args.spectateMe
             this.configLoader.save(this.globalConfig)
+            this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
         })
         
 
@@ -356,6 +359,9 @@ class OBSPlayer {
                     ...this.globalConfig.echoArena,
                     ...args,
                 }
+
+                this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+
                 this.configLoader.save(this.globalConfig)
                 this.obsClient.send('GetSourcesList').then((arg) => {
                     arg.sources.forEach(source => {
