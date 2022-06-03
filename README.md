@@ -20,19 +20,21 @@ Download and install :
 - ECHOVR (https://www.oculus.com/echo-vr/?locale=fr_FR)
 - OBS WEBSOCKET 4.9.1 (https://github.com/obsproject/obs-websocket/releases/tag/4.9.1)
 
-Extract and run EAST executable
-Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
-Run OBS, Go to Tools, Websocket, and set a password
-Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
+Then
+
+- Extract and run EAST executable
+- Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
+- Run OBS, Go to Tools, Websocket, and set a password
+- Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 
 ## How to use
 
 ### OBS Configuration
 
-Create a stinger transition if you want EAST transition
-To create the scene/overlays sources click create in OBS section on EAST
-To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s
-When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700mss
+Create a stinger transition if you want EAST transition,
+To create the scene/overlays sources click create in OBS section on EAST,
+To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s,
+When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700ms,
 
 ### EchoVR Configuration
 
