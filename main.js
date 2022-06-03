@@ -1,36 +1,59 @@
 const { OBSPlayer } = require('./index')
+const ChainEventEmitter = require('./src/ChainEventEmitter')
+const EventEmitter = require('events')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const dev = false
+const dev = true
+
+const uiEventEmitter = (webContents) => {
+  return {
+    send: (channel, args) => {
+      if ((typeof webContents.send) === 'function') {
+        webContents.send(channel, args)
+        // console.log('event send ', channel, args)
+      } else {
+        console.log('can not send event')
+      }
+    },
+    on: (channel, callable) => {
+      ipcMain.on(channel, function (event, args) {
+        // console.log('event received ', channel)
+        callable(args, event)
+      })
+    }
+  }
+}
+
+const stdEventEmitter = () => {
+  const eventEmitter = new EventEmitter()
+  return {
+    send: eventEmitter.emit,
+    on: eventEmitter.on,
+  }
+}
 
 const start = (webContents) => {
-    const overlayEventEmitter = {
-        send: (channel, args) => {
-            if ((typeof webContents.send) === 'function') {
-              webContents.send(channel, args)
-              console.log('event send ', channel)
-            } else {
-              console.log('can not send event')
-            }
-        },
-        on: (channel, callable) => {
-            ipcMain.on(channel, function (event, args) {
-                console.log('event received ', channel)
-              callable(args, event)
-            })
-        }
-    }
+    const eventEmitter = new ChainEventEmitter()
+    eventEmitter.add(stdEventEmitter())
+    eventEmitter.add(uiEventEmitter(webContents))
+    
 
-    new OBSPlayer(
+    const player = new OBSPlayer(
         __dirname,
-        overlayEventEmitter
+        eventEmitter
     )
+    player.start()
 }
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    minWidth:600,
+    minHeight: 500,
+    maxHeight:900,
+    maxWidth: 730,
+    width: 730,
+    height: 900,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'ui', 'preload.js')
     }

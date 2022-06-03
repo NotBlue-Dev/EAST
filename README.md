@@ -56,4 +56,11 @@ You can program stream to start at a precise time in Scenes tab, Timer (EAST)
 
 Select a team and click stream incoming match
 
+### Spectate
 
+Click connect next to EchoVR IP to start 
+Click launch for overlays
+Click start replay buffer
+...
+
+(you can enable auto connect for almost every component)

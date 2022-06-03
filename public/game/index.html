@@ -1,12 +1,45 @@
 <html>
    <head>
-      <title>Wait</title>
+      <title>Game</title>
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
-      <script src="http://localhost:4545/game/renderer.js"></script>
+      <script src="/game/renderer.js"></script>
+      <link rel="stylesheet" href="/game/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Game
+      <div class="topBar">
+         <img id="logoA">
+         <div class="content">
+            <div class="left">
+               <a id="teamA"></a>
+            </div>
+
+            <div class="mid">
+               <div class="time">
+                  <a id="minutes" class="second"></a>
+                  <a id="ms" class="ms"></a>
+               </div>
+               <div class="bo3">
+                  <a>BO3</a>
+               </div>
+            </div>
+
+            <div class="right">
+               <a id="teamB"></a>
+            </div>
+         </div>
+         <img id="logoB">
+      </div>
+      <div id="OrangeR2" class="round tbdO"></div>
+      <div id="OrangeR1" class="round tbdO"></div>
+      <div class="orange">
+         <div class="scoreA"><a id="scoreA"></a></div>
+      </div>
+      <div id="BlueR2" class="round tbdB"></div>
+      <div id="BlueR1" class="round tbdB"></div>
+      <div class="blue">
+         <div class="scoreB"><a id="scoreB"></a></div>
+      </div>
    </body>
 </html>

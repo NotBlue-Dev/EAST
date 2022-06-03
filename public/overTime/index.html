@@ -1,11 +1,25 @@
 <html>
    <head>
-      <title>Wait</title>
+      <title>OT</title>
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+      <script src="/overTime/renderer.js"></script>
+      <link rel="stylesheet" href="/overTime/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Overtime
+      <video id="background-video" muted><source src="/assets/transition/background.mp4" type="video/mp4"></video>
+      <div class="wrap">
+         <div class="content">
+            <div class="mainDiv">
+               <div id="discDiv">
+                  <img src="/assets/disc.svg" id="disc" class="disc">
+               </div>
+               <div id="roundDiv" class="closed">
+                  <a id="round" class="hide">OVERTIME</a>
+               </div>
+            </div>
+         </div>
+      </div>
    </body>
 </html>

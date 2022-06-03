@@ -1,12 +1,65 @@
 <html>
    <head>
-      <title>Wait</title>
+      <title>starting</title>
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
-      <script src="http://localhost:4545/starting/renderer.js"></script>
+      <script src="/starting/renderer.js"></script>
+      <link rel="stylesheet" href="/starting/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Starting
+      <div class="background">
+         <img src="/assets/disc.svg" class="logo"/>
+
+         <div class="top">
+            <img src="/assets/echo2.png" class="echo"/>
+            <a class="title" id="week">MIXED</a>
+         </div>
+
+         <div class="loading-box-container">
+            <div class="loading-box">
+            <p>YOUR GAMEPLAY HERE</p>
+            </div>
+         </div>
+
+         <div class="teams">
+            <div class="orange">
+               <img class="logoOrange" id="OLOGO">
+               <div class="boxOrange">
+                  <a class="teamColor" id="OrangeName"></a>
+               </div>
+               <div class="boxOrangePlayers" id="BoxOrange">
+                  <div class="row o"><a></a></div>
+                  <div class="row o"><a></a></div>
+                  <div class="row o"><a></a></div>
+                  <div class="row o"><a></a></div>
+                  <div class="row o"><a></a></div>
+                  <div class="row o"><a></a></div>
+               </div>
+            </div>
+
+            <div class="blue">
+               <img class="logoBlue" id="BLOGO">
+               <div class="boxBlue">
+                  <a class="teamColor" id="BlueName"></a>
+               </div>
+               <div class="boxBluePlayers" id="BoxBlue">
+                  <div class="row b"><a></a></div>
+                  <div class="row b"><a></a></div>
+                  <div class="row b"><a></a></div>
+                  <div class="row b"><a></a></div>
+                  <div class="row b"><a></a></div>
+                  <div class="row b"><a></a></div>
+               </div>
+            </div>
+         </div>
+
+         <div class="bottom">
+            <a>Master Division</a>
+            <a>Best Of 3</a>
+         </div>
+
+      </div>
+      <div class="boxPow"><a class="powered">Powered by EAST</a></div>
    </body>
 </html>

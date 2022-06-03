@@ -1,0 +1,148 @@
+body {
+    display: flex;
+    justify-content: center;
+    margin-top: 1vw !important;
+}
+
+.topBar {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: absolute;
+}
+
+#teamA, #teamB {
+    font-weight: 600;
+    font-size: 1vw;
+}
+
+.hide {
+    display: none;
+}
+
+.content {
+    background-color: rgba(31, 33, 45, 0.71);
+    width: 34vw;
+    height: 3vw;
+    align-items: center;
+    display: flex;
+}
+
+.time {
+    margin-top: 0.54vw;
+    width: 6.6vw;
+}
+
+.right {
+    margin-left: 20.5vw;
+}
+
+.left, .right {
+    position: absolute;
+    width: 13.5vw;
+    display: flex;
+    justify-content: center;
+}
+
+#ms {
+    font-size: 1vw;
+    position: absolute;
+    top: 0.2vw;
+    font-size: 1.2vw;
+}
+
+#minutes {
+    margin-top: 0.5vw;
+    font-size: 2vw;
+}
+
+#logoA, #logoB {
+    width: 3vw;
+}
+
+.scoreB {
+    background-color: #0BDBE8;
+}
+
+.scoreA {
+    background-color: #DC872C;
+}
+
+.orange {
+    top: 4vw;
+    left: 45.7vw;
+    position: absolute;
+}
+
+#OrangeR2 {
+    margin-right: 0.6vw;
+}
+
+#OrangeR1 {
+    margin-right: 9.8vw;
+}
+
+.tbdB, .tbdO, .winB, .winO {
+    transition: height 1s;
+}
+
+.tbdO {
+    height: 0.365vw;
+    background-color: #6E4416;
+}
+
+.winO {
+    height: 0.73vw;
+    background-color: #DC872C;
+}
+
+.winB {
+    height: 0.73vw;
+    background-color: #0BDBE8;
+}
+
+.tbdB {
+    height: 0.365vw;
+    background-color: #025D70;
+}
+
+#BlueR1 {
+    margin-left: 0.6vw;
+}
+
+.round {
+    width: 0.73vw;
+    margin-top: 3vw;
+}
+
+.blue {
+    top: 4vw;
+    position: absolute;
+    left: 50.05vw;
+}
+
+.scoreA, .scoreB {
+    width: 4.35vw;
+    height: 4.35vw;
+    justify-content: center;
+    display: flex;
+    font-weight: 600;
+    align-items: center;
+    font-size: 3vw;
+}
+
+.bo3 {
+    font-size: 0.9vw;
+}
+
+.mid {
+    line-height: 1.2vw;
+    display: flex;
+    font-weight: 600;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin-left: 13.67vw;
+    margin-right: 13.67vw;
+}

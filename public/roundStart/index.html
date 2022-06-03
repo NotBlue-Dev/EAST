@@ -1,12 +1,26 @@
 <html>
    <head>
-      <title>Wait</title>
+      <title>Round start</title>
       <meta http-equiv="content-type" content="text/html;charset=utf-8">
       <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
-      <script src="http://localhost:4545/roundStart/renderer.js"></script>
+      <script src="/roundStart/renderer.js"></script>
+      <link rel="stylesheet" href="/roundStart/style.css">
       <link rel="stylesheet" href="/style.css">
    </head>
    <body>
-      Round start
+      <video id="background-video" muted><source src="/assets/transition/background.mp4" type="video/mp4"></video>
+      <div class="wrap">
+         <div class="content">
+            <div class="mainDiv">
+               <div id="discDiv">
+                  <img src="/assets/disc.svg" id="disc" class="disc">
+               </div>
+               <div id="roundDiv" class="closed">
+                  <a id="round" class="hide"></a>
+               </div>
+            </div>
+         </div>
+      </div>
+
    </body>
 </html>

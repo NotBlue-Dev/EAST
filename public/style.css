@@ -1,3 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap');
+
 body {
     color: white;
+    margin: 0;
+    font-family: 'Kanit', sans-serif;
+}
+
+.logo {
+    filter: brightness(0) saturate(100%) invert(11%) sepia(25%) saturate(607%) hue-rotate(194deg) brightness(94%) contrast(95%);
+    width: 85%;
+    margin: -16% auto;
+    margin-left: 7.6%;
+    display: block;
+    position: absolute;
+}
+
+.loading-box-container {
+    --size: 60vw;
+    --radius: 0.8vw;
+    position: relative;
+    width: var(--size);
+    height: 34vw;
+    margin: 9vw auto;
+    padding: var(--radius);
+    overflow: hidden;
+}
+
+.loading-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: #1B121E;
+}
+
+.boxPow {
+    position:relative;
+}
+
+.powered {
+    position: absolute;
+    bottom: -16.5vw;
+    right: 1vw;
+    font-size: 1.3vw;
+}
+
+.loading-box-container::before {
+    content: '';
+    width: 150%;
+    height: 119vw;
+    position: absolute;
+    top: -111%;
+    left: -25%;
+    background: conic-gradient(#0000ff00, #DC872C, #0000ff00, #03BAE0);
+    animation: rotate-border 5s linear infinite;
+}
+
+@keyframes rotate-border {
+    to {
+        transform: rotate(360deg);
+    }
 }

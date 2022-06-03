@@ -1,0 +1,69 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#content {
+	position: absolute;
+    width: 565px;
+    height: 190px;
+    top: 1vw;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.minimap_disc {
+	width: 25px;
+	position: absolute;
+	top: -12.5px;
+	left: -12.5px;
+}
+
+#map {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/* Spark */
+
+.player {
+	position: absolute;
+}
+
+.player>div {
+	border-radius: 100px;
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: -15px;
+	left: -15px;
+}
+
+.player>p {
+	font-family: Arial, sans-serif;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	position: absolute;
+	top: -11px;
+	left: -12px;
+	margin: 0;
+	font-size: 20px;
+}
+
+.blue>div {
+	background-color: #0199ff;
+}
+
+.orange>div {
+	background-color: #ff8d04;
+}
+
+.positionable_element {
+	position: absolute;
+	top: 86.5px;
+	left: 281.5px;
+	transition: all .3s;
+}

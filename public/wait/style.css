@@ -1,0 +1,108 @@
+body {
+    width: 100%;
+    overflow-y: hidden;
+    position: absolute;
+    font-family: 'Kanit', sans-serif;
+}
+
+.powered {
+    bottom: -52.2vw !important;
+}
+
+.background {
+    width: 100%;
+    position: absolute;
+    height: 100vh;
+    background-color: #1B121E;
+}
+
+.echo {
+    width: 14vw;
+}
+
+.hide {
+    display: none;
+}
+
+.content a {
+    line-height: 2.5vw;
+}
+
+.vs {
+    font-size: 14vw;
+    line-height: 9vw !important;
+    margin-bottom: 0.5vw;
+}
+
+.content {
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 522px;
+    font-size: 2vw;
+    margin-top: 17vw;
+    align-items: center;
+}
+
+.ColorLogo {
+    position: relative;
+    width: 20vw;
+}
+
+.boxOrange {
+    background: linear-gradient(to right, #DC872C, #FA4011);
+    height: 3.5vw;
+    align-items: center;
+    display: flex;
+    max-width: 20vw;
+    justify-content: center;
+}
+
+.boxBlue {
+    background: linear-gradient(to right, #0376FF, #03BAE0);
+    height: 3.5vw;
+    align-items: center;
+    display: flex;
+    max-width: 20vw;
+    justify-content: center;
+}
+
+.teamColor {
+    font-size: 1.4vw;
+    font-weight: 600;
+    justify-content: center;
+    display: flex;
+}
+
+.colorOrange {
+    font-weight: 600;
+    float: right;
+}
+
+.colorBlue {
+    font-weight: 600;
+}
+
+.teams {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    display: flex;
+    margin-right: auto;
+    justify-content: space-around;
+    width: 94%;
+    margin-top: 15vw;
+}
+
+#timer {
+    font-size: 2vw;
+    top: 32vw;
+    width: 15vw;
+    font-weight: 600;
+    left: 42.5vw;
+    text-align: center;
+}
+

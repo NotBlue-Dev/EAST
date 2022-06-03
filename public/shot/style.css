@@ -1,0 +1,88 @@
+body {
+    overflow: hidden;
+}
+
+.here {
+    font-size: 2vw;
+}
+
+.nick {
+    font-size: 2.35vw;
+    font-weight: 600;
+}
+
+.assist {
+    font-weight: 600;
+    font-size: 1.2vw;
+}
+
+.hide {
+    display: none !important;
+}
+
+.visuallyhidden {
+    opacity: 0;
+}
+
+.container {
+    position: relative;
+    top: 0;
+}
+
+.scored {
+    position: relative;
+    left: 45vw;
+    top: 19vw;
+    font-weight: 600;
+    font-size: 2vw;
+}
+
+#comp {
+    transition: all 1s ease-in-out;
+    display: block;
+    margin-top: 17.5vw;
+}
+
+.txt {
+    height: 2.2vw;
+    width: 27vw;
+    position: relative;
+    top: -19vw;
+    align-items: center;
+    margin: 0 auto;
+    justify-content: center;
+    display: flex;
+}
+
+.box-stat {
+    position: relative;
+    top: -19vw;
+    width: 27vw;
+    background-color: rgba(31, 33, 45, 0.72);
+    height: 3.2vw;
+    margin: auto;
+    font-weight: 600;
+    font-size: 1.8vw;
+    display: flex;
+    justify-content: space-around;
+    line-height: 3.2vw;
+}
+
+.box {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 27vw;
+    height: 4.2vw;
+    margin: 19vw auto;
+    position: relative;
+    
+}
+
+.o {
+    background-image: linear-gradient(to left, rgb(250, 63, 16), rgb(220, 135, 44));
+}
+
+.b {
+    background-image: linear-gradient(to right, rgb(3, 117, 255), rgb(3, 185, 224));
+}

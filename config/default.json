@@ -1,17 +1,330 @@
 {
     "vrml": {
-        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2"
+        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2",
+        "autoLoad": false
     },
     "echoArena": {
         "ip": "127.0.0.1",
         "port": 6721,
-        "autoConnect": false
+        "autoConnect": false,
+        "path":"C:/Program Files/Oculus/Software/Software/ready-at-dawn-echo-arena/bin/win10/echovr.exe",
+        "autoStart":true,
+        "settings": {
+            "ui":true,
+            "map":true,
+            "mute":true,
+            "plate":true,
+            "anonymous":true,
+            "camera":"side"
+        }
     },
     "obs": {
         "ip": "127.0.0.1",
         "port": 4444,
         "password": "toor",
-        "autoConnect": false
+        "autoConnect": false,
+        "autoBuffer":true,
+        "path": "",
+        "autoStart":true,
+        "scenesNames":["Betwen Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
+        "sources":[
+            {
+                "name": "EchoCapture",
+                "type": "game_capture",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "data":{
+                            "scaleX": 0.6,
+                            "scaleY": 0.61,
+                            "x": 382,
+                            "y": 186,
+                            "visible":true,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
+                        },
+                        "order":"first"
+                    },
+                    {
+                        "name": "MainScene",
+                        "data":{
+                            "scaleX": 1,
+                            "scaleY": 1,
+                            "x": 0,
+                            "y": 0,
+                            "visible":true,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
+                        },
+                        "order":"last"
+                    },
+                    {
+                        "name": "Betwen Round",
+                        "data": {
+                            "scaleX": 0.564,
+                            "scaleY": 0.555,
+                            "x": 56,
+                            "y": 71,
+                            "visible":true,
+                            "capture_mode":"window",
+                            "window":"Echo VR:WindowsClass:echovr.exe",
+                            "mute":false
+                        },
+                        "order":"first"
+                    }
+                ]
+            },
+            {
+                "name": "StartingOverlay",
+                "type": "browser_source",
+                "url": "starting/",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "AudioPC",
+                "type": "wasapi_output_capture",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "refresh":false
+                    },
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    },
+                    {
+                        "name": "Betwen Round",
+                        "refresh":false
+                    },
+                    {
+                        "name": "OT",
+                        "refresh":false
+                    },
+                    {
+                        "name": "RoundStart",
+                        "refresh":false
+                    },
+                    {
+                        "name": "RoundOver",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name":"Gameplay",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/gameplay.mp3",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    },
+                    {
+                        "name":"OT",
+                        "refresh":false
+                    },
+                    {
+                        "name":"RoundStart",
+                        "refresh":false
+                    }, 
+                    {
+                        "name":"RoundOver",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name":"Betwen",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/betwen.mp3",
+                "scene":[
+                    {
+                        "name": "Betwen Round",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name":"preMatch",
+                "type":"ffmpeg_source",
+                "file":"../public/assets/audio/startingWaiting.mp3",
+                "scene":[
+                    {
+                        "name": "Starting",
+                        "refresh":false
+                    },
+                    {
+                        "name": "Waiting",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "waitingOverlay",
+                "type": "browser_source",
+                "url": "wait/",
+                "scene":[
+                    {
+                        "name": "Waiting",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "betwenRoundOverlay",
+                "type": "browser_source",
+                "url": "betwenRound/",
+                "scene":[
+                    {
+                        "name": "Betwen Round",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "OTOverlay",
+                "type": "browser_source",
+                "url": "OT/",
+                "scene":[
+                    {
+                        "name": "OT",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "RoundStartOverlay",
+                "type": "browser_source",
+                "url": "roundStart/",
+                "scene":[
+                    {
+                        "name": "RoundStart",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "RoundOverOverlay",
+                "type": "browser_source",
+                "url": "roundWin/",
+                "scene":[
+                    {
+                        "name": "RoundOver",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "Replay",
+                "type": "vlc_source",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "data": {
+                            "scaleX": 0.26,
+                            "scaleY": 0.254,
+                            "x": 1372,
+                            "y": 43,
+                            "visible":false,
+                            "mute":true
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "PingMonitor",
+                "type": "browser_source",
+                "url": "pingTracker/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "HalfTimeStats",
+                "type": "browser_source",
+                "url": "halfTime/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+                
+            },
+            {
+                "name": "Shot",
+                "type": "browser_source",
+                "url": "shot/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+            },
+            {
+                "name": "ShotReplayOverlay",
+                "type": "browser_source",
+                "url": "replay/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+                
+            },
+            {
+                "name": "Possession",
+                "type": "browser_source",
+                "url": "possess/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+                
+            },
+            {
+                "name": "GameTime",
+                "type": "browser_source",
+                "url": "game/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+                
+            },
+            {
+                "name": "Minimap",
+                "type": "browser_source",
+                "url": "minimap/",
+                "scene":[
+                    {
+                        "name": "MainScene",
+                        "refresh":false
+                    }
+                ]
+            }
+        ]
+    },
+
+    "mixed":{
+        "blue":"BLUE",
+        "orange":"ORANGE"
     },
     "overlayWs": {
         "port": 4545,
@@ -23,7 +336,39 @@
             {"path": "/roundWin", "template": "roundWin"},
             {"path": "/betwenRound", "template": "betwenRound"},
             {"path": "/game", "template": "game"},
-            {"path": "/ot",   "template": "overTime"}
+            {"path": "/ot",   "template": "overTime"},
+            {"path": "/possession", "template": "possess"},
+            {"path": "/shot",   "template": "shot"},
+            {"path": "/halfTime",   "template": "halfTime"},
+            {"path": "/pingTracker","template": "pingTracker"},
+            {"path": "/replay","template": "replay"}
         ]
+    },
+    "autoStream": {
+        "autoStart":{
+            "main":"Echo",
+            "wait":"Waiting",
+            "time":"",
+            "auto": false
+        },
+        "start": {
+            "scene": "Starting",
+            "betwen":"Round Betwen"
+        },
+        "game":{
+            "events":[
+                {"event":"Round start","delay":2, "scene":"Echo", "duration":5, "used":true, "canClip":false},
+                {"event":"Round over","delay":2, "scene":"Round Betwen", "duration":5, "used":true, "canClip":false},
+                {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":false, "canClip":true, "clip":true},
+                {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true, "canClip":false},
+                {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
+                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
+                {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false, "canClip":false}
+            ]
+        },
+        "end":{
+            "ending":{"scene":"Ending","duration":5},
+            "delay":5
+        }
     }
 }

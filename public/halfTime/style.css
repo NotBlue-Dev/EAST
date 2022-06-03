@@ -1,0 +1,71 @@
+.img {
+    position: absolute;
+    display: flex;
+    width: 88vw;
+    justify-content: space-between;
+    top: 25vw;
+    margin-left: 6vw;
+    margin-right: 6vw;
+}
+
+.logoHalf {
+    width: 6.95vw;
+}
+
+.d {
+    font-size: 2.3vw;
+    line-height: 1vw;
+}
+
+.b {
+    left: 79vw !important;
+}
+
+.loading-box-container {
+    --size: 27.85vw !important;
+    --radius: 0.3vw !important;
+    height: 3.2vw !important;
+}
+
+
+.loading-box-container::before {
+    height: 35vw !important;
+    top: -184% !important;
+}
+
+.pos {
+    top: 39vw;
+    left: 35vw;
+    position: absolute;
+    font-weight: 600;
+    font-size: 2vw;
+}
+
+.hide {
+    display: none !important;
+}
+
+.visuallyhidden {
+    opacity: 0;
+}
+
+
+.loading-box {
+    background-color: rgba(31, 33, 45, 1) !important;
+}
+
+.name {
+    font-size: 1.2vw;
+}
+
+.txt {
+    position: absolute;
+    width: 11vw;
+    top: 2vw;
+    font-weight: 600;
+    display: flex;
+    flex-flow: column;
+    left: -2vw;
+    justify-content: center;
+    align-items: center;
+}

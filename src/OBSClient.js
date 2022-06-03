@@ -1,7 +1,8 @@
 const OBSWebSocket = require('obs-websocket-js');
-
+const exec = require('child_process').exec;
 class OBSClient {
-    constructor() {
+    constructor(eventEmitter) {
+        this.eventEmitter = eventEmitter;
         this.obsWebSocket = new OBSWebSocket();
         this.handleConnected = () => {}
         this.handleDisconnected = () => {}
@@ -11,6 +12,34 @@ class OBSClient {
     onConnected(callback) {
         this.handleConnected = callback
         return this
+    }
+
+    isLaunched() {
+        return new Promise((resolve,reject) => {
+            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
+                if(stdout.indexOf('obs64.exe') === -1) {
+                    resolve(false)
+                }
+                resolve(true)
+            });
+        })
+
+    }
+
+    launch(executablePath) {
+        let self = this
+        if(executablePath.endsWith('obs64.exe')) {
+            executablePath = executablePath.substring(0, executablePath.length - 10);
+        }
+        if(!executablePath.endsWith('\\')) {
+            executablePath += '\\';
+        }
+
+        exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
+            if(error !== null) self.eventEmitter.send('obs.error', error)
+
+            self.eventEmitter.send('obs.started')
+        });
     }
 
     onDisconnected(callback) {
@@ -23,10 +52,46 @@ class OBSClient {
             address: `${ip}:${port}`,
             password
         })
+        
     }  
 
-    send(channel, arg) {
-        return this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
+    on(channel, callback) {
+        this.obsWebSocket.on(channel, (args) => callback(args));
+        return this
+    }
+
+    async createScene(sceneName) {
+        const response = await this.send('CreateScene', {sceneName});
+        return response
+    }
+
+    async refresh(sourceName) {
+        const response = await this.send('RefreshBrowserSource', {sourceName});
+        return response
+    }
+
+    async addSourceToScene(sceneName, sourceName) {
+        const response = await this.send('AddSceneItem', {sourceName, sceneName});
+        return response
+    }
+
+    async setSourceOrder(sceneName, sceneItem) {
+        const response = await this.send('ReorderSceneItems', {scene:sceneName, items:sceneItem});
+        return response
+    }
+
+    async createSource(sourceName, sourceKind, sceneName, sourceSettings = {}) {
+        const response = await this.send('CreateSource', {
+            sourceName,
+            sourceKind,
+            sceneName,
+            sourceSettings,
+        });
+        return response
+    }
+
+    async send(channel, arg) {
+        return await this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
     }
 
     initialize() {

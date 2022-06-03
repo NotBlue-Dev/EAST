@@ -1,0 +1,128 @@
+.title {
+    height: 1.2vw;
+    font-size: 0.9vw;
+    align-items: center;
+    justify-content: end;
+    display: flex;
+    background-color: rgba(31, 33, 45, 0.72);
+}
+
+.orange, .blue {
+    width: 16.1vw;
+}
+
+.contain {
+    display: flex;
+    gap: 0.7vw;
+    margin-right: 1.5vw;
+    align-items: center;
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 0vw;
+    gap: 63vw;
+    margin-top: 36vw;
+    font-weight: 600;
+    font-size: 1vw;
+}
+
+.stunO {
+    background-color: #6E4416 !important;
+}
+
+
+
+.holdO {
+    background-image: linear-gradient(to left, #DC872C, #FA4011) !important;
+}
+
+.stunB {
+    background-color: #025D70 !important;
+}
+
+.holdB {
+    background-image: linear-gradient(to left, #0BDBE8, #0375FF) !important;
+}
+
+/* normal 0BDBE8 */
+
+.poss {
+    position: absolute;
+    width: 16.1vw;
+}
+
+.datas {
+    display: flex;
+    gap: 0.95vw;
+    margin-top: 0.5vw;
+}
+
+.data {
+    display: flex;
+    gap: 0.95vw;
+    margin-right: 1.65vw;
+    justify-content: end;
+}
+
+.datarow {
+    width: 1.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.playercontent {
+    height: 2.6vw;
+    background-color: rgba(31, 33, 45, 0.72);
+}
+
+.top-header a {
+    margin-left: 0.5vw;
+}
+
+.top-header {
+    font-size: 0.9vw;
+    display: flex;
+    align-items: center;
+    height: 1.2vw;
+    
+}
+
+.hide {
+    display: none;
+}
+
+.possB {
+    transform: scaleX(-1);
+}
+
+.dataB {
+    margin-left: 1.65vw;
+    justify-content: start;
+}
+
+.topB {
+    justify-content: end;
+}
+
+.topB a {
+    margin-right: 0.5vw;
+}
+
+.bTitle {
+    justify-content: start;
+}
+
+.bCont {
+    margin-left: 1.5vw;
+}
+
+.O {
+    background-color: #DC872C;
+}
+
+.B {
+    background-color: #0BDBE8;
+}

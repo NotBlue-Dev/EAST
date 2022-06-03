@@ -1,0 +1,267 @@
+body {
+    width: 100%;
+    overflow-y: hidden;
+    position: absolute;
+    font-family: 'Kanit', sans-serif;
+}
+
+.background {
+    width: 100%;
+    position: absolute;
+    height: 100vh;
+    background-color: #1B121E;
+}
+
+#gradient {
+    --size: 56.4vw;
+    --radius: 0.8vw;
+    position: relative;
+    width: var(--size);
+    height: 31.1vw;
+    margin-left: 2vw !important;
+    margin-top: 3vw !important;
+    padding: var(--radius);
+    overflow: hidden;
+}
+
+#gradient::before {
+    content: '';
+    width: 150%;
+    height: 119vw;
+    position: absolute;
+    top: -111%;
+    left: -25%;
+    background: conic-gradient(#0000ff00, #DC872C, #0000ff00, #03BAE0);
+    animation: rotate-border 5s linear infinite;
+}
+
+.replay-box {
+    position: relative;
+    width: 100%;
+    flex-direction: column;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #1B121E;
+}
+
+.RoundO {
+    border-width: 0.2vw;
+    width: 4vw;
+    height: 4vw;
+    font-weight: 600;
+    font-size: 2.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-image:linear-gradient(to left, #DC872C, #FA4011) 1;
+}
+
+.RoundB {
+    border-width: 0.2vw;
+    border-style: solid;
+    width: 4vw;
+    height: 4vw;
+    font-weight: 600;
+    font-size: 2.5vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-image:linear-gradient(to left, #0BDBE8, #0375FF) 1;
+}
+
+.rightTop {
+    position: absolute;
+    top: 2.95vw;
+    left: 65.5vw;
+}
+
+.rightTop h1 {
+    font-weight: 600;
+    font-size: 4vw;
+    margin-top: 0;
+    margin-left: 0.5vw;
+    line-height: 3.5vw;
+}
+
+.echo {
+    width: 30vw;
+}
+
+.logoO, .logoB {
+    height: 13.15vw;
+    width: 13vw;
+}
+
+.cont {
+    display: flex;
+    position: absolute;
+    left: 2vw;
+    top: 37.9vw;
+}
+
+.rowO {
+    background-image: linear-gradient(to left, rgba(250, 63, 16, 0.25), rgba(220, 135, 44,0.25));
+    display: flex;
+    font-weight: 600;
+    font-size: 1.1vw;
+    margin-bottom: -1px;
+    align-items: center;
+    height: 2.7vw;
+    width: 34.5vw;
+}
+
+.dat {
+    width: 1.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.data {
+    display: flex;
+    gap: 1.8vw;
+    margin-left: 1.9vw;
+}
+
+.contain {
+    display: flex;
+    gap: 1.5vw;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1vw;
+}
+
+.teamO {
+    width: 13.75vw;
+    height: 2.5vw;
+    background-image: linear-gradient(to left, #DC872C, #FA4011);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.05vw;
+}
+
+
+.datab {
+    margin-left: 1.15vw;
+    margin-right: 1.9vw;
+}
+
+.b {
+    justify-content: end;
+}
+
+.orange {
+    display: flex;
+    top: 37.9vw;
+    left: 2vw;
+}
+
+.name {
+    width: 13vw;
+    display: flex;
+    justify-content: end;
+}
+
+.nameO {
+    width: 13vw;
+    display: flex;
+    justify-content: start;
+    margin-left: 0.5vw;
+}
+
+.teamB {
+    width: 13.75vw;
+    height: 2.5vw;
+    background: linear-gradient(to right, #0376FF, #03BAE0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.05vw;
+}
+
+.hide {
+    display: none;
+}
+
+.rowB {
+    background-image: linear-gradient(to right, rgba(3, 117, 255,0.25), rgba(3, 185, 224,0.25));
+    display: flex;
+    font-weight: 600;
+    font-size: 1.1vw;
+    margin-bottom: -1px;
+    align-items: center;
+    height: 2.7vw;
+    width: 34.5vw;
+}
+
+.blue {
+    display: flex;
+    top: 37.9vw;
+    left: 49.5vw;
+}
+
+.sc {
+    font-size: 1.8vw;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 2.5vw;
+}
+
+.scores {
+    position: absolute;
+    left: 73.5vw;
+    top: 16.5vw;
+}
+
+.top, .bottom {
+    display: flex;
+    gap: 1vw;
+}
+
+.top {
+    margin-bottom: 1vw;
+}
+
+.replay {
+    position: fixed;
+    top: -3vw;
+    font-weight: 600;
+    font-size: 3vw;
+}
+
+.winO {
+    background-image: linear-gradient(to left, #DC872C, #FA4011);
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+}
+
+.looseO {
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+    background-color: #6E4416;
+}
+
+.winB {
+    background-image: linear-gradient(to left, #0BDBE8, #0375FF);
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+}
+
+.looseB {
+    border-width: 0;
+    width: 4.3vw;
+    height: 4.3vw;
+    background-color: #025D70;
+}
