@@ -31,10 +31,10 @@ Then
 
 ### OBS Configuration
 
-Create a stinger transition if you want EAST transition,
-To create the scene/overlays sources click create in OBS section on EAST,
-To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s,
-When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700ms,
+Create a stinger transition if you want EAST transition,<br />
+To create the scene/overlays sources click create in OBS section on EAST,<br />
+To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s,<br />
+When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700ms,<br />
 
 ### EchoVR Configuration
 
@@ -44,12 +44,12 @@ PC :
 Quest :
 - Input your quest IP
 
-You can join a session with the session id
+You can join a session with the session id <br />
 You can spectate your game by clicking spectate me
 
 ### MIXED
 
-Input team name in the last section
+Input team name in the last section<br />
 You can program stream to start at a precise time in Scenes tab, Timer (EAST)
 
 ### VRML
