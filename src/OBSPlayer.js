@@ -464,6 +464,10 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
 
+        this.eventEmitter.on('app.kill', (args, event) => {
+            this.overlayWS.killServer()
+        })
+
         this.eventEmitter.on('vrml.teamSelected', (args, event) => {
             this.eventEmitter.send('vrml.teamChanged', args)
             this.globalConfig.vrml = {
