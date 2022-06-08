@@ -36,6 +36,11 @@ To create the scene/overlays sources click create in OBS section on EAST,<br />
 To have the default replay timing, enable replay buffer in OBS (File, settings, output) and set duration to 7s,<br />
 When scene are created, go to main scene, replay, right click : Hide transition, Fade, 1100ms ; Show transition, Fade, 700ms,<br />
 
+### Replay buffer
+file formating for replay buffer : %CCYY<br />
+start replay buffer, save a file (copy location)<br />
+input it in the replay source settings<br />
+
 ### EchoVR Configuration
 
 PC :
