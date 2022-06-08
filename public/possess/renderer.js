@@ -212,7 +212,6 @@ window.addEventListener("load", (event) => {
                 elemBox[i].classList.remove('holdO')
             }
         }
-        console.log(arg.possession.player)
         if(arg.possession.team === "BLUE TEAM") {
             box.classList.add("holdB")
         } else {

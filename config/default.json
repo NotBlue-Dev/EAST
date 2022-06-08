@@ -1,19 +1,19 @@
 {
     "vrml": {
-        "teamId": "Ump8RAT5HYFXgHE1WLU9Eg2",
+        "teamId": "",
         "autoLoad": false
     },
     "echoArena": {
         "ip": "127.0.0.1",
         "port": 6721,
         "autoConnect": false,
-        "path":"C:/Program Files/Oculus/Software/Software/ready-at-dawn-echo-arena/bin/win10/echovr.exe",
-        "autoStart":true,
+        "path":"",
+        "autoStart":false,
         "settings": {
             "ui":true,
             "map":true,
             "mute":true,
-            "plate":true,
+            "plate":false,
             "anonymous":true,
             "camera":"side"
         }
@@ -21,12 +21,12 @@
     "obs": {
         "ip": "127.0.0.1",
         "port": 4444,
-        "password": "toor",
+        "password": "",
         "autoConnect": false,
-        "autoBuffer":true,
+        "autoBuffer":false,
         "path": "",
-        "autoStart":true,
-        "scenesNames":["Betwen Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
+        "autoStart":false,
+        "scenesNames":["Between Round","Starting", "Waiting", "MainScene", "OT", "RoundStart", "RoundOver"],
         "sources":[
             {
                 "name": "EchoCapture",
@@ -61,7 +61,7 @@
                         "order":"last"
                     },
                     {
-                        "name": "Betwen Round",
+                        "name": "Between Round",
                         "data": {
                             "scaleX": 0.564,
                             "scaleY": 0.555,
@@ -100,7 +100,7 @@
                         "refresh":false
                     },
                     {
-                        "name": "Betwen Round",
+                        "name": "Between Round",
                         "refresh":false
                     },
                     {
@@ -141,12 +141,12 @@
                 ]
             },
             {
-                "name":"Betwen",
+                "name":"Between",
                 "type":"ffmpeg_source",
-                "file":"../public/assets/audio/betwen.mp3",
+                "file":"../public/assets/audio/between.mp3",
                 "scene":[
                     {
-                        "name": "Betwen Round",
+                        "name": "Between Round",
                         "refresh":false
                     }
                 ]
@@ -178,12 +178,12 @@
                 ]
             },
             {
-                "name": "betwenRoundOverlay",
+                "name": "betweenRoundOverlay",
                 "type": "browser_source",
-                "url": "betwenRound/",
+                "url": "betweenRound/",
                 "scene":[
                     {
-                        "name": "Betwen Round",
+                        "name": "Between Round",
                         "refresh":false
                     }
                 ]
@@ -233,7 +233,14 @@
                             "x": 1372,
                             "y": 43,
                             "visible":false,
-                            "mute":true
+                            "mute":true,
+                            "playlist": [
+                              {
+                                "hidden": false,
+                                "selected": false,
+                                "value": "../public/assets/transition/background.mp4"
+                              }
+                            ]
                         }
                     }
                 ]
@@ -334,7 +341,7 @@
             {"path": "/starting", "template": "starting"},
             {"path": "/roundStart", "template": "roundStart"},
             {"path": "/roundWin", "template": "roundWin"},
-            {"path": "/betwenRound", "template": "betwenRound"},
+            {"path": "/betweenRound", "template": "betweenRound"},
             {"path": "/game", "template": "game"},
             {"path": "/ot",   "template": "overTime"},
             {"path": "/possession", "template": "possess"},
@@ -345,30 +352,84 @@
         ]
     },
     "autoStream": {
-        "autoStart":{
-            "main":"Echo",
-            "wait":"Waiting",
-            "time":"",
+        "autoStart": {
+            "main": "[Echo Overlay] MainScene",
+            "wait": "[Echo Overlay] Waiting",
+            "time": "",
             "auto": false
         },
         "start": {
-            "scene": "Starting",
-            "betwen":"Round Betwen"
+            "scene": "[Echo Overlay] Starting",
+            "between": "DO NOT SWITCH SCENE",
+            "dur": "78"
         },
-        "game":{
-            "events":[
-                {"event":"Round start","delay":2, "scene":"Echo", "duration":5, "used":true, "canClip":false},
-                {"event":"Round over","delay":2, "scene":"Round Betwen", "duration":5, "used":true, "canClip":false},
-                {"event":"Score changed","delay":2, "scene":"Goal", "duration":5, "used":false, "canClip":true, "clip":true},
-                {"event":"Overtime","delay":2, "scene":"OT", "duration":5, "used":true, "canClip":false},
-                {"event":"Team change","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
-                {"event":"Restart","delay":2, "scene":"Goal", "duration":5, "used":false , "canClip":false},
-                {"event":"Possession changed","delay":2, "scene":"OT", "duration":5, "used":false, "canClip":false}
+        "game": {
+            "events": [
+                {
+                    "event": "Team change",
+                    "delay": 2,
+                    "scene": "Goal",
+                    "duration": 5,
+                    "used": false,
+                    "canClip": false
+                },
+                {
+                    "event": "Restart",
+                    "delay": 2,
+                    "scene": "Goal",
+                    "duration": 5,
+                    "used": false,
+                    "canClip": false
+                },
+                {
+                    "event": "Overtime",
+                    "delay": "2",
+                    "scene": "[Echo Overlay] OT",
+                    "duration": "5",
+                    "used": true,
+                    "canClip": false
+                },
+                {
+                    "event": "Possession changed",
+                    "delay": "2",
+                    "scene": "",
+                    "duration": "5",
+                    "used": false,
+                    "canClip": false
+                },
+                {
+                    "event": "Round start",
+                    "delay": "0.5",
+                    "scene": "[Echo Overlay] RoundStart",
+                    "duration": "5",
+                    "used": true,
+                    "canClip": false
+                },
+                {
+                    "event": "Score changed",
+                    "delay": "0.5",
+                    "scene": "DO NOT SWITCH SCENE",
+                    "duration": "5",
+                    "used": false,
+                    "canClip": true,
+                    "clip": true
+                },
+                {
+                    "event": "Round over",
+                    "delay": "2",
+                    "scene": "[Echo Overlay] RoundOver",
+                    "duration": "5",
+                    "used": true,
+                    "canClip": false
+                }
             ]
         },
-        "end":{
-            "ending":{"scene":"Ending","duration":5},
-            "delay":5
+        "end": {
+            "ending": {
+                "scene": "DO NOT SWITCH SCENE",
+                "duration": "5"
+            },
+            "delay": "5"
         }
     }
 }

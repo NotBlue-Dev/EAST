@@ -90,6 +90,16 @@ class OBSClient {
         return response
     }
 
+    async refreshAll() {
+        this.send('GetSourcesList').then((arg) => {
+            arg.sources.forEach(source => {
+                if(source.typeId === 'browser_source') {
+                    this.refresh(source.name)
+                }
+            });
+        })
+    }
+
     async send(channel, arg) {
         return await this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
     }

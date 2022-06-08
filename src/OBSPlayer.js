@@ -158,6 +158,16 @@ class OBSPlayer {
                                 }
 
                                 if(scene.data !== undefined) {
+                                    if(scene.data.playlist !== undefined) {
+                                        scene.data.playlist[0].value = path.join(__dirname, scene.data.playlist[0].value)
+                                        this.obsClient.send('SetSourceSettings', {
+                                            "sourceName": source.name,
+                                            "sourceSettings": {
+                                                "playlist": scene.data.playlist,
+                                                "loop":true
+                                            }
+                                        })
+                                    }
                                     this.obsClient.send('SetSceneItemTransform', {
                                         'scene-name': sceneName,
                                         'item': source.name,
@@ -176,9 +186,11 @@ class OBSPlayer {
                                         "item": source.name,
                                         "visible":scene.data.visible
                                     })
-                                    
+
                                     settings = {width:1920,height:1080}
                                 }
+
+                                this.obsClient.refreshAll()
                             })
                         }, 500);
                     });
@@ -196,13 +208,7 @@ class OBSPlayer {
 
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
-            this.obsClient.send('GetSourcesList').then((arg) => {
-                arg.sources.forEach(source => {
-                    if(source.typeId === 'browser_source') {
-                        this.obsClient.refresh(source.name)
-                    }
-                });
-            })
+            this.obsClient.refreshAll()
         }
         this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
@@ -275,6 +281,11 @@ class OBSPlayer {
             this.spectateStarted = true
         })
 
+        this.eventEmitter.on('echoArena.updateDurBetweenRound', (args, event) => {
+            this.globalConfig.autoStream.start.dur = args.dur
+            this.configLoader.save(this.globalConfig)
+        })
+
         this.eventEmitter.on('echoArena.sessionID', (args, event) => {
             let self = this
             exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout, stderr) {
@@ -289,7 +300,9 @@ class OBSPlayer {
                 this.startEchoVR(this.globalConfig.echoArena.path, args.sessionID)
             }
 
-            this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+            if(this.echoArena !== null) {
+                this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+            }
         })
 
         this.eventEmitter.on('spectate.updateConfig', (args, event) => {
@@ -308,7 +321,9 @@ class OBSPlayer {
             this.globalConfig.echoArena.path = output
             this.globalConfig.echoArena.autoStart = args.spectateMe
             this.configLoader.save(this.globalConfig)
-            this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+            if(this.echoArena !== null) {
+                this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+            }
         })
         
 
@@ -323,13 +338,7 @@ class OBSPlayer {
         this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
             this.createScenesAndContent()
             if(this.obsConnectionState) {
-                this.obsClient.send('GetSourcesList').then((arg) => {
-                    arg.sources.forEach(source => {
-                        if(source.typeId === 'browser_source') {
-                            this.obsClient.refresh(source.name)
-                        }
-                    });
-                })
+                this.obsClient.refreshAll()
             }
 
         })
@@ -360,15 +369,13 @@ class OBSPlayer {
                     ...args,
                 }
 
-                this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+                if(this.echoArena !== null) {
+                    this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings)
+                }
 
                 this.configLoader.save(this.globalConfig)
                 this.obsClient.send('GetSourcesList').then((arg) => {
-                    arg.sources.forEach(source => {
-                        if(source.typeId === 'browser_source') {
-                            this.obsClient.refresh(source.name)
-                        }
-                    });
+                    this.obsClient.refreshAll()
                 })
             }).catch((error) => {
                 this.eventEmitter.send('echoArena.connectionFailed', {
@@ -401,13 +408,7 @@ class OBSPlayer {
                     ...this.globalConfig.obs,
                     ...args,
                 }        
-                this.obsClient.send('GetSourcesList').then((arg) => {
-                    arg.sources.forEach(source => {
-                        if(source.typeId === 'browser_source') {
-                            this.obsClient.refresh(source.name)
-                        }
-                    });
-                })
+                this.obsClient.refreshAll()
                 this.configLoader.save(this.globalConfig)
             }).catch((error) => {
                 this.eventEmitter.send('obsWebsocket.connectionFailed', {
@@ -510,8 +511,8 @@ class OBSPlayer {
             .onConnected((name) => {
                 if(this.obsConnectionState !== true) {
                     this.obsConnectionState = true
-                    console.log('Connected')
                     setTimeout(() => {
+                        this.eventEmitter.send('obs.connected')
                         this.obsClient.send('GetSceneList').then((scenesData) => {
                             this.eventEmitter.send('scenes.loaded', {
                                 scenes: scenesData.scenes.map(scene => scene.name)
@@ -524,7 +525,6 @@ class OBSPlayer {
             .onDisconnected((message) => {
                 this.obsConnectionState = false
                 this.eventEmitter.send('obs.disconnected')
-                console.log('Disconnected', message)
             })
         .connect(args)
     }
@@ -634,7 +634,8 @@ class OBSPlayer {
         
     connectEchoArena(config) {
         return new Promise((resolve,reject) => {
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.globalConfig.mixed)
+            let custom = {mixed:this.globalConfig.mixed, bet:this.globalConfig.autoStream.start.dur}
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, custom)
             this.echoArena.listen()
         })
     }
@@ -642,12 +643,3 @@ class OBSPlayer {
 }
 
 module.exports = OBSPlayer
-
-// starting : 1152 658 px
-// x 382 y 186
-
-// betwen 1083 599
-// 56 71
-
-// main 1920 1080
-// 0 0

@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const camera = document.getElementById('cameraMode')
   const join = document.getElementById('echo-arena-joinSessionButton')
   const idJoin = document.getElementById('echo-arena-joinSession')
+  const BetweenRoundDur = document.getElementById('BetweenRoundDur')
 
   body.style.overflow = "hidden"
   loader.style.display = "flex"
@@ -64,10 +65,17 @@ window.addEventListener('DOMContentLoaded', () => {
     })
   }
   
+  const updateDurBetweenRound = () => {
+    ipcRenderer.send('echoArena.updateDurBetweenRound', {
+      dur: BetweenRoundDur.value
+    })
+  }
+
   ipcRenderer.on('echoArena.sessionID', (event, data) => {
     echoArenaSession.value = data.sessionID
   })
 
+  BetweenRoundDur.addEventListener('change', updateDurBetweenRound)
   echoArenaUrlInput.addEventListener('change', echoArenaConfig)
   echoArenaPortInput.addEventListener('change', echoArenaConfig)
   echoArenaAutoConnectInput.addEventListener('change', echoArenaConfig)
@@ -116,7 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('echoArena.connected', () => {
     echoArenaConnectButton.disabled = true
-    log(`Echo Arena connected`)
+    ipcRenderer.send("log", `Echo Arena connected`)
   })
 
   initAutoStream(document)
@@ -174,7 +182,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('obs.error', (event, data) => {
     obsStart.disabled = false
-    log(`OBS Error: ${data.error}`)
+    ipcRenderer.send("log", `OBS Error: ${data.error}`)
   })
 
   obsPath.addEventListener('change', softOBS)
@@ -198,7 +206,7 @@ window.addEventListener('DOMContentLoaded', () => {
       startBuffer()
       obsWebsocketStartBufferButton.disabled = true
     }
-    log(`OBS Websocket connected`)
+    ipcRenderer.send("log", `OBS Websocket connected`)
   })
 
   const overlayPortInput = document.getElementById('overlay-port')
@@ -224,7 +232,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   ipcRenderer.on('overlayWs.listening', (event, args) => {
     launchOverlayServerButton.disabled = true
-    log(`Overlay server listening on http:/127.0.0.1:${args.port}`)
+    ipcRenderer.send("log", `Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
   ipcRenderer.on('overlayWs.launchFailed', (event, data) => {
@@ -298,7 +306,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const end = document.getElementById('end-scene[0]')
     const delay = document.getElementById('end-duration[0]')
     const durEnd = document.getElementById('delay-after-end-game')
-    const betwen = document.getElementById('betwen-scene[0]')
+    const between = document.getElementById('between-scene[0]')
 
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
       const noSwitch = document.createElement('option');
@@ -324,13 +332,14 @@ window.addEventListener('DOMContentLoaded', () => {
       durEnd.value = data.end.ending.duration
       delay.value = data.end.delay
       events = data.game.events
-      betwen.value = data.start.betwen
+      between.value = data.start.between
+      BetweenRoundDur.value = data.start.dur
     })
-    log('OBS Scenes loaded')
+    ipcRenderer.send("log", 'OBS Scenes loaded')
   })
 
   ipcRenderer.on('overlayWs.launchFailed', (event, data) => {
-    log(`Overlay server launch failed (${data.error.message})`)
+    ipcRenderer.send("log", `Overlay server launch failed (${data.error.message})`)
   })
 
   initVrmlMatchMode(document)
@@ -415,7 +424,7 @@ const initAutoStream = (document) => {
       const scene = document.getElementById('scene[0]')
       const dur = document.getElementById('duration[0]')
       const state = document.getElementById('event')
-      const betwen = document.getElementById('betwen-scene[0]')
+      const between = document.getElementById('between-scene[0]')
       const clips = document.getElementById('clips')
       const buffer = document.getElementById('buffer')
 
@@ -423,7 +432,6 @@ const initAutoStream = (document) => {
           const opt = document.createElement('option');
           opt.value = eventName;
           opt.innerHTML = eventName;
-          console.log(opt)
           event.appendChild(opt);
         })
 
@@ -439,7 +447,7 @@ const initAutoStream = (document) => {
       const sendStart = () => {
         ipcRenderer.send('scenes.start', {
           scene: start.value,
-          betwen:betwen.value
+          between:between.value
         })
       }
 
@@ -486,7 +494,7 @@ const initAutoStream = (document) => {
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value)
       })
-      betwen.addEventListener('change',sendStart)
+      between.addEventListener('change',sendStart)
       state.addEventListener('change', sendEvent)
       dur.oninput = () => {sendEvent()}
       delayEvent.oninput = () => {sendEvent()}
@@ -505,9 +513,4 @@ const initAutoStream = (document) => {
 
     }
   })
-}
-
-const log = (message) => {
-  // const logOutput = document.getElementById('logs')
-  // logOutput.innerText = message + "\n" + logOutput.innerText
 }

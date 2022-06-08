@@ -58,7 +58,7 @@
           <article>
             <h2>SpectatorStream (Spark)</h2>
             <article class="block">
-              <label for="echo-path">EchoVR path</label>
+              <label for="echo-path">EchoVR executable path</label>
               <div class="inline">
                 <input type="text" class="txt" id="echo-path"/>
               </div>
@@ -239,12 +239,14 @@
             </article>
 
             <article>
-              <h2>Betwen</h2>
+              <h2>Between</h2>
               <article class="block">
-                <label for="betwen-scene[0]">Scene betwen round</label>
-                <div class="inline no-bottom">
-                  <select id="betwen-scene[0]" class="scene-select txt" type="text"></select>
+                <label for="between-scene[0]">Scene between round</label>
+                <div class="inline">
+                  <select id="between-scene[0]" class="scene-select txt" type="text"></select>
                 </div>
+                <label for="BetweenRoundDur">Duration</label>
+                <div class="inline no-bottom"><input id="BetweenRoundDur" class="txt" type="number" min="1"/></div>
               </article>
             </article>
             

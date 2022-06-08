@@ -25,11 +25,17 @@ class EchoArena {
     }
 
     setSettingsEchoVR(settings) {
-        this.requestEchoVR("ui_visibility", {enabled: !settings.ui})
-        this.requestEchoVR("minimap_visibility", {enabled: !settings.map})
-        this.requestEchoVR("team_muted", {blue_team_muted: settings.mute, orange_team_muted: settings.mute})
-        this.requestEchoVR("nameplates_visibility", {enabled: !settings.plate})
-        this.requestEchoVR("camera_mode", {mode: settings.camera, num: 0})
+        fetch(`http://127.0.0.1:${this.port}/session`).then(resp => resp.json()).then(json => {
+            this.requestEchoVR("ui_visibility", {enabled: !settings.ui})
+            this.requestEchoVR("minimap_visibility", {enabled: !settings.map})
+            this.requestEchoVR("team_muted", {blue_team_muted: settings.mute, orange_team_muted: settings.mute})
+            this.requestEchoVR("nameplates_visibility", {enabled: !settings.plate})
+            this.requestEchoVR("camera_mode", {mode: settings.camera, num: 0})
+        }).catch(error => {
+            setTimeout(() => {
+                this.setSettingsEchoVR()
+            }, 1500);
+        })
     }
 
     async testConnection() {
