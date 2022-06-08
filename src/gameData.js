@@ -8,7 +8,7 @@ class GameData {
         this.durBet = customData.bet
         this.sessionID = json.sessionid
         this.roundData = []
-        this.betwenRound = false
+        this.betweenRound = false
         this.blueTeam = {
             teamName:customData.mixed.blue,
             blueTeamPlayers: [],

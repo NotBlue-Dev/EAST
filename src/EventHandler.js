@@ -212,7 +212,7 @@ class EventHandler {
                     this.switchWindowEvent(gameEvent)
                     setTimeout(() => {
                         setTimeout(() => {
-                            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.betwen})
+                            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.between})
                         }, gameEvent.duration * 1000);
                     }, (gameEvent.delay * 1000));
                 }

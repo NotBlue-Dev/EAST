@@ -3,7 +3,7 @@ const ChainEventEmitter = require('./src/ChainEventEmitter')
 const EventEmitter = require('events')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const dev = true
+const dev = false
 
 const uiEventEmitter = (webContents) => {
   return {

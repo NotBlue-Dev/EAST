@@ -17,7 +17,7 @@ class RoundStart {
         if (this.roundStarted) {
             return
         }
-        if ((status === 'round_start' && (gameData.round != this.lastRound)) && !gameData.betwenRound) {
+        if ((status === 'round_start' && (gameData.round != this.lastRound)) && !gameData.betweenRound) {
             this.roundStarted = true
             eventEmitter.send('game.roundStart', {
                 round: gameData.round,
