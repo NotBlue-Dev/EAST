@@ -75,7 +75,9 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
+  if (process.platform !== 'darwin') {
+    stdEventEmitter().send('app.kill')
+    app.quit()
+  }
 })
 
-// faire visu + regler bug img dupliquée

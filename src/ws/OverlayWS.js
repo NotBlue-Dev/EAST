@@ -26,12 +26,15 @@ class OverlayWS {
       })
     }
 
+    killServer() {
+        this.io.close()
+        this.server.close()
+    }
+
     startServer(port) {
         return new Promise((resolve) => {
             this.server.listen(port, () => {
-                this.io.on('connection', (socket) => {
-                    resolve()
-                })
+                resolve()
             })
         })
     }
