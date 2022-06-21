@@ -159,11 +159,13 @@ class OBSPlayer {
 
                                 if(scene.data !== undefined) {
                                     if(scene.data.playlist !== undefined) {
-                                        scene.data.playlist[0].value = path.join(__dirname, scene.data.playlist[0].value)
+                                        let playlist = scene.data.playlist
+                                        let val = playlist[0].value
+                                        playlist[0].value = path.join(__dirname, val)
                                         this.obsClient.send('SetSourceSettings', {
                                             "sourceName": source.name,
                                             "sourceSettings": {
-                                                "playlist": scene.data.playlist,
+                                                "playlist": playlist[0].value,
                                                 "loop":true
                                             }
                                         })
