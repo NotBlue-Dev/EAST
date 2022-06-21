@@ -39,11 +39,7 @@ Then
 
 ### EchoVR section Configuration
 
-PC :
-- Input your pc IP (default is 127.0.0.1), and change the port if you need it
-
-Quest :
-- Input your quest IP
+- Input your pc IP (default is 127.0.0.1), and change the port if you need it or input your quest IP
 
 You can join a session with the session id <br />
 You can spectate your game by clicking spectate me
