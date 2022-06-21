@@ -90,7 +90,7 @@ class OBSPlayer {
 
                 setTimeout(() => {
                     this.globalConfig.obs.sources.forEach(source => {
-                        let settings = {width:1920,height:1080}
+                        let settings = {width:this.globalConfig.obs.width,height:this.globalConfig.obs.height}
                         scenesListandSourcesData.forEach(item => {
                             item.sources.forEach(source => {
                                 if(!OBSsources.some(obj => obj.name === source.name)) {
@@ -189,7 +189,7 @@ class OBSPlayer {
                                         "visible":scene.data.visible
                                     })
 
-                                    settings = {width:1920,height:1080}
+                                    settings = {width:this.globalConfig.obs.width,height:this.globalConfig.obs.height}
                                 }
 
                                 this.obsClient.refreshAll()
@@ -328,6 +328,11 @@ class OBSPlayer {
             }
         })
         
+        this.eventEmitter.on('obs.screen', (args,event) => {
+            this.globalConfig.obs.width = args.width
+            this.globalConfig.obs.height = args.height
+            this.configLoader.save(this.globalConfig)
+        })
 
         this.eventEmitter.on('obs.soft', (args, event) => {
             this.globalConfig.obs.autoStart = args.auto

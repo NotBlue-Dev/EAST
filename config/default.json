@@ -22,6 +22,8 @@
         "ip": "127.0.0.1",
         "port": 4444,
         "password": "",
+        "width":1920,
+        "height":1080,
         "autoConnect": false,
         "autoBuffer":false,
         "path": "",
@@ -407,7 +409,7 @@
                 },
                 {
                     "event": "Score changed",
-                    "delay": "0.5",
+                    "delay": "1",
                     "scene": "DO NOT SWITCH SCENE",
                     "duration": "5",
                     "used": false,
