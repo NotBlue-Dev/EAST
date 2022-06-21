@@ -1,6 +1,6 @@
 body {
     width: 100%;
-    overflow-y: hidden;
+    overflow: hidden;
     position: absolute;
     font-family: 'Kanit', sans-serif;
 }
