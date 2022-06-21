@@ -33,9 +33,10 @@ Then
 - Create an empty stinger transition if you want EAST transition,<br />
 - Enable replay buffer in OBS File>settings>output and set duration to 7s,<br />
 - Go to File>Settings>Advanced> and set file formating to %CCYY<br />
+- Enable overwrite
 - Start replay buffer and click the save button<br />
-- Go to the "replay" source in "Main scene" and set the file you saved as playlist (should be named Replay 2022)<br />
 - Click create in OBS section on EAST, (if audio or source are missing, click again)<br />
+- Go to the "replay" source in "Main scene" and set the file you saved as playlist (should be named Replay 2022)<br />
 - Go to "Main scene", "replay" source, right click : Hide transition>Fade>1100ms and Show transition>Fade>700ms<br />
 - If you had to change the screen size in EAST app you might have to adjust some sources like "replay" or "EchoCapture"
 
