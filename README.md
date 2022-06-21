@@ -7,11 +7,17 @@ This project includes an auto scene manager, overlays for echo, auto spectate an
 
 ## Preview
 
+### Replay + Score data
 ![Replay + Score](https://user-images.githubusercontent.com/64601123/174887113-14113375-59a8-4afe-8de8-ddd222d30b04.png)
+### Main Screen
 ![Main_Screen](https://user-images.githubusercontent.com/64601123/174887118-20ba3b0d-6b78-4b52-9387-3a09b29d05af.png)
+### Half Time Stats
 ![Half time stats](https://user-images.githubusercontent.com/64601123/174887120-87be8952-d420-48ea-8984-73b3450e1168.png)
+### Between round
 ![Between round](https://user-images.githubusercontent.com/64601123/174887123-d0ba0e16-e325-48d1-bbf3-31388403c6dd.png)
+### Starting
 ![Starting](https://user-images.githubusercontent.com/64601123/174887126-ad1ffe9e-0e72-49a2-9c1a-ba0286676b2a.png)
+### Waiting
 ![Waiting](https://user-images.githubusercontent.com/64601123/174887129-e38c343c-a016-4736-829a-f2750298e42a.png)
 
 ## How to install Video
