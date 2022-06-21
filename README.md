@@ -22,8 +22,6 @@ This project includes an auto scene manager, overlays for echo, auto spectate an
 Round Win animation (Similar for round loose, OT)
 ![Round Win](https://user-images.githubusercontent.com/64601123/174887717-45fe23b8-5674-4ada-8656-16d6c5c0a19f.png)
 
-
-
 ## How to install Video
 
 
@@ -88,3 +86,9 @@ Click start replay buffer
 And finally, join session or spectate
 
 (you can enable auto connect for almost every component)
+
+### Credit
+
+- Kwizer for his help with the developpement
+- Moozor for the design of these beautiful overlays
+- Seechee for his help with testing
