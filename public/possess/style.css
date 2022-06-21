@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 .title {
     height: 1.2vw;
     font-size: 0.9vw;

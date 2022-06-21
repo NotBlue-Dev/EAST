@@ -2,6 +2,7 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 1vw !important;
+    overflow: hidden;
 }
 
 .topBar {

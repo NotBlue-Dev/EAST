@@ -142,6 +142,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const obsPath = document.getElementById('obs-path')
   const obsSoftAuto = document.getElementById('obs-software-auto')
   const obsStart = document.getElementById('obs-start')
+  const obsW = document.getElementById('obs-width')
+  const obsH = document.getElementById('obs-height')
   
   const softOBS = () => {
     ipcRenderer.send('obs.soft', {path:obsPath.value, auto: obsSoftAuto.checked})
@@ -180,11 +182,20 @@ window.addEventListener('DOMContentLoaded', () => {
     obsStart.disabled = true
   }
 
+  const updateScreen = () => {
+    ipcRenderer.send('obs.screen', {
+      width:obsW.value,
+      height:obsH.value
+    })
+  }
+
   ipcRenderer.on('obs.error', (event, data) => {
     obsStart.disabled = false
     ipcRenderer.send("log", `OBS Error: ${data.error}`)
   })
 
+  obsH.addEventListener('change', updateScreen)
+  obsW.addEventListener('change', updateScreen)
   obsPath.addEventListener('change', softOBS)
   obsSoftAuto.addEventListener('click', softOBS)
   blueCustom.addEventListener('change', customTeamName)
@@ -263,7 +274,9 @@ window.addEventListener('DOMContentLoaded', () => {
     mute.checked = data.echoArena.settings.mute
     camera.checked = data.echoArena.settings.camera
     anonymous.checked = data.echoArena.settings.anonymous
-    
+    obsH.value = data.obs.height
+    obsW.value = data.obs.width
+
     if (data.echoArena.autoConnect) {
       const echoArenaAutoConnect = setInterval(echoArenaConnect, 10000)
       ipcRenderer.on('echoArena.connected', () => {
