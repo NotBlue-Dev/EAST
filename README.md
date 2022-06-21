@@ -23,6 +23,7 @@ Then
 - Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
 - Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 - Run OBS, Go to Tools, Websocket, and set a password
+- Change the screen size in OBS section on EAST (make it the size in File>Settings>Video>Base Canvas Resolution in OBS app)
 - Optional : Enable auto starts in EAST
 
 ## How to use
