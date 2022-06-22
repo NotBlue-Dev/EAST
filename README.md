@@ -1,5 +1,7 @@
 # Echo Arena Streaming Tool
 
+### NA VRML teams are going to be included before next season /!\
+
 ## About 
 
 EAST is an open source project to help streamers around the echo arena community to cast.
