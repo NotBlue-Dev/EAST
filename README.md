@@ -42,7 +42,7 @@ Download and install :
 
 Then
 
-- Extract and run EAST executable
+- Download and run setup.exe
 - Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
 - Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 - Run OBS, Go to Tools, Websocket, and set a password
