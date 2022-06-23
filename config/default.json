@@ -409,9 +409,9 @@
                 },
                 {
                     "event": "Score changed",
-                    "delay": "1",
+                    "delay": "0.5",
                     "scene": "DO NOT SWITCH SCENE",
-                    "duration": "5",
+                    "duration": "5.20",
                     "used": false,
                     "canClip": true,
                     "clip": true

@@ -108,7 +108,6 @@ class EventHandler {
     }
 
     listenGameEvents() {
-        // y'a peut etre mieux a faire que de faire un listener par event (plus tard)
         this.eventEmitter.on('game.scoreChanged', (args, event) => {
             let sourceName;
             let sceneName = this.config.autoStart.main
@@ -145,19 +144,19 @@ class EventHandler {
                         })
                         this.eventEmitter.send('game.showReplay', args)
                         this.animRN = true
-                    }, 600);
 
-                    setTimeout(() => {
-                        this.eventEmitter.send('game.endReplay')
-                        this.obsClient.send('SetSceneItemProperties', {
-                            "scene-name": sceneName,
-                            "item": sourceName,
-                            "visible":false
-                        })
                         setTimeout(() => {
-                            this.animRN = false
-                        }, 1100);
-                    }, (gameEvent.duration * 1000) + 500);
+                            this.eventEmitter.send('game.endReplay')
+                            this.obsClient.send('SetSceneItemProperties', {
+                                "scene-name": sceneName,
+                                "item": sourceName,
+                                "visible":false
+                            })
+                            setTimeout(() => {
+                                this.animRN = false
+                            }, 1100);
+                        }, (gameEvent.duration * 1000) + 1000);
+                    }, ((gameEvent.delay * 1000)+1500)/1.5);
                 }, (gameEvent.delay * 1000) + 1500);
             }
         })
