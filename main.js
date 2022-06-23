@@ -3,18 +3,7 @@ const ChainEventEmitter = require('./src/ChainEventEmitter')
 const EventEmitter = require('events')
 const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const ChildProcess = require('child_process');
-const appFolder = path.resolve(process.execPath, '..');
-const rootAtomFolder = path.resolve(appFolder, '..');
-const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-const exeName = path.basename(process.execPath);
-const dev = false
-
-if(!dev) {
-  const server = "east-releases-o0ooqkuua-notblue-dev.vercel.app"
-  const url = `${server}/update/${process.platform}/${app.getVersion()}`
-  autoUpdater.setFeedURL({ url })
-}
+const isDev = require('electron-is-dev');
 
 if (handleSquirrelEvent()) {
   return;
@@ -115,7 +104,7 @@ const createWindow = () => {
   })
 
   mainWindow.loadFile('ui/index.html').then(() => {
-    dev && mainWindow.webContents.openDevTools()
+    isDev && mainWindow.webContents.openDevTools()
     start(mainWindow.webContents)
   })
   .catch((err) => console.error(err))
