@@ -1,9 +1,9 @@
 # Echo Arena Streaming Tool
-https://img.shields.io/github/license/notblue-dev/east?style=for-the-badge
-https://img.shields.io/github/package-json/v/notblue-dev/east/master?style=for-the-badge
-https://img.shields.io/github/commit-activity/w/notblue-dev/east?style=for-the-badge
-https://img.shields.io/github/languages/top/notblue-dev/east?style=for-the-badge
-https://img.shields.io/tokei/lines/github/notblue-dev/east?style=for-the-badge
+![licence](https://img.shields.io/github/license/notblue-dev/east?style=for-the-badge)
+![package](https://img.shields.io/github/package-json/v/notblue-dev/east/master?style=for-the-badge)
+![commit](https://img.shields.io/github/commit-activity/w/notblue-dev/east?style=for-the-badge)
+![languages](https://img.shields.io/github/languages/top/notblue-dev/east?style=for-the-badge)
+![lines](https://img.shields.io/tokei/lines/github/notblue-dev/east?style=for-the-badge)
 
 ## About 
 
