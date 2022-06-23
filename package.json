@@ -18,7 +18,8 @@
     "moment": "^2.29.1",
     "node-fetch": "^2.6.7",
     "obs-websocket-js": "^4.0.3",
-    "socket.io": "^4.4.1"
+    "socket.io": "^4.4.1",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "electron": "^17.0.1",

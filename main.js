@@ -1,40 +1,9 @@
 const { OBSPlayer } = require('./index')
 const ChainEventEmitter = require('./src/ChainEventEmitter')
 const EventEmitter = require('events')
-const { app, BrowserWindow, ipcMain, autoUpdater } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path');
-const ChildProcess = require('child_process');
-const appFolder = path.resolve(process.execPath, '..');
-const rootAtomFolder = path.resolve(appFolder, '..');
-const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-const exeName = path.basename(process.execPath);
 const isDev = require('electron-is-dev');
-
-if (!isDev) {
-  const server = "east-releases-o0ooqkuua-notblue-dev.vercel.app"
-  const url = `${server}/update/${process.platform}/${app.getVersion()}`
-  autoUpdater.setFeedURL({ url })
-  autoUpdater.checkForUpdates()
-}
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Application Update',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-  }
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
-
-autoUpdater.on('error', message => {
-  console.error('There was a problem updating the application')
-  console.error(message)
-})
 
 if (handleSquirrelEvent()) {
   return;
