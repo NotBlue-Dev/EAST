@@ -1,11 +1,34 @@
 # Echo Arena Streaming Tool
 
+### NA VRML teams are going to be included before next season /!\
+
 ## About 
 
 EAST is an open source project to help streamers around the echo arena community to cast.
 This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support
 
-## How to install
+## Preview
+
+### Waiting
+![Waiting](https://user-images.githubusercontent.com/64601123/174887129-e38c343c-a016-4736-829a-f2750298e42a.png)
+### Starting
+![Starting](https://user-images.githubusercontent.com/64601123/174887126-ad1ffe9e-0e72-49a2-9c1a-ba0286676b2a.png)
+### Main Screen
+![Main_Screen](https://user-images.githubusercontent.com/64601123/174887118-20ba3b0d-6b78-4b52-9387-3a09b29d05af.png)
+### Replay + Score data
+![Replay + Score](https://user-images.githubusercontent.com/64601123/174887113-14113375-59a8-4afe-8de8-ddd222d30b04.png)
+### Half Time Stats
+![Half time stats](https://user-images.githubusercontent.com/64601123/174887120-87be8952-d420-48ea-8984-73b3450e1168.png)
+### Between round
+![Between round](https://user-images.githubusercontent.com/64601123/174887123-d0ba0e16-e325-48d1-bbf3-31388403c6dd.png)
+Round Win animation (Similar for round loose, OT)
+![Round Win](https://user-images.githubusercontent.com/64601123/174887717-45fe23b8-5674-4ada-8656-16d6c5c0a19f.png)
+
+## How to install Video
+
+https://youtu.be/CPs6qQWdtys
+
+## How to install Text
 
 Prerequisites : 
 - Enable echo arena API
@@ -65,3 +88,9 @@ Click start replay buffer
 And finally, join session or spectate
 
 (you can enable auto connect for almost every component)
+
+### Credit
+
+- Kwizer for his help with the developpement
+- Moozor for the design of these beautiful overlays
+- Seechee for his help with testing
