@@ -1,13 +1,13 @@
 {
-  "name": "overlayecho",
-  "version": "0.0.2",
-  "description": "",
+  "name": "east",
+  "version": "0.0.3",
+  "description": "Echo Arena Streaming Tool",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "east",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.26.0",
@@ -19,6 +19,7 @@
     "socket.io": "^4.4.1"
   },
   "devDependencies": {
-    "electron": "^17.0.1"
+    "electron": "^17.0.1",
+    "electron-winstaller": "^5.0.0"
   }
 }
