@@ -7,6 +7,10 @@
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NotBlue-Dev/EAST"
+  },
   "author": "east",
   "license": "ISC",
   "dependencies": {
@@ -23,6 +27,7 @@
   },
   "devDependencies": {
     "electron": "^17.0.1",
+    "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^5.0.0"
   }
 }
