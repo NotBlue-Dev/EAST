@@ -1,4 +1,4 @@
-# Echo Arena Streaming Tool
+# Echo Arena Streaming Tools
 ![licence](https://img.shields.io/github/license/notblue-dev/east?style=for-the-badge)
 ![package](https://img.shields.io/github/package-json/v/notblue-dev/east/master?style=for-the-badge)
 ![commit](https://img.shields.io/github/commit-activity/w/notblue-dev/east?style=for-the-badge)
