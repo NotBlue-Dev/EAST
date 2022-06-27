@@ -16,7 +16,7 @@ if (handleSquirrelEvent()) {
 }
 
 if(!isDev) {
-  const server = 'https://east-releases-g1hho5jbs-notblue-dev.vercel.app'
+  const server = 'https://east-releases.vercel.app/'
   const url = `${server}/update/${process.platform}/${app.getVersion()}`
   autoUpdater.setFeedURL({ url })
   autoUpdater.checkForUpdates()
