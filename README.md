@@ -4,6 +4,7 @@
 ![commit](https://img.shields.io/github/commit-activity/w/notblue-dev/east?style=for-the-badge)
 ![languages](https://img.shields.io/github/languages/top/notblue-dev/east?style=for-the-badge)
 ![lines](https://img.shields.io/tokei/lines/github/notblue-dev/east?style=for-the-badge)
+![time](https://wakatime.com/badge/github/NotBlue-Dev/EchoArena-Overlay.svg?style=for-the-badge)
 
 EAST is an open source project to help streamers around the echo arena community to cast.\
 This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support\
