@@ -1,11 +1,15 @@
-# Echo Arena Streaming Tool
+# Echo Arena Streaming Tools
+![licence](https://img.shields.io/github/license/notblue-dev/east?style=for-the-badge)
+![package](https://img.shields.io/github/package-json/v/notblue-dev/east/master?style=for-the-badge)
+![commit](https://img.shields.io/github/commit-activity/w/notblue-dev/east?style=for-the-badge)
+![languages](https://img.shields.io/github/languages/top/notblue-dev/east?style=for-the-badge)
+![lines](https://img.shields.io/tokei/lines/github/notblue-dev/east?style=for-the-badge)
+![time](https://wakatime.com/badge/github/NotBlue-Dev/EchoArena-Overlay.svg?style=for-the-badge)
 
-### NA VRML teams are going to be included before next season /!\
+EAST is an open source project to help streamers around the echo arena community to cast.\
+This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support\
 
-## About 
-
-EAST is an open source project to help streamers around the echo arena community to cast.
-This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support
+/!\ NA VRML teams are going to be included before next season /!\
 
 ## Preview
 
@@ -34,7 +38,7 @@ Prerequisites :
 - Enable echo arena API
 
 Download and install :
-- EAST latest release (https://github.com/NotBlue-Dev/EAST/releases)
+- (SETUP.EXE) EAST latest release (https://github.com/NotBlue-Dev/EAST/releases)
 - OBS (https://obsproject.com/fr/download)
 - ECHOVR (https://www.oculus.com/echo-vr/?locale=fr_FR)
 - OBS WEBSOCKET 4.9.1 (https://github.com/obsproject/obs-websocket/releases/tag/4.9.1)
@@ -42,7 +46,7 @@ Download and install :
 
 Then
 
-- Extract and run EAST executable
+- Download and run setup.exe
 - Fill EchoVR Path with the game path (ex: C:\Program Files\Oculus\Software\Software\ready-at-dawn-echo-arena\bin\win10\echovr.exe)
 - Fill OBS path on EAST app (ex: C:/Program Files/obs-studio/bin/64bit)
 - Run OBS, Go to Tools, Websocket, and set a password
