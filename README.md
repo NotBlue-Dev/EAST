@@ -30,7 +30,7 @@ Round Win animation (Similar for round loose, OT)
 
 ## How to install Video
 
-https://youtu.be/CPs6qQWdtys
+[https://youtu.be/CPs6qQWdtys](https://youtu.be/8F5BoZLMy94)
 
 ## How to install Text
 
