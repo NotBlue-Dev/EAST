@@ -95,6 +95,6 @@ And finally, join session or spectate
 
 ### Credit
 
-- Kwizer for his help with the developpement
+- Kwizer for his work on the developpement of EAST
 - Moozor for the design of these beautiful overlays
 - Seechee for his help with testing
