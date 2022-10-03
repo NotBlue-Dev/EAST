@@ -7,7 +7,10 @@ module.exports = {
     },
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 12
+        "ecmaVersion": 12,
+        "ecmaFeatures": {
+          "experimentalObjectRestSpread": true
+        }
     },
     "rules": {
         "accessor-pairs": "error",
@@ -227,7 +230,7 @@ module.exports = {
             "error",
             "never"
         ],
-        "semi": ["error", "always"],
+        "semi": "off",
         "semi-spacing": [
             "error",
             {

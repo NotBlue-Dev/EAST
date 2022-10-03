@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
 
     const content = document.getElementById('ping')
 

@@ -15,8 +15,8 @@ class OBSClient {
     }
 
     isLaunched() {
-        return new Promise((resolve,reject) => {
-            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
+        return new Promise((resolve) => {
+            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout) {
                 if(stdout.indexOf('obs64.exe') === -1) {
                     resolve(false)
                 }
@@ -35,7 +35,7 @@ class OBSClient {
             executablePath += '\\';
         }
 
-        exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
+        exec(`start /d "${executablePath}" obs64.exe`, (error) => { 
             if(error !== null) self.eventEmitter.send('obs.error', error)
 
             self.eventEmitter.send('obs.started')
@@ -47,7 +47,11 @@ class OBSClient {
         return this
     }
 
-    connect({ip, port, password}) {
+    connect({
+        ip, 
+        port, 
+        password
+        }) {
         return this.obsWebSocket.connect({ 
             address: `${ip}:${port}`,
             password
@@ -61,22 +65,32 @@ class OBSClient {
     }
 
     async createScene(sceneName) {
-        const response = await this.send('CreateScene', {sceneName});
+        const response = await this.send('CreateScene', {
+            sceneName
+        });
         return response
     }
 
     async refresh(sourceName) {
-        const response = await this.send('RefreshBrowserSource', {sourceName});
+        const response = await this.send('RefreshBrowserSource', {
+            sourceName
+        });
         return response
     }
 
     async addSourceToScene(sceneName, sourceName) {
-        const response = await this.send('AddSceneItem', {sourceName, sceneName});
+        const response = await this.send('AddSceneItem', {
+            sourceName,
+            sceneName
+        });
         return response
     }
 
     async setSourceOrder(sceneName, sceneItem) {
-        const response = await this.send('ReorderSceneItems', {scene:sceneName, items:sceneItem});
+        const response = await this.send('ReorderSceneItems', {
+            scene:sceneName,
+            items:sceneItem
+        });
         return response
     }
 
@@ -90,7 +104,7 @@ class OBSClient {
         return response
     }
 
-    async refreshAll() {
+    refreshAll() {
         this.send('GetSourcesList').then((arg) => {
             arg.sources.forEach(source => {
                 if(source.typeId === 'browser_source') {
@@ -100,8 +114,8 @@ class OBSClient {
         })
     }
 
-    async send(channel, arg) {
-        return await this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
+    send(channel, arg) {
+        return this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
     }
 
     initialize() {

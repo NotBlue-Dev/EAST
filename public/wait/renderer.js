@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 let socket = io();
 
 window.addEventListener("load", () => {
@@ -13,16 +14,17 @@ window.addEventListener("load", () => {
 
     const week = document.getElementById('week')
 
+    // eslint-disable-next-line func-style
     const fill = function (arg) {
         if(arg.teams.length === 0) {
             vrml = false
             return
-        } else {
-            vrml = true
-        }
+        } 
+        vrml = true
+        
 
-        orange = arg.teams.home
-        blue = arg.teams.away
+        let orange = arg.teams.home
+        let blue = arg.teams.away
 
         if (arg.teams.home.color !== null && arg.teams.away.color !== null) { 
             if(arg.teams.home.color === 'blue') {
@@ -53,13 +55,15 @@ window.addEventListener("load", () => {
         }
     });
 
-    socket.on('vrml.hide', (arg) => {
+    socket.on('vrml.hide', () => {
         vrml = false
         imgA.classList.add('hide')
         imgB.classList.add('hide')
         TeamA.innerHTML = ''
         TeamB.innerHTML = ''
-        try {clearInterval(matchCountDown)} catch {}
+        try {clearInterval(matchCountDown)} catch {
+            console.log('catch')
+        }
         timer.innerHTML = ''
     })
 
@@ -75,7 +79,9 @@ window.addEventListener("load", () => {
         
         week.innerHTML = `VRML Week ${arg.week}`
         
-        try {clearInterval(matchCountDown)} catch {}
+        try {clearInterval(matchCountDown)} catch {
+            console.log('catch')
+        }
 
         let date = new Date()
         let nextMatch = new Date(arg.time)
@@ -83,9 +89,9 @@ window.addEventListener("load", () => {
         
         function timerFunc() {
             let hours = Math.floor(time / 3600);
-            let restTime = time - hours * 3600;
+            let restTime = time - (hours * 3600);
             let minutes = Math.floor(restTime / 60);
-            let seconds = Math.round(restTime - minutes * 60);
+            let seconds = Math.round(restTime - (minutes * 60));
             time--
             if (minutes < 10) {
                 minutes = '0' + minutes
@@ -107,6 +113,6 @@ window.addEventListener("load", () => {
         matchCountDown = setInterval(function() {timerFunc()}, 1000)
     })
 
-    socket.emit('overlay.ready', {'overlay': 'wait'})
+    socket.emit('overlay.ready', { 'overlay': 'wait' })
 });
 
