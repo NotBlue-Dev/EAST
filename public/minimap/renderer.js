@@ -1,10 +1,17 @@
+/* eslint-disable no-mixed-operators */
 
+// eslint-disable-next-line no-undef
 let socket = io();
 
 // Most of the code on this page is made by Spark
 window.addEventListener('load', function() {
     const disc = document.getElementById("disc");
     const players = document.getElementsByClassName('player');
+
+    function setPos(elem, x, z) {
+        elem.style.left = (-z / 80 + 0.5) * 427 + 68 + "px";
+        elem.style.top = (x / 32 + 0.5) * 165 + 5 + "px";
+    }    
 
     function removePlayer(arg) {
         for (let i = 0; i < players.length; i++) {
@@ -54,7 +61,7 @@ window.addEventListener('load', function() {
                     team: color
                 });
             } else {
-                set_pos(players[id.indexOf(player.name)], player.position[0], player.position[1]);
+                setPos(players[id.indexOf(player.name)], player.position[0], player.position[1]);
             }
         }
     }
@@ -73,13 +80,10 @@ window.addEventListener('load', function() {
             }
         }
 
-        set_pos(disc, arg.disc[0], arg.disc[1]); 
+        setPos(disc, arg.disc[0], arg.disc[1]); 
     });
 
-    socket.emit('overlay.ready', {'overlay': 'minimap'})
+    socket.emit('overlay.ready', {
+        'overlay': 'minimap'
+    })
 });
-
-function set_pos(elem, x, z) {
-    elem.style.left = (-z / 80 + .5) * 427 + 68 + "px";
-    elem.style.top = (x / 32 + .5) * 165 + 5 + "px";
-}

@@ -17,8 +17,8 @@ class PingTracking {
                 orange: gameData.orangeTeam.playerPing,
             },
             teamName:[gameData.blueTeam.teamName, gameData.orangeTeam.teamName]
-        })
+        });
     }
 }
 
-module.exports = PingTracking
+module.exports = PingTracking;

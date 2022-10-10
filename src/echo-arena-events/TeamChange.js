@@ -23,7 +23,11 @@ class TeamChange {
         eventEmitter.send('vrml.colorChanged', teamsColor)
 
         eventEmitter.send('game.teamChange', {
-            teams: {blue: this.blue, orange: this.orange, teamName:[gameData.blueTeam.teamName, gameData.orangeTeam.teamName]},
+            teams: {
+                blue: this.blue, 
+                orange: this.orange, 
+                teamName:[gameData.blueTeam.teamName, gameData.orangeTeam.teamName]
+            },
             name:this.name
         })
     }

@@ -40,8 +40,17 @@ class ScoreChanged {
                 nb:nbData
             }
 
-            gameData.scoreData = {blue: this.bluePoints, orange: this.orangePoints}
-            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data, name:this.name, clip:false});
+            gameData.scoreData = {
+                blue: this.bluePoints, 
+                orange: this.orangePoints
+            }
+            eventEmitter.send('game.scoreChanged', {
+                blue: this.bluePoints, 
+                orange: this.orangePoints, 
+                data:this.data, 
+                name:this.name, 
+                clip:false
+            });
         }
     }
 }

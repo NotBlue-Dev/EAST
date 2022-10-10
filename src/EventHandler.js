@@ -11,7 +11,10 @@ class EventHandler {
         this.halfTimeShown = 0
         this.animRN = false
         // round win counter
-        this.roundData = {orange:0,blue:0}
+        this.roundData = {
+            orange:0,
+            blue:0
+        }
         this.listenGameEvents()
         this.initListener()
     }
@@ -20,7 +23,10 @@ class EventHandler {
         clearTimeout(this.delay)
         clearTimeout(this.dur)
         this.delay = setTimeout(() => {
-            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.end.ending.scene})
+            this.obsClient.send('SetCurrentScene',
+            {
+                "scene-name":this.config.end.ending.scene
+            })
             this.dur = setTimeout(() => {
                 this.obsClient.send('StopStreaming')
             }, this.config.end.ending.duration * 1000);
@@ -28,39 +34,48 @@ class EventHandler {
     }
 
     initListener() {
-        this.eventEmitter.on('game.emptyTeam', (args, event) => {
+        this.eventEmitter.on('game.emptyTeam', () => {
             if(this.roundData.orange !== 0 && this.roundData.blue !== 0) {
                 this.endStream()
             }
         })
 
-        this.eventEmitter.on('obsWebsocket.connected', (args, event) => {
+        this.eventEmitter.on('obsWebsocket.connected', () => {
             this.autoStart()
         })
 
-        this.obsClient.on('StreamStarted', (args) => {
+        this.obsClient.on('StreamStarted', () => {
             if(this.vrml) {
-                this.obsClient.send('SetCurrentScene',{"scene-name":this.config.autoStart.wait})
+                this.obsClient.send('SetCurrentScene',
+                {
+                    "scene-name":this.config.autoStart.wait
+                })
                 setTimeout(() => {
-                    this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.scene})
+                    this.obsClient.send('SetCurrentScene',
+                    {
+                        "scene-name":this.config.start.scene
+                    })
                 }, this.left);
             } else {
-                this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.scene})
+                this.obsClient.send('SetCurrentScene',
+                {
+                    "scene-name":this.config.start.scene
+                })
             }
             
         })
 
-        this.eventEmitter.on('scenes.changed', (args, event) => {
+        this.eventEmitter.on('scenes.changed', (args) => {
             this.autoStart(args.autoStart.time)
             this.config = args
         })
 
         // VRML match incoming
-        this.eventEmitter.on('vrml.matchDataLoaded', (args, event) => {
+        this.eventEmitter.on('vrml.matchDataLoaded', (args) => {
             clearInterval(this.timer)
             this.timer = setInterval(() => {
                 let date = new Date()
-                let localTime = new Date(args.time.getTime() + date.getTimezoneOffset() * 60000)
+                let localTime = new Date(args.time.getTime() + (date.getTimezoneOffset() * 60000))
                 let incoming = localTime.getHours() + ':' + localTime.getMinutes()
                 let currentTime = date.getHours() + ':' + date.getMinutes() - 10
                 let timeLeft = incoming - currentTime
@@ -99,20 +114,26 @@ class EventHandler {
     switchWindowEvent(event) {
         if(event.used && event.scene !== "DO NOT SWITCH SCENE") {
             setTimeout(() => {
-                this.obsClient.send('SetCurrentScene',{"scene-name":event.scene})
+                this.obsClient.send('SetCurrentScene',{
+                    "scene-name":event.scene
+                })
                 setTimeout(() => {
-                    this.obsClient.send('SetCurrentScene',{"scene-name":this.config.autoStart.main})
+                    this.obsClient.send('SetCurrentScene',{
+                        "scene-name":this.config.autoStart.main
+                    })
                 }, event.duration * 1000);
             }, event.delay * 1000);
         }
     }
 
     listenGameEvents() {
-        this.eventEmitter.on('game.scoreChanged', (args, event) => {
+        this.eventEmitter.on('game.scoreChanged', (args) => {
             let sourceName;
             let sceneName = this.config.autoStart.main
 
-            this.obsClient.send('GetSceneItemList', {sceneName:sceneName}).then((arg) => {
+            this.obsClient.send('GetSceneItemList', {
+                sceneName:sceneName
+            }).then((arg) => {
                 arg.sceneItems.forEach(item => {
                     if(item.sourceKind === 'vlc_source') {
                         sourceName = item.sourceName
@@ -156,21 +177,24 @@ class EventHandler {
                                 this.animRN = false
                             }, 1100);
                         }, (gameEvent.duration * 1000) + 1000);
-                    }, ((gameEvent.delay * 1000)+1500)/1.5);
+                    }, ((gameEvent.delay * 1000) + 1500) / 1.5);
                 }, (gameEvent.delay * 1000) + 1500);
             }
         })
 
-        this.eventEmitter.on('game.restart', (args, event) => {
+        this.eventEmitter.on('game.restart', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             setTimeout(() => {
                 this.switchWindowEvent(gameEvent)
             }, gameEvent.delay * 1000);
-            this.roundData = {orange:0,blue:0}
+            this.roundData = {
+                orange:0,
+                blue:0
+            }
         })
 
-        this.eventEmitter.on('game.overtime', (args, event) => {
+        this.eventEmitter.on('game.overtime', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
@@ -179,24 +203,26 @@ class EventHandler {
             }, gameEvent.delay * 1000);
         })
 
-        this.eventEmitter.on('game.possessionChange', (args, event) => {
+        this.eventEmitter.on('game.possessionChange', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
         })
 
-        this.eventEmitter.on('local.halfTimeStats', (args, event) => {
+        this.eventEmitter.on('local.halfTimeStats', (args) => {
             if(this.halfTimeShown < 2) {
                 this.halfTimeShown++;
                 this.eventEmitter.send('animation.triggerHalfTime', args)
             }
         })
 
-        this.eventEmitter.on('game.play', (args, event) => {
-            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.autoStart.main})
+        this.eventEmitter.on('game.play', () => {
+            this.obsClient.send('SetCurrentScene',{
+                "scene-name":this.config.autoStart.main
+            })
         })
 
-        this.eventEmitter.on('game.roundOver', (args, event) => {
+        this.eventEmitter.on('game.roundOver', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.roundData[args.winner]++
@@ -206,12 +232,17 @@ class EventHandler {
                         showRound()
                     }, 1000);
                 } else {
-                    this.eventEmitter.send('animation.triggerRoundOver', {rounds:args.rounds, winner:args.winner})
+                    this.eventEmitter.send('animation.triggerRoundOver', {
+                        rounds:args.rounds, 
+                        winner:args.winner
+                    })
                     this.halfTimeShown = 0
                     this.switchWindowEvent(gameEvent)
                     setTimeout(() => {
                         setTimeout(() => {
-                            this.obsClient.send('SetCurrentScene',{"scene-name":this.config.start.between})
+                            this.obsClient.send('SetCurrentScene',{
+                                "scene-name":this.config.start.between
+                            })
                         }, gameEvent.duration * 1000);
                     }, (gameEvent.delay * 1000));
                 }
@@ -220,21 +251,23 @@ class EventHandler {
             setTimeout(() => {
                 showRound()
             }, gameEvent.delay * 1000);
-            if(this.roundData.blue-this.roundData.orange >= 2 || this.roundData.orange-this.roundData.blue >= 2) {
+            if(this.roundData.blue - this.roundData.orange >= 2 || this.roundData.orange - this.roundData.blue >= 2) {
                 this.endStream()
             }
             
         })
-        this.eventEmitter.on('game.roundStart', (args, event) => {
+        this.eventEmitter.on('game.roundStart', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             setTimeout(() => {
-                this.eventEmitter.send('animation.triggerRoundStart', {round:args.round})
+                this.eventEmitter.send('animation.triggerRoundStart', {
+                    round:args.round
+                })
                 this.switchWindowEvent(gameEvent)
             }, gameEvent.delay * 1000);
             
         })
-        this.eventEmitter.on('game.teamChange', (args, event) => {
+        this.eventEmitter.on('game.teamChange', (args) => {
             let index = this.config.game.events.findIndex(x => x.event === args.name)
             let gameEvent = this.config.game.events[index]
             this.switchWindowEvent(gameEvent)
