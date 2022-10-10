@@ -11,6 +11,40 @@ const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 const exeName = path.basename(process.execPath);
 const isDev = require('electron-is-dev');
 
+if (handleSquirrelEvent()) {
+  return;
+}
+
+if(!isDev) {
+  const server = 'https://east-releases.vercel.app/'
+  const url = `${server}/update/${process.platform}/${app.getVersion()}`
+  autoUpdater.setFeedURL({ url })
+  autoUpdater.checkForUpdates()
+}
+
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
+  }
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall()
+  })
+})
+
+autoUpdater.on('error', message => {
+  console.error('There was a problem updating the application')
+  console.error(message)
+})
+
+setInterval(() => {
+  autoUpdater.checkForUpdates()
+}, 60000)
+
 function handleSquirrelEvent() {
   if (process.argv.length === 1) {
     return false;
@@ -49,41 +83,7 @@ function handleSquirrelEvent() {
       app.quit();
       return true;
   }
-}
-
-if (handleSquirrelEvent()) {
-  return;
-}
-
-if(!isDev) {
-  const server = 'https://east-releases.vercel.app/'
-  const url = `${server}/update/${process.platform}/${app.getVersion()}`
-  autoUpdater.setFeedURL({ url })
-  autoUpdater.checkForUpdates()
-}
-
-autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-  const dialogOpts = {
-    type: 'info',
-    buttons: ['Restart', 'Later'],
-    title: 'Application Update',
-    message: process.platform === 'win32' ? releaseNotes : releaseName,
-    detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-  }
-
-  dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall()
-  })
-})
-
-autoUpdater.on('error', message => {
-  console.error('There was a problem updating the application')
-  console.error(message)
-})
-
-setInterval(() => {
-  autoUpdater.checkForUpdates()
-}, 60000)
+};
 
 const uiEventEmitter = (webContents) => {
   return {

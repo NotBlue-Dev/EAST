@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
 
     let dataOrange = document.getElementById('dataOrange')
     let dataBlue = document.getElementById('dataBlue')
@@ -10,7 +9,7 @@ window.addEventListener("load", () => {
     let halfTime = document.getElementById('comp')
     let comp = document.getElementById('comp')
 
-    socket.on('game.scoreChanged', () => {
+    socket.on('game.scoreChanged', (arg) => {
         halfTime.classList.add('hide')
     })
 
@@ -24,7 +23,7 @@ window.addEventListener("load", () => {
     // hide
     function hide() {
         comp.classList.add('visuallyhidden');    
-        comp.addEventListener('transitionend', function() {
+        comp.addEventListener('transitionend', function(e) {
             comp.classList.add('hidden');
         });
     }
@@ -50,8 +49,6 @@ window.addEventListener("load", () => {
         }, 6000);
     })
     
-    socket.emit('overlay.ready', {
-        'overlay': 'halfTime'
-    })
+    socket.emit('overlay.ready', {'overlay': 'halfTime'})
 });
 

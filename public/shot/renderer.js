@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
 
     const speed = document.getElementById('speed')
     const dist = document.getElementById('dist')
@@ -22,7 +21,7 @@ window.addEventListener("load", () => {
     // hide
     function hide() {
         comp.classList.add('visuallyhidden');    
-        comp.addEventListener('transitionend', function() {
+        comp.addEventListener('transitionend', function(e) {
             comp.classList.add('hidden');
         });
     }
@@ -47,10 +46,10 @@ window.addEventListener("load", () => {
         display()
     })
 
-    socket.on('game.endScore', () => {
+    socket.on('game.endScore', (arg) => {
         hide()
     })
     
-    socket.emit('overlay.ready', { 'overlay': 'shot' })
+    socket.emit('overlay.ready', {'overlay': 'shot'})
 });
 

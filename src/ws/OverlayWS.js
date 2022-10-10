@@ -2,6 +2,7 @@ const http = require('http');
 const { Server } = require("socket.io");
 const express = require('express');
 const path = require('path');
+const { resolve } = require('path');
 
 class OverlayWS {
     constructor(config, eventEmitter, rootPath) {
@@ -22,7 +23,6 @@ class OverlayWS {
         app.get(overlay.path, (req, res) => {
           res.sendFile(path.join(this.rootPath , 'public', overlay.template, 'index.html'))
         });
-        return 0;
       })
     }
 
@@ -39,13 +39,13 @@ class OverlayWS {
         })
     }
 
-    on(channel, callable) {
+    on = (channel, callable) => {
         this.io.on('connection', (socket) => {
             socket.on(channel, callable)
         })
     }
 
-    send(channel, args) {
+    send = (channel, args) => {
         this.io.emit(channel, args);
     }
 }

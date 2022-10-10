@@ -15,7 +15,7 @@ class RoundBetween {
             return
         }
 
-        if((!this.play && (gameData.status === 'sudden_death')) || (gameData.blueTeam.blueReset && gameData.orangeTeam.orangeReset)) {
+        if(!this.play &&(gameData.status === 'sudden_death') || (gameData.blueTeam.blueReset && gameData.orangeTeam.orangeReset)) {
             this.betweenRound = false
             this.play = true
             clearTimeout(this.timeout)

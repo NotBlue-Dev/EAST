@@ -1,132 +1,5 @@
 const { ipcRenderer } = require('electron')
 let events;
-let initAuto = false
-
-const initAutoStream = (document) => {
-  ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
-    if(!initAuto) {
-      const main = document.getElementById('main-scene')
-      const wait = document.getElementById('wait-scene')
-      const autostream = document.getElementById('autostream')
-      const launch = document.getElementById('launch-time')
-      const start = document.getElementById('start-scene[0]')
-      const end = document.getElementById('end-scene[0]')
-      const delay = document.getElementById('end-duration[0]')
-      const durEnd = document.getElementById('delay-after-end-game')
-      const event = document.getElementById('event[0]')
-      const delayEvent = document.getElementById('delay[0]')
-      const scene = document.getElementById('scene[0]')
-      const dur = document.getElementById('duration[0]')
-      const state = document.getElementById('event')
-      const between = document.getElementById('between-scene[0]')
-      const clips = document.getElementById('clips')
-      const buffer = document.getElementById('buffer')
-
-        data.events.map((eventName) => {    
-          const opt = document.createElement('option');
-          opt.value = eventName;
-          opt.innerHTML = eventName;
-          event.appendChild(opt);
-          return 0;
-        })
-
-      const sendAuto = () => {
-        ipcRenderer.send('scenes.autoStart', {
-          main: main.value,
-          wait: wait.value,
-          auto:autostream.checked,
-          time: launch.value
-        })
-      }
-
-      const sendStart = () => {
-        ipcRenderer.send('scenes.start', {
-          scene: start.value,
-          between:between.value
-        })
-      }
-
-      const sendEnd = () => {
-        ipcRenderer.send('scenes.end', {
-          ending: {
-            scene:end.value, 
-            duration:delay.value
-          },
-          delay: durEnd.value,
-        })
-      }
-
-      const sendEvent = () => {
-        events = events.filter(function( obj ) {
-          return obj.event !== event.value;
-        })
-
-        let obj = {
-          event:event.value,
-          delay:delayEvent.value, 
-          scene:scene.value, 
-          duration:dur.value, 
-          used:state.checked, 
-          canClip:false
-        }
-        if(clips.style.display == 'block') {
-          obj = {
-            event:event.value,
-            delay:delayEvent.value, 
-            scene:scene.value, 
-            duration:dur.value, 
-            used:state.checked, 
-            canClip:true, 
-            clip:buffer.checked
-          }
-        } 
-
-        events.push(obj)
-
-        ipcRenderer.send('scenes.events', {
-          events:events
-        })
-      }
-
-      const switchEvent = (event) => {
-        let data = events.find(element => element.event === event)
-        if (data.canClip) {
-          clips.style.display = 'block'
-          buffer.checked = data.clip
-        } else {
-          clips.style.display = 'none'
-          buffer.checked = false
-        }
-        state.checked = data.used
-        dur.value = data.duration
-        scene.value = data.scene
-        delayEvent.value = data.delay
-      }
-
-      buffer.addEventListener('change',sendEvent)
-      event.addEventListener('change', (event) => {
-        switchEvent(event.target.value)
-      })
-      between.addEventListener('change',sendStart)
-      state.addEventListener('change', sendEvent)
-      dur.oninput = () => {sendEvent()}
-      delayEvent.oninput = () => {sendEvent()}
-      scene.addEventListener('change', sendEvent)
-      event.addEventListener('change', sendEvent)
-      end.addEventListener('change', sendEnd);
-      durEnd.oninput = () => {sendEnd()}
-      delay.oninput = () => {sendEnd()}
-      start.addEventListener('change', sendStart);
-      main.addEventListener('change', sendAuto);
-      wait.addEventListener('change', sendAuto);
-      launch.oninput = () => {sendAuto()}
-      autostream.addEventListener('change', sendAuto);
-
-      initAuto = true
-
-    }
-  })
-}
 
 window.addEventListener('DOMContentLoaded', () => {
   const body = document.getElementById('body')
@@ -233,14 +106,14 @@ window.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  dashboard.addEventListener('click', () => {
+  dashboard.addEventListener('click', (event) => {
     dashWrapper.classList.remove('hidden')
     scenesWrapper.classList.add('hidden')
     dashboard.classList.add('active')
     scenes.classList.remove('active')
   })
 
-  scenes.addEventListener('click', () => {
+  scenes.addEventListener('click', (event) => {
     scenesWrapper.classList.remove('hidden')
     dashboard.classList.remove('active')
     scenes.classList.add('active')
@@ -255,66 +128,6 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 
   initAutoStream(document)
-
-const initVrmlMatchMode = (document) => {
-  const matchDataBlock = document.getElementById('matchData')
-  const autoLoad = document.getElementById('vrml-autoconnect')
-  const teamSelect = document.getElementById('teams')
-  
-  const vrmlNext = (value) => {
-    if(value) {
-      ipcRenderer.send('vrml.isVrmlMatch', {
-        teamId: teamSelect.value
-      })
-    }
-  }
-
-  autoLoad.addEventListener('change', (event) => {
-    if(!autoLoad.checked) {
-      ipcRenderer.send('vrml.disabled')
-    }
-    ipcRenderer.send('vrml.autoLoad', autoLoad.checked) 
-    vrmlNext(event.target.checked)
-  })
-
-  ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
-    autoLoad.checked = data.auto
-
-    data.teams.map((team) => {
-      const opt = document.createElement('option');
-      opt.value = team.id;
-      opt.innerHTML = team.name;
-      if (data.teamId === team.id) {
-        opt.selected = true
-      }
-      teamSelect.appendChild(opt);
-      return 0;
-    })
-
-    if(data.auto) {
-      vrmlNext(data.auto)
-    }
-  })
-
-  teamSelect.addEventListener('change', (event) => {
-    ipcRenderer.send('vrml.teamSelected', {
-      teamId: event.target.value
-    })
-    if(autoLoad.checked) {
-      vrmlNext(true)
-    }
-  })
-
-  ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
-    matchDataBlock.innerHTML = `${data.teams.home.name} vs. ${data.teams.away.name}`
-    matchDataBlock.classList.remove('hidden')
-  })
-
-  ipcRenderer.on('vrml.matchDataNotFound', () => {
-    matchDataBlock.innerHTML = `No match found`
-    matchDataBlock.classList.remove('hidden')
-  })
-}
 
   const blueCustom = document.getElementById('customBlueName')
   const orangeCustom = document.getElementById('customOrangeName')
@@ -333,10 +146,7 @@ const initVrmlMatchMode = (document) => {
   const obsH = document.getElementById('obs-height')
   
   const softOBS = () => {
-    ipcRenderer.send('obs.soft', {
-      path:obsPath.value, 
-      auto: obsSoftAuto.checked
-    })
+    ipcRenderer.send('obs.soft', {path:obsPath.value, auto: obsSoftAuto.checked})
   }
 
   obsWebsocketStartBufferButton.disabled = true
@@ -364,10 +174,7 @@ const initVrmlMatchMode = (document) => {
   }
 
   const customTeamName = () => {
-    ipcRenderer.send('mixed.customTeam', {
-      blue: blueCustom.value, 
-      orange: orangeCustom.value
-    })
+    ipcRenderer.send('mixed.customTeam', {blue: blueCustom.value, orange: orangeCustom.value})
   }
 
   const startOBS = () => {
@@ -439,7 +246,7 @@ const initVrmlMatchMode = (document) => {
     ipcRenderer.send("log", `Overlay server listening on http:/127.0.0.1:${args.port}`)
   })
 
-  ipcRenderer.on('overlayWs.launchFailed', () => {
+  ipcRenderer.on('overlayWs.launchFailed', (event, data) => {
     launchOverlayServerButton.disabled = false
   })
 
@@ -450,7 +257,7 @@ const initVrmlMatchMode = (document) => {
     obsPath.value = data.obs.path
     obsSoftAuto.checked = data.obs.autoStart
     if(obsSoftAuto.checked) {
-      ipcRenderer.on('all.ready', () => {
+      ipcRenderer.on('all.ready', (event, data) => {
         startOBS()
       })
     }
@@ -493,7 +300,7 @@ const initVrmlMatchMode = (document) => {
     overlayAutoLaunchInput.checked = data.overlayWs.autoLaunch
     overlayPortInput.value = data.overlayWs.port
     if (data.overlayWs.autoLaunch) {
-      ipcRenderer.on('all.ready', () => {
+      ipcRenderer.on('all.ready', (event, data) => {
         ipcRenderer.send('overlayWs.launchServer', {
           autoLaunch: overlayAutoLaunchInput.checked,
           port: overlayPortInput.value
@@ -525,7 +332,6 @@ const initVrmlMatchMode = (document) => {
         opt.value = scene;
         opt.innerHTML = scene;
         sceneSelect.appendChild(opt);
-        return 0;
       })
     })
 
@@ -551,3 +357,173 @@ const initVrmlMatchMode = (document) => {
 
   initVrmlMatchMode(document)
 })
+
+
+const initVrmlMatchMode = (document) => {
+  const matchDataBlock = document.getElementById('matchData')
+  const autoLoad = document.getElementById('vrml-autoconnect')
+  const teamSelect = document.getElementById('teams')
+  
+  autoLoad.addEventListener('change', (event) => {
+    if(!autoLoad.checked) {
+      ipcRenderer.send('vrml.disabled')
+    }
+    ipcRenderer.send('vrml.autoLoad', autoLoad.checked) 
+    vrmlNext(event.target.checked)
+  })
+
+  const vrmlNext = (value) => {
+    if(value) {
+      ipcRenderer.send('vrml.isVrmlMatch', {
+        teamId: teamSelect.value
+      })
+    }
+  }
+
+  ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
+    autoLoad.checked = data.auto
+
+    data.teams.map((team) => {
+      const opt = document.createElement('option');
+      opt.value = team.id;
+      opt.innerHTML = team.name;
+      if (data.teamId === team.id) {
+        opt.selected = true
+      }
+      teamSelect.appendChild(opt);
+    })
+
+    if(data.auto) {
+      vrmlNext(data.auto)
+    }
+  })
+
+  teamSelect.addEventListener('change', (event) => {
+    ipcRenderer.send('vrml.teamSelected', {
+      teamId: event.target.value
+    })
+    if(autoLoad.checked) {
+      vrmlNext(true)
+    }
+  })
+
+  ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
+    matchDataBlock.innerHTML = `${data.teams.home.name} vs. ${data.teams.away.name}`
+    matchDataBlock.classList.remove('hidden')
+  })
+
+  ipcRenderer.on('vrml.matchDataNotFound', (event, data) => {
+    matchDataBlock.innerHTML = `No match found`
+    matchDataBlock.classList.remove('hidden')
+  })
+}
+
+let initAuto = false
+
+const initAutoStream = (document) => {
+  ipcRenderer.on('echoArena.eventsLoaded', (event, data) => {
+    if(!initAuto) {
+      const echoEventSelects = document.querySelectorAll('.echo-arena-event-select')
+      const main = document.getElementById('main-scene')
+      const wait = document.getElementById('wait-scene')
+      const autostream = document.getElementById('autostream')
+      const launch = document.getElementById('launch-time')
+      const start = document.getElementById('start-scene[0]')
+      const end = document.getElementById('end-scene[0]')
+      const delay = document.getElementById('end-duration[0]')
+      const durEnd = document.getElementById('delay-after-end-game')
+      const event = document.getElementById('event[0]')
+      const delayEvent = document.getElementById('delay[0]')
+      const scene = document.getElementById('scene[0]')
+      const dur = document.getElementById('duration[0]')
+      const state = document.getElementById('event')
+      const between = document.getElementById('between-scene[0]')
+      const clips = document.getElementById('clips')
+      const buffer = document.getElementById('buffer')
+
+        data.events.map((eventName) => {    
+          const opt = document.createElement('option');
+          opt.value = eventName;
+          opt.innerHTML = eventName;
+          event.appendChild(opt);
+        })
+
+      const sendAuto = () => {
+        ipcRenderer.send('scenes.autoStart', {
+          main: main.value,
+          wait: wait.value,
+          auto:autostream.checked,
+          time: launch.value
+        })
+      }
+
+      const sendStart = () => {
+        ipcRenderer.send('scenes.start', {
+          scene: start.value,
+          between:between.value
+        })
+      }
+
+      const sendEnd = () => {
+        ipcRenderer.send('scenes.end', {
+          ending: {scene:end.value, duration:delay.value},
+          delay: durEnd.value,
+        })
+      }
+
+      const sendEvent = () => {
+        events = events.filter(function( obj ) {
+          return obj.event !== event.value;
+        })
+
+        let obj = {event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked, canClip:false}
+        if(clips.style.display == 'block') {
+          obj = {event:event.value,delay:delayEvent.value, scene:scene.value, duration:dur.value, used:state.checked, canClip:true, clip:buffer.checked}
+        } 
+
+        events.push(obj)
+
+        ipcRenderer.send('scenes.events', {
+          events:events
+        })
+      }
+
+      const switchEvent = (event) => {
+        let data = events.find(element => element.event === event)
+        if (data.canClip) {
+          clips.style.display = 'block'
+          buffer.checked = data.clip
+        } else {
+          clips.style.display = 'none'
+          buffer.checked = false
+        }
+        state.checked = data.used
+        dur.value = data.duration
+        scene.value = data.scene
+        delayEvent.value = data.delay
+      }
+
+      buffer.addEventListener('change',sendEvent)
+      event.addEventListener('change', (event) => {
+        switchEvent(event.target.value)
+      })
+      between.addEventListener('change',sendStart)
+      state.addEventListener('change', sendEvent)
+      dur.oninput = () => {sendEvent()}
+      delayEvent.oninput = () => {sendEvent()}
+      scene.addEventListener('change', sendEvent)
+      event.addEventListener('change', sendEvent)
+      end.addEventListener('change', sendEnd);
+      durEnd.oninput = () => {sendEnd()}
+      delay.oninput = () => {sendEnd()}
+      start.addEventListener('change', sendStart);
+      main.addEventListener('change', sendAuto);
+      wait.addEventListener('change', sendAuto);
+      launch.oninput = () => {sendAuto()}
+      autostream.addEventListener('change', sendAuto);
+
+      initAuto = true
+
+    }
+  })
+}

@@ -12,8 +12,8 @@ class VRMLClient {
         return season.match(/\d+/)[0]
     }
 
-    getTeamPlace(teamId) {
-        return fetch(`${this.baseUrl}/Teams/${teamId}`).then(resp => resp.json())
+    async getTeamPlace(teamId) {
+        return await fetch(`${this.baseUrl}/Teams/${teamId}`).then(resp => resp.json())
     }
 
     async getTeams(region = 'eu', rank = 0) {
@@ -37,12 +37,12 @@ class VRMLClient {
         }
     }
 
-    getTeamUpcomingMatches(teamId) {
-        return fetch(`${this.baseUrl}/Teams/${teamId}/Matches/Upcoming`).then(resp => resp.json())
+    async getTeamUpcomingMatches(teamId) {
+        return await fetch(`${this.baseUrl}/Teams/${teamId}/Matches/Upcoming`).then(resp => resp.json())
     }
 
-    getTeam(teamId) {
-        return fetch(`${this.baseUrl}/Teams/${teamId}`).then(resp => resp.json())
+    async getTeam(teamId) {
+        return await fetch(`${this.baseUrl}/Teams/${teamId}`).then(resp => resp.json())
     }
 }
 

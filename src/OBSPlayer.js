@@ -49,12 +49,9 @@ class OBSPlayer {
     }
 
     initializeWS() {
-        this.eventEmitter.on('overlayWs.launchServer', (args) => {
+        this.eventEmitter.on('overlayWs.launchServer', (args, event) => {
             this.overlayWS.startServer(args.port).then(() => {
-                this.eventEmitter.add({
-                    send:this.overlayWS.send, 
-                    on:this.overlayWS.on
-                })
+                this.eventEmitter.add({send:this.overlayWS.send, on:this.overlayWS.on})
                 this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
                 this.globalConfig.overlayWs.port = args.port
                 this.configLoader.save(this.globalConfig)
@@ -84,31 +81,20 @@ class OBSPlayer {
                         this.obsClient.createScene(sceneName)
                     }
                 });
-                this.obsClient.send('SetTransitionSettings', {
-                    transitionName:'Stinger', 
-                    transitionSettings: {
-                        audioFadeStyle: 0,
-                        path: path.join(__dirname, '../public/assets/transition/transition.mov')
-                    }
-                })
+                this.obsClient.send('SetTransitionSettings', {transitionName:'Stinger', transitionSettings: {
+                    audio_fade_style: 0,
+                    path: path.join(__dirname, '../public/assets/transition/transition.mov')
+                }})
 
-                this.obsClient.send('SetCurrentTransition', {
-                    "transition-name":'Stinger'
-                })
+                this.obsClient.send('SetCurrentTransition', {"transition-name":'Stinger'})
 
                 setTimeout(() => {
                     this.globalConfig.obs.sources.forEach(source => {
-                        let settings = {
-                            width:this.globalConfig.obs.width,
-                            height:this.globalConfig.obs.height
-                        }
+                        let settings = {width:this.globalConfig.obs.width,height:this.globalConfig.obs.height}
                         scenesListandSourcesData.forEach(item => {
                             item.sources.forEach(source => {
                                 if(!OBSsources.some(obj => obj.name === source.name)) {
-                                    OBSsources.push({
-                                        name:source.name, 
-                                        type:source.type
-                                    })
+                                    OBSsources.push({name:source.name, type:source.type})
                                 }
                             });
                         });
@@ -117,21 +103,23 @@ class OBSPlayer {
                             let sceneName = `[Echo Overlay] ${scene.name}`  
                             let index = scenesListandSourcesData.findIndex(obj => obj.name === sceneName)
                             if(scene.data !== undefined) {
-                                settings.captureMode = 'window'
+                                settings.capture_mode = 'window'
                                 settings.window = 'Echo VR:WindowsClass:echovr.exe'
                             }
                             if(source.url !== undefined) {
                                 settings.url = `http://localhost:${this.globalConfig.overlayWs.port}/${source.url}`
-                                settings.restartWhenActive = scene.refresh
+                                settings.restart_when_active = scene.refresh
                             }
                             if(source.type === 'ffmpeg_source') {
-                                settings.localFile = path.join(__dirname, source.file)
+                                settings.local_file = path.join(__dirname, source.file),
                                 settings.looping = true
                             }
                             if(!OBSsources.some(obj => obj.name === source.name && obj.type === source.type)) {
                                 this.obsClient.createSource(source.name, source.type, sceneName, settings)
-                            } else if(index === -1 || scenesListandSourcesData[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
-                                this.obsClient.addSourceToScene(sceneName, source.name)
+                            } else {
+                                if(index === -1 || scenesListandSourcesData[index].sources.findIndex(obj => obj.name === source.name && obj.type === source.type) === -1) {
+                                    this.obsClient.addSourceToScene(sceneName, source.name)
+                                }
                             }
                         });
                         
@@ -141,40 +129,29 @@ class OBSPlayer {
                                 let order = []
                                 if(scene.data !== undefined) {
                                     if(scene.data.mute) {
-                                        this.obsClient.send('SetMute', {
-                                            source:source.name, 
-                                            mute:true
-                                        })
+                                        this.obsClient.send('SetMute', {source:source.name, mute:true})
                                     }
                                 }
                                 
                                 if(scene.order !== undefined) {
-                                    this.obsClient.send('GetSceneItemList', {
-                                        sceneName:sceneName
-                                    }).then((arg) => {
+                                    this.obsClient.send('GetSceneItemList', {sceneName:sceneName}).then((arg) => {
                                         arg.sceneItems.forEach(item => {
                                             if(item.sourceName !== source.name) {
-                                                order.push({
-                                                    name:item.sourceName
-                                                })
+                                                order.push({name:item.sourceName})
                                             }
                                         });
 
                                         // si la liste est renvoyer a l'envers on la retourne
-                                        if(order[order.length - 1].name === 'Replay') {
+                                        if(order[order.length-1].name === 'Replay') {
                                             order = order.reverse()
                                         }
                                         
                                         if(scene.order === 'first') {
-                                            order = [{
-                                                name:source.name
-                                            }].concat(order)
+                                            order = [{name:source.name}].concat(order)
                                         }
                                         
                                         if(scene.order === 'last') {
-                                            order.push({
-                                                name:source.name
-                                            })
+                                            order.push({name:source.name})
                                         }
                                         this.obsClient.setSourceOrder(sceneName, order)
                                     })
@@ -212,10 +189,7 @@ class OBSPlayer {
                                         "visible":scene.data.visible
                                     })
 
-                                    settings = {
-                                        width:this.globalConfig.obs.width,
-                                        height:this.globalConfig.obs.height
-                                    }
+                                    settings = {width:this.globalConfig.obs.width,height:this.globalConfig.obs.height}
                                 }
 
                                 this.obsClient.refreshAll()
@@ -228,11 +202,8 @@ class OBSPlayer {
 
     startEchoVR(executablePath, sessionID) {
         let self = this
-        exec(`start /d "${executablePath}" echovr.exe -spectatorstream ${sessionID !== null ? `-lobbyid "${sessionID}"` : ""} ${this.globalConfig.echoArena.settings.anonymous ? "-noovr" : ""} ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} `, (error) => { 
-            if(error !== null) {
-                self.eventEmitter.send('spectate.error', error)
-                console.log(error)
-            }
+        exec(`start /d "${executablePath}" echovr.exe -spectatorstream ${sessionID !== null ? `-lobbyid "${sessionID}"` : ""} ${this.globalConfig.echoArena.settings.anonymous ? "-noovr" : ""} ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} `, (error, stdout, stderr) => { 
+            if(error !== null) self.eventEmitter.send('spectate.error', error), console.log(error)
             self.eventEmitter.send('spectate.started')
         });
     }
@@ -241,7 +212,7 @@ class OBSPlayer {
         if(this.obsConnectionState) {
             this.obsClient.refreshAll()
         }
-        this.eventEmitter.on('overlay.ready', () => {
+        this.eventEmitter.on('overlay.ready', (args, event) => {
             if(this.globalConfig.vrml.autoLoad) {
                 this.overlayWS.send('vrml.matchDataLoaded', this.vrmlInfoWS)
             }
@@ -257,16 +228,16 @@ class OBSPlayer {
             this.Allinfo.season = data
         })
 
-        this.eventEmitter.on('vrml.disabled', () => {
+        this.eventEmitter.on('vrml.disabled', (args, event) => {
             this.eventEmitter.send('vrml.hide')
         })
 
-        this.eventEmitter.on('obsWebsocket.autoBuffer', (args) => {
+        this.eventEmitter.on('obsWebsocket.autoBuffer', (args, event) => {
             this.globalConfig.obs.autoBuffer = args
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('scenes.autoStart', (args) => {
+        this.eventEmitter.on('scenes.autoStart', (args, event) => {
             this.globalConfig.autoStream.autoStart = {
                 ...this.globalConfig.autoStream.autoStart,
                 ...args
@@ -275,7 +246,7 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
-        this.eventEmitter.on('scenes.start', (args) => {
+        this.eventEmitter.on('scenes.start', (args, event) => {
             this.globalConfig.autoStream.start = {
                 ...this.globalConfig.autoStream.start,
                 ...args
@@ -284,7 +255,7 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
         
-        this.eventEmitter.on('scenes.events', (args) => {
+        this.eventEmitter.on('scenes.events', (args, event) => {
             this.globalConfig.autoStream.game = {
                 ...this.globalConfig.autoStream.game,
                 ...args
@@ -293,7 +264,7 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
-        this.eventEmitter.on('scenes.end', (args) => {
+        this.eventEmitter.on('scenes.end', (args, event) => {
             this.globalConfig.autoStream.end = {
                 ...this.globalConfig.autoStream.end,
                 ...args
@@ -302,24 +273,24 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
-        this.eventEmitter.on('obsWebsocket.autoConnect', (args) => {
+        this.eventEmitter.on('obsWebsocket.autoConnect', (args, event) => {
             this.globalConfig.obs.autoConnect = args
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('spectate.start', (args) => {
+        this.eventEmitter.on('spectate.start', (args, event) => {
             this.startEchoVR(this.globalConfig.echoArena.path, args.id)
             this.spectateStarted = true
         })
 
-        this.eventEmitter.on('echoArena.updateDurBetweenRound', (args) => {
+        this.eventEmitter.on('echoArena.updateDurBetweenRound', (args, event) => {
             this.globalConfig.autoStream.start.dur = args.dur
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('echoArena.sessionID', (args) => {
+        this.eventEmitter.on('echoArena.sessionID', (args, event) => {
             let self = this
-            exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout) {
+            exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout, stderr) {
                 if(stdout.indexOf('echovr.exe') === -1) {
                     self.spectateStarted = false
                 } else {
@@ -336,7 +307,7 @@ class OBSPlayer {
             }
         })
 
-        this.eventEmitter.on('spectate.updateConfig', (args) => {
+        this.eventEmitter.on('spectate.updateConfig', (args, event) => {
             this.globalConfig.echoArena.settings = {
                 ...this.globalConfig.echoArena.settings,
                 ...args.settings
@@ -357,13 +328,13 @@ class OBSPlayer {
             }
         })
         
-        this.eventEmitter.on('obs.screen', (args) => {
+        this.eventEmitter.on('obs.screen', (args,event) => {
             this.globalConfig.obs.width = args.width
             this.globalConfig.obs.height = args.height
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('obs.soft', (args) => {
+        this.eventEmitter.on('obs.soft', (args, event) => {
             this.globalConfig.obs.autoStart = args.auto
             let parts = args.path.split('\\');
             let output = parts.join('/');
@@ -371,7 +342,7 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
         
-        this.eventEmitter.on('obsWebsocket.createScenes', () => {
+        this.eventEmitter.on('obsWebsocket.createScenes', (args, event) => {
             this.createScenesAndContent()
             if(this.obsConnectionState) {
                 this.obsClient.refreshAll()
@@ -379,7 +350,7 @@ class OBSPlayer {
 
         })
 
-        this.eventEmitter.on('obs.start', () => {
+        this.eventEmitter.on('obs.start', (args, event) => {
             let executablePath = this.globalConfig.obs.path;
             this.obsClient.isLaunched().then((isLaunched) => {
                 if(!isLaunched) {
@@ -388,7 +359,7 @@ class OBSPlayer {
             })
         })
 
-        this.eventEmitter.on('obsWebsocket.clip', (args) => {
+        this.eventEmitter.on('obsWebsocket.clip', (args, event) => {
             this.globalConfig.autoStream.end = {
                 ...this.globalConfig.autoStream.end,
                 ...args
@@ -397,7 +368,7 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream)
         })
 
-        this.eventEmitter.on('echoArena.connect', (args) => {
+        this.eventEmitter.on('echoArena.connect', (args, event) => {
             this.connectEchoArena(args).then(() => {
                 this.eventEmitter.send('echoArena.connected', args)
                 this.globalConfig.echoArena = {
@@ -410,7 +381,7 @@ class OBSPlayer {
                 }
 
                 this.configLoader.save(this.globalConfig)
-                this.obsClient.send('GetSourcesList').then(() => {
+                this.obsClient.send('GetSourcesList').then((arg) => {
                     this.obsClient.refreshAll()
                 })
             }).catch((error) => {
@@ -421,7 +392,7 @@ class OBSPlayer {
             })
         })
 
-        this.eventEmitter.on('echoArena.edit', (args) => {
+        this.eventEmitter.on('echoArena.edit', (args, event) => {
             this.globalConfig.echoArena.ip = args.ip
             this.globalConfig.echoArena.port = args.port
             this.globalConfig.echoArena.autoConnect = args.autoConnect
@@ -429,12 +400,14 @@ class OBSPlayer {
             this.eventEmitter.send('echoArena.configEdited', this.globalConfig.echoArena)
         })
 
+        
+
         let ev = events.filter(event => event.customizable)
         this.eventEmitter.send('echoArena.eventsLoaded', {
             events: ev.map(event => event.name)
         }) 
 
-        this.eventEmitter.on('obsWebsocket.connect', (args) => {
+        this.eventEmitter.on('obsWebsocket.connect', (args, event) => {
             this.connectObsWebsocket(args).then(() => {
                 this.eventEmitter.send('obsWebsocket.connected', args)
                 this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream)
@@ -452,7 +425,7 @@ class OBSPlayer {
             })
         })
 
-        this.eventEmitter.on('obsWebsocket.startStream', (args) => {
+        this.eventEmitter.on('obsWebsocket.startStream', (args, event) => {
             this.obsClient.send('StartStreaming').catch((error) => {
                 this.eventEmitter.send('obsWebsocket.startStreamFailed', {
                     args,
@@ -461,7 +434,7 @@ class OBSPlayer {
             })
         })
     
-        this.eventEmitter.on('obsWebsocket.stopStream', (args) => {
+        this.eventEmitter.on('obsWebsocket.stopStream', (args, event) => {
             this.obsClient.send('StopStreaming').catch((error) => {
                 this.eventEmitter.send('obsWebsocket.stopStreamFailed', {
                     args,
@@ -470,7 +443,7 @@ class OBSPlayer {
             })
         })
 
-        this.eventEmitter.on('obsWebsocket.startBuffer', () => {
+        this.eventEmitter.on('obsWebsocket.startBuffer', (args, event) => {
             this.obsClient.send('GetReplayBufferStatus').then(arg => {
                 if(!arg.isReplayBufferActive) {
                     this.obsClient.send("StartReplayBuffer")
@@ -479,30 +452,30 @@ class OBSPlayer {
             
         })
 
-        this.eventEmitter.on('mixed.customTeam', (args) => {
+        this.eventEmitter.on('mixed.customTeam', (args, event) => {
             this.globalConfig.mixed.blue = args.blue
             this.globalConfig.mixed.orange = args.orange
             this.configLoader.save(this.globalConfig)
             this.eventEmitter.send('mixed.customTeamChanged', this.globalConfig.mixed)
         })
 
-        this.eventEmitter.on('overlayWs.config', (args) => {
+        this.eventEmitter.on('overlayWs.config', (args, event) => {
             this.globalConfig.overlayWs.autoLaunch = args.autoLaunch
             this.globalConfig.overlayWs.port = args.port
             this.configLoader.save(this.globalConfig)
             this.eventEmitter.send('overlayWs.configEdited', this.globalConfig.overlayWs)
         })
 
-        this.eventEmitter.on('vrml.autoLoad', (args) => {
+        this.eventEmitter.on('vrml.autoLoad', (args, event) => {
             this.globalConfig.vrml.autoLoad = args
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('app.kill', () => {
+        this.eventEmitter.on('app.kill', (args, event) => {
             this.overlayWS.killServer()
         })
 
-        this.eventEmitter.on('vrml.teamSelected', (args) => {
+        this.eventEmitter.on('vrml.teamSelected', (args, event) => {
             this.eventEmitter.send('vrml.teamChanged', args)
             this.globalConfig.vrml = {
                 ...this.globalConfig.vrml,
@@ -517,7 +490,7 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig)
         })
 
-        this.eventEmitter.on('vrml.isVrmlMatch', (args) => {
+        this.eventEmitter.on('vrml.isVrmlMatch', (args, event) => {
             this.loadMatchDataFromTeam(args.teamId)
         })
         
@@ -534,7 +507,7 @@ class OBSPlayer {
             this.vrmlInfoWS = match
             this.eventEmitter.send('vrml.matchDataLoaded', match)
             
-        }).catch(() => {
+        }).catch(error => {
             this.vrmlInfoWS = this.Allinfo
             this.eventEmitter.send('vrml.matchDataNotFound', {
                 teamId: teamId
@@ -546,7 +519,7 @@ class OBSPlayer {
 
     connectObsWebsocket(args) {
         return this.obsClient
-            .onConnected(() => {
+            .onConnected((name) => {
                 if(this.obsConnectionState !== true) {
                     this.obsConnectionState = true
                     setTimeout(() => {
@@ -560,14 +533,14 @@ class OBSPlayer {
                     }, 1000);
                 }
             })
-            .onDisconnected(() => {
+            .onDisconnected((message) => {
                 this.obsConnectionState = false
                 this.eventEmitter.send('obs.disconnected')
             })
         .connect(args)
     }
 
-    async loadTeamList() {
+    async loadTeamList(region) {
         const json = await this.vrmlClient.getTeams()
         const teams = json.filter(team => team.isActive).map((team) => {
             return {
@@ -590,9 +563,7 @@ class OBSPlayer {
 
         try {
             this.Allinfo.week = json[0].week
-        } catch {
-            console.log('catch');
-        }
+        } catch {}
 
         json.forEach(element => {
             let dt = new Date(element.dateScheduledUTC)
@@ -612,12 +583,9 @@ class OBSPlayer {
             throw new Error('no matches scheduled')
         }
 
-        for(let i = 0; i < this.Allinfo.times.length; i++) {
+        for(let i = 0; i<this.Allinfo.times.length; i++) {
             if(this.Allinfo.times[i] !== 'TBD') {
-                const data = {
-                    A:this.vrmlClient.getTeamPlace(json[i].homeTeam.teamID), 
-                    B:this.vrmlClient.getTeamPlace(json[i].awayTeam.teamID)
-                }
+                const data = {A:await this.vrmlClient.getTeamPlace(json[i].homeTeam.teamID), B:await this.vrmlClient.getTeamPlace(json[i].awayTeam.teamID)}
                 this.Allinfo.teams.push({
                     name: json[i].homeTeam.teamName,
                     rank: json[i].homeTeam.divisionLogo,
@@ -638,8 +606,14 @@ class OBSPlayer {
                     color: null
                 })
             
-                this.getPlayers()
+                await this.getPlayers()
 
+                // let newDate = new Date()
+                // let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+                // let offset = date.getTimezoneOffset() / 60;
+                // let hours = date.getHours();
+                // newDate.setHours(hours - offset);
+                
                 return {
                     // time: newDate,
                     time: this.Allinfo.times[i],
@@ -654,13 +628,13 @@ class OBSPlayer {
         }
     }
 
-    getPlayers() {
+    async getPlayers() {
+        let u = 0
         for (let u = 0; u < this.Allinfo.teams.length; u++) {
             const element = this.Allinfo.teams[u]
-            const json = this.vrmlClient.getTeam(element.link)
+            const json = await this.vrmlClient.getTeam(element.link)
             json.team.players.map(player => {
                 element.rosters.push(player.playerName.toLowerCase())
-                return 0;
             });
             if(u >= 2) {
                 this.infoState = true
@@ -670,11 +644,8 @@ class OBSPlayer {
     }
         
     connectEchoArena(config) {
-        return new Promise(() => {
-            let custom = {
-                mixed:this.globalConfig.mixed, 
-                bet:this.globalConfig.autoStream.start.dur
-            }
+        return new Promise((resolve,reject) => {
+            let custom = {mixed:this.globalConfig.mixed, bet:this.globalConfig.autoStream.start.dur}
             this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, custom)
             this.echoArena.listen()
         })

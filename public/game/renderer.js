@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
     const imgA = document.getElementById('logoA')
     let vrml = false
     const imgB = document.getElementById('logoB')
@@ -13,11 +12,12 @@ window.addEventListener("load", () => {
         if(arg.teams === null || arg.teams.length === 0) {
             vrml = false
             return
+        } else {
+            vrml = true
         }
-        vrml = true
 
-        let orange = arg.teams.home
-        let blue = arg.teams.away
+        orange = arg.teams.home
+        blue = arg.teams.away
 
         if (arg.teams.home.color !== null && arg.teams.away.color !== null) {
             if(arg.teams.home.color === 'blue') {
@@ -65,7 +65,7 @@ window.addEventListener("load", () => {
         }
     });
 
-    socket.on('vrml.hide', () => {
+    socket.on('vrml.hide', (arg) => {
         vrml = false
         imgA.classList.add('hide')
         imgB.classList.add('hide')
@@ -87,20 +87,18 @@ window.addEventListener("load", () => {
 
     socket.on('game.roundOver', (arg) => {
         if(arg.winner !== null) {
-            console.log(arg.winner,arg.rounds[arg.rounds.length - 1],arg.rounds[arg.rounds.length - 1].currentRound)
+            console.log(arg.winner,arg.rounds[arg.rounds.length-1],arg.rounds[arg.rounds.length-1].currentRound)
             if(arg.winner === 'orange') {
-                let current = document.getElementById(`OrangeR${arg.rounds[arg.rounds.length - 1].currentRound}`)
+                let current = document.getElementById(`OrangeR${arg.rounds[arg.rounds.length-1].currentRound}`)
                 current.classList.add('winO')
                 current.classList.remove('tbdO')
             } else {
-                let current = document.getElementById(`BlueR${arg.rounds[arg.rounds.length - 1].currentRound}`)
+                let current = document.getElementById(`BlueR${arg.rounds[arg.rounds.length-1].currentRound}`)
                 current.classList.add('winB')
                 current.classList.remove('tbdB')
             }
         }
     })
 
-    socket.emit('overlay.ready', {
-        'overlay': 'game'
-    })
+    socket.emit('overlay.ready', {'overlay': 'game'})
 })

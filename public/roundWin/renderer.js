@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 let VRMLDATA = [];
 
@@ -10,6 +9,11 @@ socket.on('vrml.colorChanged', (arg) => {
     if(arg !== undefined) {
         VRMLDATA = arg
     }
+});
+
+
+socket.on('animation.triggerRoundOver', (arg) => {
+    animate(VRMLDATA, arg.winner)
 });
 
 function animate(arg, winner) {
@@ -34,8 +38,8 @@ function animate(arg, winner) {
         img.classList.add('hide')
     } else {
         img.classList.remove('hide')
-        let orange = arg.teams.home
-        let blue = arg.teams.away
+        orange = arg.teams.home
+        blue = arg.teams.away
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
                 blue = arg.teams.home
@@ -90,9 +94,4 @@ function animate(arg, winner) {
     }, 6000)
 }
 
-
-socket.on('animation.triggerRoundOver', (arg) => {
-    animate(VRMLDATA, arg.winner)
-});
-
-socket.emit('overlay.ready', { 'overlay': 'roundWin' })
+socket.emit('overlay.ready', {'overlay': 'roundWin'})

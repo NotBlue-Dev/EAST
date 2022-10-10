@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
     let vrml = false
 
     const imgA = document.getElementById('BLOGO')
@@ -49,7 +48,7 @@ window.addEventListener("load", () => {
     }
 
     const fill = (arg) => {
-        if(arg.week === null) {
+        if(arg.week == null) {
             week.innerHTML = `MIXED GAME`
         } else {
             week.innerHTML = `VRML Week ${arg.week}`
@@ -58,11 +57,12 @@ window.addEventListener("load", () => {
         if(arg.teams.length === 0) {
             vrml = false
             return
-        } 
-        vrml = true
+        } else {
+            vrml = true
+        }
 
-        let orange = arg.teams.home
-        let blue = arg.teams.away
+        orange = arg.teams.home
+        blue = arg.teams.away
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
                 blue = arg.teams.home
@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
 
     socket.on('vrml.colorChanged', fill)
 
-    socket.on('vrml.hide', () => {
+    socket.on('vrml.hide', (arg) => {
         vrml = false
         imgA.classList.add('hide')
         imgB.classList.add('hide')
@@ -144,6 +144,6 @@ window.addEventListener("load", () => {
         createPlayers(arg.teams.blue, arg.teams.orange)
     });
 
-    socket.emit('overlay.ready', { 'overlay': 'starting' })
+    socket.emit('overlay.ready', {'overlay': 'starting'})
 
 });

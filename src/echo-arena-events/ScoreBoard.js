@@ -12,29 +12,14 @@ class ScoreBoard {
             return 
         }
 
-        let orangeStats = [{ data:null,
-            name:null,
-            type:"Stuns" }, { data:null,
-            name:null,
-            type:"Saves" }, { data:null,
-            name:null,
-            type:"Goals" }
-        ]
-
-        let blueStats = [{ data:null,
-            name:null,
-            type:"Stuns" }, { data:null,
-            name:null,
-            type:"Saves" }, { data:null,
-            name:null,
-            type:"Goals" }
-        ]
+        let orangeStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
+        let blueStats = [{data:null, name:null, type:"Stuns"}, {data:null, name:null, type:"Saves"}, {data:null, name:null, type:"Goals"}]
 
         this.blue = gameData.blueTeam.playerStats
         this.orange = gameData.orangeTeam.playerStats
         
         const send = (orange, blue) => {
-            if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now())) / 1000) / 60) >= 1) {
+            if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now()))/1000)/60) >= 1) {
                 eventEmitter.send('local.halfTimeStats', {
                     blue:blue,
                     orange:orange
@@ -72,7 +57,7 @@ class ScoreBoard {
             }
         }
 
-        if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now())) / 1000) / 60) >= 1) {
+        if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now()))/1000)/60) >= 1) {
             this.orange.forEach(player => {
                 fill(orangeStats, player)
             });

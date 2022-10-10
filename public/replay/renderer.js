@@ -1,7 +1,6 @@
-// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
     let comp = document.getElementById('comp')
 
     // display
@@ -15,7 +14,7 @@ window.addEventListener("load", () => {
     // hide
     function hide() {
         comp.classList.add('visuallyhidden');    
-        comp.addEventListener('transitionend', function() {
+        comp.addEventListener('transitionend', function(e) {
             comp.classList.add('hidden');
         });
     }
@@ -30,12 +29,10 @@ window.addEventListener("load", () => {
         display()
     })
 
-    socket.on('game.endReplay', () => {
+    socket.on('game.endReplay', (arg) => {
         hide()
     })
     
-    socket.emit('overlay.ready', {
-        'overlay': 'replay'
-    })
+    socket.emit('overlay.ready', {'overlay': 'replay'})
 });
 

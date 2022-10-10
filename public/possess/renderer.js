@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-// eslint-disable-next-line no-undef
 let socket = io();
 
 function createOrange(playername) {
@@ -117,7 +115,7 @@ function createBlue(playername) {
     container.appendChild(e_0);
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", (event) => {
 
     const blue = document.getElementById('playersBlue')
 
@@ -132,12 +130,12 @@ window.addEventListener("load", () => {
         }
 
         let or = arg.teams.orange
-        for(let x = 0; x < or.length; x++) {
+        for(let x =0; x<or.length; x++) {
             createOrange(or[x])
         }
 
         let bl = arg.teams.blue
-        for(let i = 0; i < bl.length; i++) {
+        for(let i =0; i<bl.length; i++) {
             createBlue(bl[i])
         }
     });
@@ -146,19 +144,19 @@ window.addEventListener("load", () => {
     socket.on('game.scoreBoard', (arg) => {
         if (document.getElementById('playersBlue').childElementCount === 0) {
             let bl = arg.blue
-            for(let i = 0; i < bl.length; i++) {
+            for(let i =0; i<bl.length; i++) {
                 createBlue(bl[i].name)
             }
         }
 
         if (document.getElementById('playersOrange').childElementCount === 0) {
             let or = arg.orange
-            for(let x = 0; x < or.length; x++) {
+            for(let x =0; x<or.length; x++) {
                 createOrange(or[x].name)
             }
         }
         
-        for(let i = 0; i < arg.orange.length; i++) {
+        for(let i = 0; i<arg.orange.length; i++) {
             let ass = document.getElementById(`${arg.orange[i].name}_ASS`)
             let pts = document.getElementById(`${arg.orange[i].name}_PTS`)
             let save = document.getElementById(`${arg.orange[i].name}_SAVE`)
@@ -177,7 +175,7 @@ window.addEventListener("load", () => {
             }
         }
 
-        for(let i = 0; i < arg.blue.length; i++) {
+        for(let i = 0; i<arg.blue.length; i++) {
             let ass = document.getElementById(`${arg.blue[i].name}_ASS`)
             let pts = document.getElementById(`${arg.blue[i].name}_PTS`)
             let save = document.getElementById(`${arg.blue[i].name}_SAVE`)
@@ -203,13 +201,13 @@ window.addEventListener("load", () => {
         let elem = document.getElementsByClassName('show')
         let elemBox = document.getElementsByClassName('showBox')
         if(elem.length !== 0) {
-            for(let i = 0; i < elem.length; i++) {
+            for(let i =0; i<elem.length; i++) {
                 elem[i].classList.add('hide')
                 elem[i].classList.remove('show')
             }
         }
         if(elemBox.length !== 0) {
-            for(let i = 0; i < elemBox.length; i++) {
+            for(let i =0; i<elemBox.length; i++) {
                 elemBox[i].classList.remove('holdB')
                 elemBox[i].classList.remove('holdO')
             }
@@ -224,7 +222,5 @@ window.addEventListener("load", () => {
         box.classList.add('showBox')
     });  
 
-    socket.emit('overlay.ready', {
-        'overlay': 'possession'
-    })
+    socket.emit('overlay.ready', {'overlay': 'possession'})
 })
