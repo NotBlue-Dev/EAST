@@ -2,47 +2,47 @@
 let socket = io();
 
 window.addEventListener("load", () => {
-    const imgA = document.getElementById('LogoA')
-    let vrml = false
-    const imgB = document.getElementById('LogoB')
+    const imgA = document.getElementById('LogoA');
+    let vrml = false;
+    const imgB = document.getElementById('LogoB');
 
-    const nameA = document.getElementById('nameA')
+    const nameA = document.getElementById('nameA');
 
-    const nameB = document.getElementById('nameB')  
+    const nameB = document.getElementById('nameB');  
     
-    const teamPlayerA = document.getElementById('playersOrange')
+    const teamPlayerA = document.getElementById('playersOrange');
 
-    const teamPlayerB = document.getElementById('playersBlue')
+    const teamPlayerB = document.getElementById('playersBlue');
 
     const fill = (arg) => {
-        const season = document.getElementById('season')
-        season.innerHTML =  `SEASON ${arg.season}`
+        const season = document.getElementById('season');
+        season.innerHTML =  `SEASON ${arg.season}`;
         if(arg.teams.length === 0) {
-            vrml = false
-            return
+            vrml = false;
+            return;
         } 
-        vrml = true
+        vrml = true;
 
-        let orange = arg.teams.home
-        let blue = arg.teams.away
+        let orange = arg.teams.home;
+        let blue = arg.teams.away;
 
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
-                blue = arg.teams.home
-                orange = arg.teams.away
+                blue = arg.teams.home;
+                orange = arg.teams.away;
             } else {
-                blue = arg.teams.away
-                orange = arg.teams.home
+                blue = arg.teams.away;
+                orange = arg.teams.home;
             }
         }
 
-        nameB.innerHTML = orange.name
-        nameA.innerHTML = blue.name
-        imgA.classList.remove('hide')
-        imgB.classList.remove('hide')
-        imgA.src = `https://vrmasterleague.com/${blue.logo}`
-        imgB.src = `https://vrmasterleague.com/${orange.logo}`
-    }
+        nameB.innerHTML = orange.name;
+        nameA.innerHTML = blue.name;
+        imgA.classList.remove('hide');
+        imgB.classList.remove('hide');
+        imgA.src = `https://vrmasterleague.com/${blue.logo}`;
+        imgB.src = `https://vrmasterleague.com/${orange.logo}`;
+    };
 
     const clear = () => {
         while (teamPlayerA.firstChild) {
@@ -51,53 +51,53 @@ window.addEventListener("load", () => {
         while (teamPlayerB.firstChild) {
             teamPlayerB.removeChild(teamPlayerB.firstChild);
         }
-    }
+    };
 
     const fillRound = (arg) => { 
         arg.forEach(round => {
             if(round.winner === 'orange') {
-                let r = document.getElementById(`R${round.currentRound}O`)
-                r.classList.add('winO')
-                let rB = document.getElementById(`R${round.currentRound}B`)
-                rB.classList.add('looseB')
+                let r = document.getElementById(`R${round.currentRound}O`);
+                r.classList.add('winO');
+                let rB = document.getElementById(`R${round.currentRound}B`);
+                rB.classList.add('looseB');
             } else {
-                let r = document.getElementById(`R${round.currentRound}B`)
-                r.classList.add('winB')
-                let rB = document.getElementById(`R${round.currentRound}O`)
-                rB.classList.add('looseO')
+                let r = document.getElementById(`R${round.currentRound}B`);
+                r.classList.add('winB');
+                let rB = document.getElementById(`R${round.currentRound}O`);
+                rB.classList.add('looseO');
             }
-            document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange
-            document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue
+            document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange;
+            document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue;
         }); 
-    }
+    };
 
     socket.on('game.roundOver', (arg) => {  
-        fillRound(arg.rounds)
-    })
+        fillRound(arg.rounds);
+    });
 
     socket.on('roundData', (arg) => {
-        fillRound(arg)
-    })
+        fillRound(arg);
+    });
     
     socket.on('vrml.hide', () => {
-        vrml = false
-        imgA.classList.add('hide')
-        imgB.classList.add('hide')
-        nameA.innerHTML = ''
-        nameB.innerHTML = ''
+        vrml = false;
+        imgA.classList.add('hide');
+        imgB.classList.add('hide');
+        nameA.innerHTML = '';
+        nameB.innerHTML = '';
 
-    })  
+    });  
 
     const mixed = (arg) => {
-        nameA.innerHTML = arg.teamName[1]
-        nameB.innerHTML = arg.teamName[0]
-        imgA.classList.add('hide')
-        imgB.classList.add('hide')
-    }
+        nameA.innerHTML = arg.teamName[1];
+        nameB.innerHTML = arg.teamName[0];
+        imgA.classList.add('hide');
+        imgB.classList.add('hide');
+    };
 
         
     function createOrange(playername) {
-        let container = document.getElementById('playersOrange')
+        let container = document.getElementById('playersOrange');
         let e0 = document.createElement("div");
         let e1 = document.createElement("div");
         e1.setAttribute("class", "rowO");
@@ -155,7 +155,7 @@ window.addEventListener("load", () => {
     }
 
     function createBlue(playername) {
-        let container = document.getElementById('playersBlue')
+        let container = document.getElementById('playersBlue');
         let e0 = document.createElement("div");
         let e1 = document.createElement("div");
         e1.setAttribute("class", "rowB");
@@ -214,86 +214,86 @@ window.addEventListener("load", () => {
 
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
-            mixed(arg)
+            mixed(arg);
 
-            clear()
+            clear();
     
             arg.pings.blue.forEach(player => {
-                createBlue(player.name)
+                createBlue(player.name);
             });
     
             arg.pings.orange.forEach(player => {
-                createOrange(player.name)
+                createOrange(player.name);
             });
         }
     });
 
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
-            mixed(arg)
+            mixed(arg);
         }
 
-        clear()
+        clear();
 
         arg.teams.blue.forEach(player => {
-            createBlue(player)
+            createBlue(player);
         });
 
         arg.teams.orange.forEach(player => {
-            createOrange(player)
+            createOrange(player);
         });
     });
 
 
-    socket.on('vrml.colorChanged', fill)
+    socket.on('vrml.colorChanged', fill);
 
-    socket.on('vrml.matchDataLoaded', fill)
+    socket.on('vrml.matchDataLoaded', fill);
     
     socket.on('game.scoreBoard', (arg) => {
         if(document.getElementById('playersOrange').childElementCount === 0) {
             arg.orange.forEach(player => {
-                createOrange(player.name)
+                createOrange(player.name);
             });
         }
 
         if(document.getElementById('playersBlue').childElementCount === 0) {
             arg.blue.forEach(player => {
-                createBlue(player.name)
+                createBlue(player.name);
             });
         }
         
         arg.blue.forEach(player => {
-            let pts = document.getElementById(`${player.name}_PTS`)
-            pts.innerHTML = player.stats.points
-            let ass = document.getElementById(`${player.name}_ASS`)
-            ass.innerHTML = player.stats.assists
-            let sav = document.getElementById(`${player.name}_SAV`)
-            sav.innerHTML = player.stats.saves
-            let stn = document.getElementById(`${player.name}_STN`)
-            stn.innerHTML = player.stats.stuns
-            let att = document.getElementById(`${player.name}_ATT`)
-            att.innerHTML = player.stats.possession_time
-            let pos = document.getElementById(`${player.name}_POS`)
-            pos.innerHTML = player.stats.steals
+            let pts = document.getElementById(`${player.name}_PTS`);
+            pts.innerHTML = player.stats.points;
+            let ass = document.getElementById(`${player.name}_ASS`);
+            ass.innerHTML = player.stats.assists;
+            let sav = document.getElementById(`${player.name}_SAV`);
+            sav.innerHTML = player.stats.saves;
+            let stn = document.getElementById(`${player.name}_STN`);
+            stn.innerHTML = player.stats.stuns;
+            let att = document.getElementById(`${player.name}_ATT`);
+            att.innerHTML = player.stats.possession_time;
+            let pos = document.getElementById(`${player.name}_POS`);
+            pos.innerHTML = player.stats.steals;
         });
 
         arg.orange.forEach(player => {
-            let pts = document.getElementById(`${player.name}_PTS`)
-            pts.innerHTML = player.stats.points
-            let ass = document.getElementById(`${player.name}_ASS`)
-            ass.innerHTML = player.stats.assists
-            let sav = document.getElementById(`${player.name}_SAV`)
-            sav.innerHTML = player.stats.saves
-            let stn = document.getElementById(`${player.name}_STN`)
-            stn.innerHTML = player.stats.stuns
-            let att = document.getElementById(`${player.name}_ATT`)
-            att.innerHTML = player.stats.possession_time
-            let pos = document.getElementById(`${player.name}_POS`)
-            pos.innerHTML = player.stats.steals
+            let pts = document.getElementById(`${player.name}_PTS`);
+            pts.innerHTML = player.stats.points;
+            let ass = document.getElementById(`${player.name}_ASS`);
+            ass.innerHTML = player.stats.assists;
+            let sav = document.getElementById(`${player.name}_SAV`);
+            sav.innerHTML = player.stats.saves;
+            let stn = document.getElementById(`${player.name}_STN`);
+            stn.innerHTML = player.stats.stuns;
+            let att = document.getElementById(`${player.name}_ATT`);
+            att.innerHTML = player.stats.possession_time;
+            let pos = document.getElementById(`${player.name}_POS`);
+            pos.innerHTML = player.stats.steals;
         });
-    })
+    });
 
     socket.emit('overlay.ready', {
         'overlay': 'betweenRound'
-    })
+    });
 });

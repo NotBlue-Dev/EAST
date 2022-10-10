@@ -48,7 +48,7 @@ window.addEventListener('load', function() {
                     team: color
                 });
             }
-            return
+            return;
         }
         for (let j = 0; j < team.length; j++) {
             const player = team[j];
@@ -68,8 +68,8 @@ window.addEventListener('load', function() {
 
     socket.on('game.minimap', (arg) => {
         // if a player miss it will be created
-        createPlayers(arg.orange, 'orange')
-        createPlayers(arg.blue, 'blue')
+        createPlayers(arg.orange, 'orange');
+        createPlayers(arg.blue, 'blue');
 
         // if a player is not in the game anymore it will be removed
         for (let i = 0; i < players.length; i++) {           
@@ -85,5 +85,5 @@ window.addEventListener('load', function() {
 
     socket.emit('overlay.ready', {
         'overlay': 'minimap'
-    })
+    });
 });

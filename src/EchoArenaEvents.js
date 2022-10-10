@@ -26,4 +26,4 @@ module.exports = [
     new sessionID(),
     new Minimap(),
     new PingTracking(),
-]
+];

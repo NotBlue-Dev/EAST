@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NotBlue-Dev/EAST"
+    "url": "git+https://github.com/NotBlue-Dev/EAST.git"
   },
   "author": "east",
   "license": "ISC",
@@ -29,6 +29,13 @@
     "electron": "^17.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^5.0.0",
-    "eslint": "^8.24.0"
+    "eslint": "^8.25.0"
+  },
+  "bugs": {
+    "url": "https://github.com/NotBlue-Dev/EAST/issues"
+  },
+  "homepage": "https://github.com/NotBlue-Dev/EAST#readme",
+  "directories": {
+    "doc": "docs"
   }
 }

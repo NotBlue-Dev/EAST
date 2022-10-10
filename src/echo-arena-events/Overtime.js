@@ -8,7 +8,7 @@ class Overtime {
     handle(gameData, eventEmitter) {
         if (gameData.status !== 'sudden_death') {
             this.isOvertime = false;
-            return
+            return;
         }
 
         if (this.isOvertime === false) {
@@ -20,4 +20,4 @@ class Overtime {
     }
 }
 
-module.exports = Overtime
+module.exports = Overtime;

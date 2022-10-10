@@ -1,19 +1,19 @@
 class sessionID {
     constructor() {
-        this.name = 'sessionID'
-        this.customizable = false
-        this.sessionID = null
+        this.name = 'sessionID';
+        this.customizable = false;
+        this.sessionID = null;
     }
 
     handle(gameData, eventEmitter) {
         if (gameData.sessionID === this.sessionID) {
-            return
+            return;
         }
 
-        this.sessionID = gameData.sessionID
+        this.sessionID = gameData.sessionID;
         eventEmitter.send('echoArena.sessionID', { name:this.name,
-        sessionID:this.sessionID })
+        sessionID:this.sessionID });
     }
 }
 
-module.exports = sessionID
+module.exports = sessionID;
