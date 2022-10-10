@@ -17,17 +17,17 @@ class ChainEventEmitter {
     }
 
     on(channel, callback) {
+        // eslint-disable-next-line array-callback-return
         this.emitters.map((eventEmitter) => {
             eventEmitter.on(channel, callback);
-            return 0;
         });
     }
 
     send(channel, args) {
+        // eslint-disable-next-line array-callback-return
         this.emitters.map((eventEmitter) => {
             eventEmitter.send(channel, args);
             myLogger.log(`channel : ${channel} ${args !== undefined ? JSON.stringify(args) : ""}`);
-            return 0;
         });
     }
 }

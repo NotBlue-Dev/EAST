@@ -26,6 +26,7 @@
     "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
     "electron": "^17.0.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-winstaller": "^5.0.0",
