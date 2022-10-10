@@ -1,7 +1,8 @@
 {
     "vrml": {
         "teamId": "",
-        "autoLoad": false
+        "autoLoad": false,
+        "region":"EU"
     },
     "echoArena": {
         "ip": "127.0.0.1",

@@ -38,7 +38,7 @@ class OBSPlayer {
 
     async start() {
         try {
-            await this.loadTeamList();
+            await this.loadTeamList(this.globalConfig.vrml.region);
             //await this.connectVrml(this.globalConfig.vrml.teamId)
         } catch (err) {
             console.error(err.message);
@@ -255,6 +255,12 @@ class OBSPlayer {
     initializeListeners() {
         this.vrmlClient.getSeason().then((data) => {
             this.Allinfo.season = data;
+        });
+
+        this.eventEmitter.on('vrml.region', (args) => {
+            this.globalConfig.vrml.region = args.region;
+            this.loadTeamList(args.region);
+            this.configLoader.save(this.globalConfig);
         });
 
         this.eventEmitter.on('vrml.disabled', () => {
@@ -567,8 +573,8 @@ class OBSPlayer {
         .connect(args);
     }
 
-    async loadTeamList() {
-        const json = await this.vrmlClient.getTeams();
+    async loadTeamList(args) {
+        const json = await this.vrmlClient.getTeams(args);
         const teams = json.filter(team => team.isActive).map((team) => {
             return {
                 name: team.teamName,
@@ -578,7 +584,9 @@ class OBSPlayer {
         this.eventEmitter.send('vrml.teamListLoaded', {
             teams,
             teamId: this.globalConfig.vrml.teamId,
-            auto:this.globalConfig.vrml.autoLoad
+            auto:this.globalConfig.vrml.autoLoad,
+            region:args,
+            regions:['eu','na','oce']
         });
     }
 

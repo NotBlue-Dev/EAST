@@ -17,6 +17,11 @@ class VRMLClient {
     }
 
     async getTeams(region = 'eu', rank = 0) {
+        if(region == 'na') {
+            // eslint-disable-next-line no-promise-executor-return
+            await new Promise(r => setTimeout(r, 280));
+        }
+
         try {
             const resp = await fetch(`${this.baseUrl}/EchoArena/Standings/?region=${region}&rank=${rank}`);
             const json = await resp.json();
@@ -27,7 +32,7 @@ class VRMLClient {
             if (json.teams.length !== json.nbPerPage) {
                 return json.teams;
             }
-
+            
             const next = await this.getTeams(region, rank + json.nbPerPage);
             
             return [...json.teams, ...next];

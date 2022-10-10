@@ -260,6 +260,8 @@ const initVrmlMatchMode = (document) => {
   const matchDataBlock = document.getElementById('matchData');
   const autoLoad = document.getElementById('vrml-autoconnect');
   const teamSelect = document.getElementById('teams');
+  const regionSelect = document.getElementById('region');
+  const state = document.getElementById('state');
   
   const vrmlNext = (value) => {
     if(value) {
@@ -279,6 +281,17 @@ const initVrmlMatchMode = (document) => {
 
   ipcRenderer.on('vrml.teamListLoaded', (event, data) => {
     autoLoad.checked = data.auto;
+    teamSelect.innerHTML = "";
+    data.regions.map((region) => {
+      const opt = document.createElement('option');
+      opt.value = region;
+      opt.innerHTML = region;
+      if (data.region == region) {
+        opt.selected = true;
+      }
+      regionSelect.appendChild(opt);
+      return 0;
+    });
 
     data.teams.map((team) => {
       const opt = document.createElement('option');
@@ -294,6 +307,8 @@ const initVrmlMatchMode = (document) => {
     if(data.auto) {
       vrmlNext(data.auto);
     }
+
+    state.innerHTML = '';
   });
 
   teamSelect.addEventListener('change', (event) => {
@@ -303,6 +318,13 @@ const initVrmlMatchMode = (document) => {
     if(autoLoad.checked) {
       vrmlNext(true);
     }
+  });
+
+  regionSelect.addEventListener('change', (event) => {
+    ipcRenderer.send('vrml.region', {
+      region:event.target.value
+    });
+    state.innerHTML = 'Loading teams ...';
   });
 
   ipcRenderer.on('vrml.matchDataLoaded', (event, data) => {
