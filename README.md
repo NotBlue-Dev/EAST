@@ -9,8 +9,6 @@
 EAST is an open source project to help streamers around the echo arena community to cast.\
 This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support\
 
-/!\ NA VRML teams are going to be included before next season /!\
-
 ## Preview
 
 ### Waiting
