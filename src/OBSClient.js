@@ -4,30 +4,30 @@ class OBSClient {
     constructor(eventEmitter) {
         this.eventEmitter = eventEmitter;
         this.obsWebSocket = new OBSWebSocket();
-        this.handleConnected = () => {}
-        this.handleDisconnected = () => {}
-        this.initialize()
+        this.handleConnected = () => {};
+        this.handleDisconnected = () => {};
+        this.initialize();
     }
 
     onConnected(callback) {
-        this.handleConnected = callback
-        return this
+        this.handleConnected = callback;
+        return this;
     }
 
     isLaunched() {
-        return new Promise((resolve,reject) => {
-            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout, stderr) {
+        return new Promise((resolve) => {
+            exec('tasklist /FI "imagename eq obs64.exe"', function(err, stdout) {
                 if(stdout.indexOf('obs64.exe') === -1) {
-                    resolve(false)
+                    resolve(false);
                 }
-                resolve(true)
+                resolve(true);
             });
-        })
+        });
 
     }
 
     launch(executablePath) {
-        let self = this
+        let self = this;
         if(executablePath.endsWith('obs64.exe')) {
             executablePath = executablePath.substring(0, executablePath.length - 10);
         }
@@ -35,49 +35,63 @@ class OBSClient {
             executablePath += '\\';
         }
 
-        exec(`start /d "${executablePath}" obs64.exe`, (error, stdout, stderr) => { 
-            if(error !== null) self.eventEmitter.send('obs.error', error)
+        exec(`start /d "${executablePath}" obs64.exe`, (error) => { 
+            if(error !== null) self.eventEmitter.send('obs.error', error);
 
-            self.eventEmitter.send('obs.started')
+            self.eventEmitter.send('obs.started');
         });
     }
 
     onDisconnected(callback) {
-        this.handleDisconnected = callback
-        return this
+        this.handleDisconnected = callback;
+        return this;
     }
 
-    connect({ip, port, password}) {
+    connect({
+        ip, 
+        port, 
+        password
+        }) {
         return this.obsWebSocket.connect({ 
             address: `${ip}:${port}`,
             password
-        })
+        });
         
     }  
 
     on(channel, callback) {
         this.obsWebSocket.on(channel, (args) => callback(args));
-        return this
+        return this;
     }
 
     async createScene(sceneName) {
-        const response = await this.send('CreateScene', {sceneName});
-        return response
+        const response = await this.send('CreateScene', {
+            sceneName
+        });
+        return response;
     }
 
     async refresh(sourceName) {
-        const response = await this.send('RefreshBrowserSource', {sourceName});
-        return response
+        const response = await this.send('RefreshBrowserSource', {
+            sourceName
+        });
+        return response;
     }
 
     async addSourceToScene(sceneName, sourceName) {
-        const response = await this.send('AddSceneItem', {sourceName, sceneName});
-        return response
+        const response = await this.send('AddSceneItem', {
+            sourceName,
+            sceneName
+        });
+        return response;
     }
 
     async setSourceOrder(sceneName, sceneItem) {
-        const response = await this.send('ReorderSceneItems', {scene:sceneName, items:sceneItem});
-        return response
+        const response = await this.send('ReorderSceneItems', {
+            scene:sceneName,
+            items:sceneItem
+        });
+        return response;
     }
 
     async createSource(sourceName, sourceKind, sceneName, sourceSettings = {}) {
@@ -87,21 +101,21 @@ class OBSClient {
             sceneName,
             sourceSettings,
         });
-        return response
+        return response;
     }
 
-    async refreshAll() {
+    refreshAll() {
         this.send('GetSourcesList').then((arg) => {
             arg.sources.forEach(source => {
                 if(source.typeId === 'browser_source') {
-                    this.refresh(source.name)
+                    this.refresh(source.name);
                 }
             });
-        })
+        });
     }
 
-    async send(channel, arg) {
-        return await this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error)});
+    send(channel, arg) {
+        return this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error);});
     }
 
     initialize() {
@@ -111,4 +125,4 @@ class OBSClient {
 
 }
 
-module.exports = OBSClient
+module.exports = OBSClient;

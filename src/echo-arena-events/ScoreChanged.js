@@ -1,32 +1,32 @@
 class ScoreChanged {
     constructor() {
-        this.name = 'Score changed'
-        this.orangePoints = null
-        this.bluePoints = null
-        this.customizable = true
+        this.name = 'Score changed';
+        this.orangePoints = null;
+        this.bluePoints = null;
+        this.customizable = true;
     }
 
     handle(gameData, eventEmitter) {
         if (this.orangePoints === null || this.bluePoints === null) {
-            this.bluePoints = gameData.blueTeam.points
-            this.orangePoints = gameData.orangeTeam.points
-            return
+            this.bluePoints = gameData.blueTeam.points;
+            this.orangePoints = gameData.orangeTeam.points;
+            return;
         }
         if (this.orangePoints != gameData.orangeTeam.points || this.bluePoints != gameData.blueTeam.points) {
-            this.bluePoints = gameData.blueTeam.points
-            this.orangePoints = gameData.orangeTeam.points
+            this.bluePoints = gameData.blueTeam.points;
+            this.orangePoints = gameData.orangeTeam.points;
             let team;
             let nbData;
 
             if(gameData.team === 'blue') {
-                team = 0
+                team = 0;
             } else if(gameData.team === 'orange') {
-                team = 1
+                team = 1;
             }
 
             gameData.teams[team].players.forEach(player => {
                 if(player.name === gameData.person_scored) {
-                    nbData = player.number
+                    nbData = player.number;
                 }
             });
 
@@ -38,12 +38,21 @@ class ScoreChanged {
                 scorer:gameData.person_scored,
                 assist:gameData.assist_scored,
                 nb:nbData
-            }
+            };
 
-            gameData.scoreData = {blue: this.bluePoints, orange: this.orangePoints}
-            eventEmitter.send('game.scoreChanged', {blue: this.bluePoints, orange: this.orangePoints, data:this.data, name:this.name, clip:false});
+            gameData.scoreData = {
+                blue: this.bluePoints, 
+                orange: this.orangePoints
+            };
+            eventEmitter.send('game.scoreChanged', {
+                blue: this.bluePoints, 
+                orange: this.orangePoints, 
+                data:this.data, 
+                name:this.name, 
+                clip:false
+            });
         }
     }
 }
 
-module.exports = ScoreChanged
+module.exports = ScoreChanged;

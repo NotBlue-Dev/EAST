@@ -1,8 +1,10 @@
+/* eslint-disable camelcase */
+// eslint-disable-next-line no-undef
 let socket = io();
 
 function createOrange(playername) {
     // c'est pas claire mais ca a pas besoin de l'etre, ca crée juste l'element en html
-    let container = document.getElementById('playersOrange')
+    let container = document.getElementById('playersOrange');
     let e_8 = document.createElement("div");
     e_8.setAttribute("class", "player");
     let e_9 = document.createElement("div");
@@ -59,7 +61,7 @@ function createOrange(playername) {
 }
 
 function createBlue(playername) {
-    let container = document.getElementById('playersBlue')
+    let container = document.getElementById('playersBlue');
     let e_0 = document.createElement("div");
     e_0.setAttribute("class", "player");
     let e_1 = document.createElement("div");
@@ -115,11 +117,11 @@ function createBlue(playername) {
     container.appendChild(e_0);
 }
 
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
 
-    const blue = document.getElementById('playersBlue')
+    const blue = document.getElementById('playersBlue');
 
-    const orange = document.getElementById('playersOrange')
+    const orange = document.getElementById('playersOrange');
 
     socket.on('game.teamChange', (arg) => {
         while (orange.firstChild) {
@@ -129,98 +131,100 @@ window.addEventListener("load", (event) => {
             blue.removeChild(blue.firstChild);
         }
 
-        let or = arg.teams.orange
-        for(let x =0; x<or.length; x++) {
-            createOrange(or[x])
+        let or = arg.teams.orange;
+        for(let x = 0; x < or.length; x++) {
+            createOrange(or[x]);
         }
 
-        let bl = arg.teams.blue
-        for(let i =0; i<bl.length; i++) {
-            createBlue(bl[i])
+        let bl = arg.teams.blue;
+        for(let i = 0; i < bl.length; i++) {
+            createBlue(bl[i]);
         }
     });
 
 
     socket.on('game.scoreBoard', (arg) => {
         if (document.getElementById('playersBlue').childElementCount === 0) {
-            let bl = arg.blue
-            for(let i =0; i<bl.length; i++) {
-                createBlue(bl[i].name)
+            let bl = arg.blue;
+            for(let i = 0; i < bl.length; i++) {
+                createBlue(bl[i].name);
             }
         }
 
         if (document.getElementById('playersOrange').childElementCount === 0) {
-            let or = arg.orange
-            for(let x =0; x<or.length; x++) {
-                createOrange(or[x].name)
+            let or = arg.orange;
+            for(let x = 0; x < or.length; x++) {
+                createOrange(or[x].name);
             }
         }
         
-        for(let i = 0; i<arg.orange.length; i++) {
-            let ass = document.getElementById(`${arg.orange[i].name}_ASS`)
-            let pts = document.getElementById(`${arg.orange[i].name}_PTS`)
-            let save = document.getElementById(`${arg.orange[i].name}_SAVE`)
-            let stn = document.getElementById(`${arg.orange[i].name}_STN`)
-            ass.innerHTML = arg.orange[i].stats.assists
-            pts.innerHTML = arg.orange[i].stats.points
-            save.innerHTML = arg.orange[i].stats.saves
-            stn.innerHTML = arg.orange[i].stats.stuns
+        for(let i = 0; i < arg.orange.length; i++) {
+            let ass = document.getElementById(`${arg.orange[i].name}_ASS`);
+            let pts = document.getElementById(`${arg.orange[i].name}_PTS`);
+            let save = document.getElementById(`${arg.orange[i].name}_SAVE`);
+            let stn = document.getElementById(`${arg.orange[i].name}_STN`);
+            ass.innerHTML = arg.orange[i].stats.assists;
+            pts.innerHTML = arg.orange[i].stats.points;
+            save.innerHTML = arg.orange[i].stats.saves;
+            stn.innerHTML = arg.orange[i].stats.stuns;
             
-            let box = document.getElementById(`${arg.orange[i].name}_BOX`)
+            let box = document.getElementById(`${arg.orange[i].name}_BOX`);
             if(arg.orange[i].stunned) {
                 
-                box.classList.add('stunO')
+                box.classList.add('stunO');
             } else {
-                box.classList.remove('stunO')
+                box.classList.remove('stunO');
             }
         }
 
-        for(let i = 0; i<arg.blue.length; i++) {
-            let ass = document.getElementById(`${arg.blue[i].name}_ASS`)
-            let pts = document.getElementById(`${arg.blue[i].name}_PTS`)
-            let save = document.getElementById(`${arg.blue[i].name}_SAVE`)
-            let stn = document.getElementById(`${arg.blue[i].name}_STN`)
-            ass.innerHTML = arg.blue[i].stats.assists
-            pts.innerHTML = arg.blue[i].stats.points
-            save.innerHTML = arg.blue[i].stats.saves
-            stn.innerHTML = arg.blue[i].stats.stuns
+        for(let i = 0; i < arg.blue.length; i++) {
+            let ass = document.getElementById(`${arg.blue[i].name}_ASS`);
+            let pts = document.getElementById(`${arg.blue[i].name}_PTS`);
+            let save = document.getElementById(`${arg.blue[i].name}_SAVE`);
+            let stn = document.getElementById(`${arg.blue[i].name}_STN`);
+            ass.innerHTML = arg.blue[i].stats.assists;
+            pts.innerHTML = arg.blue[i].stats.points;
+            save.innerHTML = arg.blue[i].stats.saves;
+            stn.innerHTML = arg.blue[i].stats.stuns;
 
-            let box = document.getElementById(`${arg.blue[i].name}_BOX`)
+            let box = document.getElementById(`${arg.blue[i].name}_BOX`);
             if(arg.blue[i].stunned) {
                 
-                box.classList.add('stunB')
+                box.classList.add('stunB');
             } else {
-                box.classList.remove('stunB')
+                box.classList.remove('stunB');
             }
         }
-    })
+    });
 
     socket.on('game.possessionChange', (arg) => {
-        let box = document.getElementById(`${arg.possession.player}_BOX`)
-        let poss = document.getElementById(`${arg.possession.player}_POSS`)
-        let elem = document.getElementsByClassName('show')
-        let elemBox = document.getElementsByClassName('showBox')
+        let box = document.getElementById(`${arg.possession.player}_BOX`);
+        let poss = document.getElementById(`${arg.possession.player}_POSS`);
+        let elem = document.getElementsByClassName('show');
+        let elemBox = document.getElementsByClassName('showBox');
         if(elem.length !== 0) {
-            for(let i =0; i<elem.length; i++) {
-                elem[i].classList.add('hide')
-                elem[i].classList.remove('show')
+            for(let i = 0; i < elem.length; i++) {
+                elem[i].classList.add('hide');
+                elem[i].classList.remove('show');
             }
         }
         if(elemBox.length !== 0) {
-            for(let i =0; i<elemBox.length; i++) {
-                elemBox[i].classList.remove('holdB')
-                elemBox[i].classList.remove('holdO')
+            for(let i = 0; i < elemBox.length; i++) {
+                elemBox[i].classList.remove('holdB');
+                elemBox[i].classList.remove('holdO');
             }
         }
         if(arg.possession.team === "BLUE TEAM") {
-            box.classList.add("holdB")
+            box.classList.add("holdB");
         } else {
-            box.classList.add("holdO")
+            box.classList.add("holdO");
         }
-        poss.classList.remove("hide")
-        poss.classList.add('show')
-        box.classList.add('showBox')
+        poss.classList.remove("hide");
+        poss.classList.add('show');
+        box.classList.add('showBox');
     });  
 
-    socket.emit('overlay.ready', {'overlay': 'possession'})
-})
+    socket.emit('overlay.ready', {
+        'overlay': 'possession'
+    });
+});

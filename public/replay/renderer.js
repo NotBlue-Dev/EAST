@@ -1,7 +1,8 @@
+// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", (event) => {
-    let comp = document.getElementById('comp')
+window.addEventListener("load", () => {
+    let comp = document.getElementById('comp');
 
     // display
     function display() {
@@ -14,25 +15,27 @@ window.addEventListener("load", (event) => {
     // hide
     function hide() {
         comp.classList.add('visuallyhidden');    
-        comp.addEventListener('transitionend', function(e) {
+        comp.addEventListener('transitionend', function() {
             comp.classList.add('hidden');
         });
     }
 
     socket.on('game.showReplay', (arg) => {
         if(arg.data.team === 'blue') {
-            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(rgb(3, 117, 255), rgb(3, 185, 224))")
+            document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(rgb(3, 117, 255), rgb(3, 185, 224))");
         } else {
             document.getElementById('gradient').style.setProperty('--gradient', "conic-gradient(#DC872C, #FA3F10)");
         }
         
-        display()
-    })
+        display();
+    });
 
-    socket.on('game.endReplay', (arg) => {
-        hide()
-    })
+    socket.on('game.endReplay', () => {
+        hide();
+    });
     
-    socket.emit('overlay.ready', {'overlay': 'replay'})
+    socket.emit('overlay.ready', {
+        'overlay': 'replay'
+    });
 });
 

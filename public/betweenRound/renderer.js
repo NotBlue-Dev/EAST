@@ -1,48 +1,48 @@
+// eslint-disable-next-line no-undef
 let socket = io();
 
-window.addEventListener("load", (event) => {
-    const imgA = document.getElementById('LogoA')
-    let vrml = false
-    const imgB = document.getElementById('LogoB')
+window.addEventListener("load", () => {
+    const imgA = document.getElementById('LogoA');
+    let vrml = false;
+    const imgB = document.getElementById('LogoB');
 
-    const nameA = document.getElementById('nameA')
+    const nameA = document.getElementById('nameA');
 
-    const nameB = document.getElementById('nameB')  
+    const nameB = document.getElementById('nameB');  
     
-    const teamPlayerA = document.getElementById('playersOrange')
+    const teamPlayerA = document.getElementById('playersOrange');
 
-    const teamPlayerB = document.getElementById('playersBlue')
+    const teamPlayerB = document.getElementById('playersBlue');
 
     const fill = (arg) => {
-        const season = document.getElementById('season')
-        season.innerHTML =  `SEASON ${arg.season}`
+        const season = document.getElementById('season');
+        season.innerHTML =  `SEASON ${arg.season}`;
         if(arg.teams.length === 0) {
-            vrml = false
-            return
-        } else {
-            vrml = true
-        }
+            vrml = false;
+            return;
+        } 
+        vrml = true;
 
-        orange = arg.teams.home
-        blue = arg.teams.away
+        let orange = arg.teams.home;
+        let blue = arg.teams.away;
 
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
             if(arg.teams.home.color === 'blue') {
-                blue = arg.teams.home
-                orange = arg.teams.away
+                blue = arg.teams.home;
+                orange = arg.teams.away;
             } else {
-                blue = arg.teams.away
-                orange = arg.teams.home
+                blue = arg.teams.away;
+                orange = arg.teams.home;
             }
         }
 
-        nameB.innerHTML = orange.name
-        nameA.innerHTML = blue.name
-        imgA.classList.remove('hide')
-        imgB.classList.remove('hide')
-        imgA.src = `https://vrmasterleague.com/${blue.logo}`
-        imgB.src = `https://vrmasterleague.com/${orange.logo}`
-    }
+        nameB.innerHTML = orange.name;
+        nameA.innerHTML = blue.name;
+        imgA.classList.remove('hide');
+        imgB.classList.remove('hide');
+        imgA.src = `https://vrmasterleague.com/${blue.logo}`;
+        imgB.src = `https://vrmasterleague.com/${orange.logo}`;
+    };
 
     const clear = () => {
         while (teamPlayerA.firstChild) {
@@ -51,247 +51,249 @@ window.addEventListener("load", (event) => {
         while (teamPlayerB.firstChild) {
             teamPlayerB.removeChild(teamPlayerB.firstChild);
         }
-    }
+    };
 
     const fillRound = (arg) => { 
         arg.forEach(round => {
             if(round.winner === 'orange') {
-                let r = document.getElementById(`R${round.currentRound}O`)
-                r.classList.add('winO')
-                let rB = document.getElementById(`R${round.currentRound}B`)
-                rB.classList.add('looseB')
+                let r = document.getElementById(`R${round.currentRound}O`);
+                r.classList.add('winO');
+                let rB = document.getElementById(`R${round.currentRound}B`);
+                rB.classList.add('looseB');
             } else {
-                let r = document.getElementById(`R${round.currentRound}B`)
-                r.classList.add('winB')
-                let rB = document.getElementById(`R${round.currentRound}O`)
-                rB.classList.add('looseO')
+                let r = document.getElementById(`R${round.currentRound}B`);
+                r.classList.add('winB');
+                let rB = document.getElementById(`R${round.currentRound}O`);
+                rB.classList.add('looseO');
             }
-            document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange
-            document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue
+            document.getElementById(`R${round.currentRound}O_SCORE`).innerHTML = round.orange;
+            document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue;
         }); 
-    }
+    };
 
     socket.on('game.roundOver', (arg) => {  
-        fillRound(arg.rounds)
-    })
+        fillRound(arg.rounds);
+    });
 
     socket.on('roundData', (arg) => {
-        fillRound(arg)
-    })
+        fillRound(arg);
+    });
     
-    socket.on('vrml.hide', (arg) => {
-        vrml = false
-        imgA.classList.add('hide')
-        imgB.classList.add('hide')
-        nameA.innerHTML = ''
-        nameB.innerHTML = ''
+    socket.on('vrml.hide', () => {
+        vrml = false;
+        imgA.classList.add('hide');
+        imgB.classList.add('hide');
+        nameA.innerHTML = '';
+        nameB.innerHTML = '';
 
-    })  
+    });  
+
+    const mixed = (arg) => {
+        nameA.innerHTML = arg.teamName[1];
+        nameB.innerHTML = arg.teamName[0];
+        imgA.classList.add('hide');
+        imgB.classList.add('hide');
+    };
+
+        
+    function createOrange(playername) {
+        let container = document.getElementById('playersOrange');
+        let e0 = document.createElement("div");
+        let e1 = document.createElement("div");
+        e1.setAttribute("class", "rowO");
+        let e15 = document.createElement("div");
+        e15.setAttribute("class", "nameo");
+        e15.appendChild(document.createTextNode(playername));
+        e1.appendChild(e15);
+        let e2 = document.createElement("div");
+        e2.setAttribute("class", "data");
+        let e3 = document.createElement("div");
+        e3.setAttribute("class", "dat");
+        e3.setAttribute("id", `${playername}_PTS`);
+        let e4 = document.createElement("a");
+        e4.appendChild(document.createTextNode(0));
+        e3.appendChild(e4);
+        e2.appendChild(e3);
+        let e5 = document.createElement("div");
+        e5.setAttribute("class", "dat");
+        e5.setAttribute("id", `${playername}_ASS`);
+        let e6 = document.createElement("a");
+        e6.appendChild(document.createTextNode(0));
+        e5.appendChild(e6);
+        e2.appendChild(e5);
+        let e7 = document.createElement("div");
+        e7.setAttribute("class", "dat");
+        e7.setAttribute("id", `${playername}_SAV`);
+        let e8 = document.createElement("a");
+        e8.appendChild(document.createTextNode(0));
+        e7.appendChild(e8);
+        e2.appendChild(e7);
+        let e9 = document.createElement("div");
+        e9.setAttribute("class", "dat");
+        e9.setAttribute("id", `${playername}_STN`);
+        let e10 = document.createElement("a");
+        e10.appendChild(document.createTextNode(0));
+        e9.appendChild(e10);
+        e2.appendChild(e9);
+        let e11 = document.createElement("div");
+        e11.setAttribute("class", "dat");
+        e11.setAttribute("id", `${playername}_POS`);
+        let e12 = document.createElement("a");
+        e12.appendChild(document.createTextNode(0));
+        e11.appendChild(e12);
+        e2.appendChild(e11);
+        let e13 = document.createElement("div");
+        e13.setAttribute("class", "dat");
+        e13.setAttribute("id", `${playername}_ATT`);
+        let e14 = document.createElement("a");
+        e14.appendChild(document.createTextNode(0));
+        e13.appendChild(e14);
+        e2.appendChild(e13);
+        e1.appendChild(e2);
+        e0.appendChild(e1);
+        container.appendChild(e0);
+    }
+
+    function createBlue(playername) {
+        let container = document.getElementById('playersBlue');
+        let e0 = document.createElement("div");
+        let e1 = document.createElement("div");
+        e1.setAttribute("class", "rowB");
+        let e2 = document.createElement("div");
+        e2.setAttribute("class", "data datab");
+        let e3 = document.createElement("div");
+        e3.setAttribute("class", "dat");
+        e3.setAttribute("id", `${playername}_PTS`);
+        let e4 = document.createElement("a");
+        e4.appendChild(document.createTextNode(0));
+        e3.appendChild(e4);
+        e2.appendChild(e3);
+        let e5 = document.createElement("div");
+        e5.setAttribute("class", "dat");
+        e5.setAttribute("id", `${playername}_ASS`);
+        let e6 = document.createElement("a");
+        e6.appendChild(document.createTextNode(0));
+        e5.appendChild(e6);
+        e2.appendChild(e5);
+        let e7 = document.createElement("div");
+        e7.setAttribute("class", "dat");
+        e7.setAttribute("id", `${playername}_SAV`);
+        let e8 = document.createElement("a");
+        e8.appendChild(document.createTextNode(0));
+        e7.appendChild(e8);
+        e2.appendChild(e7);
+        let e9 = document.createElement("div");
+        e9.setAttribute("class", "dat");
+        e9.setAttribute("id", `${playername}_STN`);
+        let e10 = document.createElement("a");
+        e10.appendChild(document.createTextNode(0));
+        e9.appendChild(e10);
+        e2.appendChild(e9);
+        let e11 = document.createElement("div");
+        e11.setAttribute("class", "dat");
+        e11.setAttribute("id", `${playername}_POS`);
+        let e12 = document.createElement("a");
+        e12.appendChild(document.createTextNode(0));
+        e11.appendChild(e12);
+        e2.appendChild(e11);
+        let e13 = document.createElement("div");
+        e13.setAttribute("class", "dat");
+        e13.setAttribute("id", `${playername}_ATT`);
+        let e14 = document.createElement("a");
+        e14.appendChild(document.createTextNode(0));
+        e13.appendChild(e14);
+        e2.appendChild(e13);
+        e1.appendChild(e2);
+        let e15 = document.createElement("div");
+        e15.setAttribute("class", "name");
+        e15.appendChild(document.createTextNode(playername));
+        e1.appendChild(e15);
+        e0.appendChild(e1);
+        container.appendChild(e0);
+    }
 
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
-            mixed(arg)
+            mixed(arg);
 
-            clear()
+            clear();
     
             arg.pings.blue.forEach(player => {
-                createBlue(player.name)
+                createBlue(player.name);
             });
     
             arg.pings.orange.forEach(player => {
-                createOrange(player.name)
+                createOrange(player.name);
             });
         }
     });
 
-    const mixed = (arg) => {
-        nameA.innerHTML = arg.teamName[1]
-        nameB.innerHTML = arg.teamName[0]
-        imgA.classList.add('hide')
-        imgB.classList.add('hide')
-    }
-
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
-            mixed(arg)
+            mixed(arg);
         }
 
-        clear()
+        clear();
 
         arg.teams.blue.forEach(player => {
-            createBlue(player)
+            createBlue(player);
         });
 
         arg.teams.orange.forEach(player => {
-            createOrange(player)
+            createOrange(player);
         });
     });
 
 
-    socket.on('vrml.colorChanged', fill)
+    socket.on('vrml.colorChanged', fill);
 
-    socket.on('vrml.matchDataLoaded', fill)
+    socket.on('vrml.matchDataLoaded', fill);
     
     socket.on('game.scoreBoard', (arg) => {
         if(document.getElementById('playersOrange').childElementCount === 0) {
             arg.orange.forEach(player => {
-                createOrange(player.name)
+                createOrange(player.name);
             });
         }
 
         if(document.getElementById('playersBlue').childElementCount === 0) {
             arg.blue.forEach(player => {
-                createBlue(player.name)
+                createBlue(player.name);
             });
         }
         
         arg.blue.forEach(player => {
-            let pts = document.getElementById(`${player.name}_PTS`)
-            pts.innerHTML = player.stats.points
-            let ass = document.getElementById(`${player.name}_ASS`)
-            ass.innerHTML = player.stats.assists
-            let sav = document.getElementById(`${player.name}_SAV`)
-            sav.innerHTML = player.stats.saves
-            let stn = document.getElementById(`${player.name}_STN`)
-            stn.innerHTML = player.stats.stuns
-            let att = document.getElementById(`${player.name}_ATT`)
-            att.innerHTML = player.stats.possession_time
-            let pos = document.getElementById(`${player.name}_POS`)
-            pos.innerHTML = player.stats.steals
+            let pts = document.getElementById(`${player.name}_PTS`);
+            pts.innerHTML = player.stats.points;
+            let ass = document.getElementById(`${player.name}_ASS`);
+            ass.innerHTML = player.stats.assists;
+            let sav = document.getElementById(`${player.name}_SAV`);
+            sav.innerHTML = player.stats.saves;
+            let stn = document.getElementById(`${player.name}_STN`);
+            stn.innerHTML = player.stats.stuns;
+            let att = document.getElementById(`${player.name}_ATT`);
+            att.innerHTML = player.stats.possession_time;
+            let pos = document.getElementById(`${player.name}_POS`);
+            pos.innerHTML = player.stats.steals;
         });
 
         arg.orange.forEach(player => {
-            let pts = document.getElementById(`${player.name}_PTS`)
-            pts.innerHTML = player.stats.points
-            let ass = document.getElementById(`${player.name}_ASS`)
-            ass.innerHTML = player.stats.assists
-            let sav = document.getElementById(`${player.name}_SAV`)
-            sav.innerHTML = player.stats.saves
-            let stn = document.getElementById(`${player.name}_STN`)
-            stn.innerHTML = player.stats.stuns
-            let att = document.getElementById(`${player.name}_ATT`)
-            att.innerHTML = player.stats.possession_time
-            let pos = document.getElementById(`${player.name}_POS`)
-            pos.innerHTML = player.stats.steals
+            let pts = document.getElementById(`${player.name}_PTS`);
+            pts.innerHTML = player.stats.points;
+            let ass = document.getElementById(`${player.name}_ASS`);
+            ass.innerHTML = player.stats.assists;
+            let sav = document.getElementById(`${player.name}_SAV`);
+            sav.innerHTML = player.stats.saves;
+            let stn = document.getElementById(`${player.name}_STN`);
+            stn.innerHTML = player.stats.stuns;
+            let att = document.getElementById(`${player.name}_ATT`);
+            att.innerHTML = player.stats.possession_time;
+            let pos = document.getElementById(`${player.name}_POS`);
+            pos.innerHTML = player.stats.steals;
         });
-    })
+    });
 
-    socket.emit('overlay.ready', {'overlay': 'betweenRound'})
+    socket.emit('overlay.ready', {
+        'overlay': 'betweenRound'
+    });
 });
-
-function createOrange(playername) {
-    let container = document.getElementById('playersOrange')
-    let e_0 = document.createElement("div");
-    let e_1 = document.createElement("div");
-    e_1.setAttribute("class", "rowO");
-    let e_15 = document.createElement("div");
-    e_15.setAttribute("class", "nameo");
-    e_15.appendChild(document.createTextNode(playername));
-    e_1.appendChild(e_15);
-    let e_2 = document.createElement("div");
-    e_2.setAttribute("class", "data");
-    let e_3 = document.createElement("div");
-    e_3.setAttribute("class", "dat");
-    e_3.setAttribute("id", `${playername}_PTS`);
-    let e_4 = document.createElement("a");
-    e_4.appendChild(document.createTextNode(0));
-    e_3.appendChild(e_4);
-    e_2.appendChild(e_3);
-    let e_5 = document.createElement("div");
-    e_5.setAttribute("class", "dat");
-    e_5.setAttribute("id", `${playername}_ASS`);
-    let e_6 = document.createElement("a");
-    e_6.appendChild(document.createTextNode(0));
-    e_5.appendChild(e_6);
-    e_2.appendChild(e_5);
-    let e_7 = document.createElement("div");
-    e_7.setAttribute("class", "dat");
-    e_7.setAttribute("id", `${playername}_SAV`);
-    let e_8 = document.createElement("a");
-    e_8.appendChild(document.createTextNode(0));
-    e_7.appendChild(e_8);
-    e_2.appendChild(e_7);
-    let e_9 = document.createElement("div");
-    e_9.setAttribute("class", "dat");
-    e_9.setAttribute("id", `${playername}_STN`);
-    let e_10 = document.createElement("a");
-    e_10.appendChild(document.createTextNode(0));
-    e_9.appendChild(e_10);
-    e_2.appendChild(e_9);
-    let e_11 = document.createElement("div");
-    e_11.setAttribute("class", "dat");
-    e_11.setAttribute("id", `${playername}_POS`);
-    let e_12 = document.createElement("a");
-    e_12.appendChild(document.createTextNode(0));
-    e_11.appendChild(e_12);
-    e_2.appendChild(e_11);
-    let e_13 = document.createElement("div");
-    e_13.setAttribute("class", "dat");
-    e_13.setAttribute("id", `${playername}_ATT`);
-    let e_14 = document.createElement("a");
-    e_14.appendChild(document.createTextNode(0));
-    e_13.appendChild(e_14);
-    e_2.appendChild(e_13);
-    e_1.appendChild(e_2);
-    e_0.appendChild(e_1);
-    container.appendChild(e_0);
-}
-
-function createBlue(playername) {
-    let container = document.getElementById('playersBlue')
-    let e_0 = document.createElement("div");
-    let e_1 = document.createElement("div");
-    e_1.setAttribute("class", "rowB");
-    let e_2 = document.createElement("div");
-    e_2.setAttribute("class", "data datab");
-    let e_3 = document.createElement("div");
-    e_3.setAttribute("class", "dat");
-    e_3.setAttribute("id", `${playername}_PTS`);
-    let e_4 = document.createElement("a");
-    e_4.appendChild(document.createTextNode(0));
-    e_3.appendChild(e_4);
-    e_2.appendChild(e_3);
-    let e_5 = document.createElement("div");
-    e_5.setAttribute("class", "dat");
-    e_5.setAttribute("id", `${playername}_ASS`);
-    let e_6 = document.createElement("a");
-    e_6.appendChild(document.createTextNode(0));
-    e_5.appendChild(e_6);
-    e_2.appendChild(e_5);
-    let e_7 = document.createElement("div");
-    e_7.setAttribute("class", "dat");
-    e_7.setAttribute("id", `${playername}_SAV`);
-    let e_8 = document.createElement("a");
-    e_8.appendChild(document.createTextNode(0));
-    e_7.appendChild(e_8);
-    e_2.appendChild(e_7);
-    let e_9 = document.createElement("div");
-    e_9.setAttribute("class", "dat");
-    e_9.setAttribute("id", `${playername}_STN`);
-    let e_10 = document.createElement("a");
-    e_10.appendChild(document.createTextNode(0));
-    e_9.appendChild(e_10);
-    e_2.appendChild(e_9);
-    let e_11 = document.createElement("div");
-    e_11.setAttribute("class", "dat");
-    e_11.setAttribute("id", `${playername}_POS`);
-    let e_12 = document.createElement("a");
-    e_12.appendChild(document.createTextNode(0));
-    e_11.appendChild(e_12);
-    e_2.appendChild(e_11);
-    let e_13 = document.createElement("div");
-    e_13.setAttribute("class", "dat");
-    e_13.setAttribute("id", `${playername}_ATT`);
-    let e_14 = document.createElement("a");
-    e_14.appendChild(document.createTextNode(0));
-    e_13.appendChild(e_14);
-    e_2.appendChild(e_13);
-    e_1.appendChild(e_2);
-    let e_15 = document.createElement("div");
-    e_15.setAttribute("class", "name");
-    e_15.appendChild(document.createTextNode(playername));
-    e_1.appendChild(e_15);
-    e_0.appendChild(e_1);
-    container.appendChild(e_0);
-}
-
