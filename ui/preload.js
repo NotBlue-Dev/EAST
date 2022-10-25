@@ -21,6 +21,7 @@ const initAutoStream = (document) => {
       const between = document.getElementById('between-scene[0]');
       const clips = document.getElementById('clips');
       const buffer = document.getElementById('buffer');
+      const endGame = document.getElementById('button-end-game');
 
         data.events.map((eventName) => {    
           const opt = document.createElement('option');
@@ -52,6 +53,7 @@ const initAutoStream = (document) => {
             scene:end.value, 
             duration:delay.value
           },
+          endGame:endGame.checked,
           delay: durEnd.value,
         });
       };
@@ -107,6 +109,7 @@ const initAutoStream = (document) => {
       event.addEventListener('change', (event) => {
         switchEvent(event.target.value);
       });
+      endGame.addEventListener('change', sendEnd);
       between.addEventListener('change',sendStart);
       state.addEventListener('change', sendEvent);
       dur.oninput = () => {sendEvent();};
@@ -535,6 +538,7 @@ const initVrmlMatchMode = (document) => {
     const delay = document.getElementById('end-duration[0]');
     const durEnd = document.getElementById('delay-after-end-game');
     const between = document.getElementById('between-scene[0]');
+    const endGame = document.getElementById('button-end-game');
 
     sceneSelects && [...sceneSelects].forEach((sceneSelect) => {
       const noSwitch = document.createElement('option');
@@ -563,6 +567,7 @@ const initVrmlMatchMode = (document) => {
       events = data.game.events;
       between.value = data.start.between;
       BetweenRoundDur.value = data.start.dur;
+      endGame.checked = data.end.endGame;
     });
     ipcRenderer.send("log", 'OBS Scenes loaded');
   });

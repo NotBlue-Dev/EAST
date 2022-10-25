@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 class GameData {
     constructor(json, vrmlInfo, customData, pingTracking = false) {
         this.vrmlInfo = vrmlInfo;
@@ -38,13 +39,13 @@ class GameData {
         this.discPosition = [json.disc.position[0], json.disc.position[2]];
         
         this.lastscore = json.last_score;
-        this.pointAmount = this.lastscore.pointAmount;
-        this.personScored = this.lastscore.personScored;
-        this.assistScored = this.lastscore.assistScored;
+        this.point_amount = this.lastscore.point_amount;
+        this.person_scored = this.lastscore.person_scored;
+        this.assist_scored = this.lastscore.assist_scored;
         this.team = this.lastscore.team;
         
         
-        this.distanceThrown = this.lastscore.distanceThrown;
+        this.distance_thrown = this.lastscore.distance_thrown;
         this.round = json.blue_round_score + json.orange_round_score + 1;
         this.totalRound = json.total_round_count;
 
@@ -54,7 +55,9 @@ class GameData {
 
         if(this.blueTeam.blueTeamPlayers.length !== 0 && this.blueTeam.blueTeamPlayers !== undefined) {
             for (let player of this.blueTeam.blueTeamPlayers) {
-                player.stats.possessionTime = Math.round(player.stats.possessionTime);
+                
+                // eslint-disable-next-line camelcase
+                player.stats.possession_time = Math.round(player.stats.possession_time);
                 this.blueTeam.playerStats.push({
                     name:player.name, 
                     stats:player.stats, 
@@ -77,7 +80,9 @@ class GameData {
  
         if(this.orangeTeam.orangeTeamPlayers !== 0 && this.orangeTeam.orangeTeamPlayers !== undefined) {
             for (let player of this.orangeTeam.orangeTeamPlayers) {
-                player.stats.possessionTime = Math.round(player.stats.possessionTime);
+                
+                // eslint-disable-next-line camelcase
+                player.stats.possession_time = Math.round(player.stats.possession_time);
                 this.orangeTeam.playerStats.push({
                     name:player.name, 
                     stats:player.stats, 

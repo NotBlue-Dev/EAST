@@ -432,6 +432,7 @@
                 "scene": "DO NOT SWITCH SCENE",
                 "duration": "5"
             },
+            "endGame":true,
             "delay": "5"
         }
     }

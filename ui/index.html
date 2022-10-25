@@ -223,6 +223,7 @@
         <section class="hidden" id="autostream-wrapper">
             <article>
               <h2>Main</h2>
+			  <a>Start OBS before tweaking the settings</a>
               <article class="block">
                 <label for="main-scene">In-game scene</label>
                 <div class="inline">
@@ -291,7 +292,7 @@
             <article>
               <h2>End</h2>
               <article class="block">
-                <label for="delay-after-end-game">Scene when game stream end</label>
+                <label for="delay-after-end-game">Scene when the game end</label>
                 <div class="inline"><select id="end-scene[0]" class="scene-select" type="text"></select></div>
 
                 <label for="delay-after-end-game">Delay</label>
@@ -299,6 +300,9 @@
 
                 <label for="delay-after-end-game">Duration</label>
                 <div class="inline"><input id="end-duration[0]" class="txt" type="number" min="1"/></div>
+
+                <label for="delay-after-end-game">End stream at the end of duration</label>
+                <div class="inline"><label for="button-end-game"><input type="checkbox" id="button-end-game"/> <a>Enable</a></label></div>  
 
               </article>
             </article>
