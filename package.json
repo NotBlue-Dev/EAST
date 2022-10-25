@@ -1,6 +1,6 @@
 {
   "name": "east",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Echo Arena Streaming Tool",
   "main": "main.js",
   "scripts": {
@@ -23,6 +23,7 @@
     "node-fetch": "^2.6.7",
     "obs-websocket-js": "^4.0.3",
     "socket.io": "^4.4.1",
+    "squirrel": "^1.0.0",
     "update-electron-app": "^2.0.1"
   },
   "devDependencies": {

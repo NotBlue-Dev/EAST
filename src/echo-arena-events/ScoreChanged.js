@@ -12,7 +12,7 @@ class ScoreChanged {
             this.orangePoints = gameData.orangeTeam.points;
             return;
         }
-        if (this.orangePoints != gameData.orangeTeam.points || this.bluePoints != gameData.blueTeam.points) {
+        if ((this.orangePoints != gameData.orangeTeam.points || this.bluePoints != gameData.blueTeam.points)) {
             this.bluePoints = gameData.blueTeam.points;
             this.orangePoints = gameData.orangeTeam.points;
             let team;
@@ -44,13 +44,17 @@ class ScoreChanged {
                 blue: this.bluePoints, 
                 orange: this.orangePoints
             };
-            eventEmitter.send('game.scoreChanged', {
-                blue: this.bluePoints, 
-                orange: this.orangePoints, 
-                data:this.data, 
-                name:this.name, 
-                clip:false
-            });
+            //fix 0-0 bug
+            if(gameData.orangeTeam.points != 0 && gameData.blueTeam.points != 0) {
+                eventEmitter.send('game.scoreChanged', {
+                    blue: this.bluePoints, 
+                    orange: this.orangePoints, 
+                    data:this.data, 
+                    name:this.name, 
+                    clip:false
+                });
+            }
+            
         }
     }
 }

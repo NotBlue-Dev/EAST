@@ -23,13 +23,17 @@ class EventHandler {
         clearTimeout(this.delay);
         clearTimeout(this.dur);
         this.delay = setTimeout(() => {
-            this.obsClient.send('SetCurrentScene',
-            {
-                "scene-name":this.config.end.ending.scene
-            });
-            this.dur = setTimeout(() => {
-                this.obsClient.send('StopStreaming');
-            }, this.config.end.ending.duration * 1000);
+            if(this.config.end.ending.scene !== "DO NOT SWITCH SCENE") {
+                this.obsClient.send('SetCurrentScene',
+                {
+                    "scene-name":this.config.end.ending.scene
+                });
+            }
+            if(this.config.end.endGame) {
+                this.dur = setTimeout(() => {
+                    this.obsClient.send('StopStreaming');
+                }, this.config.end.ending.duration * 1000);
+            }
         }, this.config.end.delay * 1000);
     }
 
