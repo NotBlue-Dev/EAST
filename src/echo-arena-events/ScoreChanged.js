@@ -45,7 +45,7 @@ class ScoreChanged {
                 orange: this.orangePoints
             };
             //fix 0-0 bug
-            if(gameData.orangeTeam.points != 0 && gameData.blueTeam.points != 0) {
+            if(gameData.orangeTeam.points != 0 || gameData.blueTeam.points != 0) {
                 eventEmitter.send('game.scoreChanged', {
                     blue: this.bluePoints, 
                     orange: this.orangePoints, 
