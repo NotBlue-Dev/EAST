@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
 class GameData {
-    constructor(json, vrmlInfo, customData, pingTracking = false) {
+    // eslint-disable-next-line default-param-last
+    constructor(json, vrmlInfo, customData, pingTracking = false, settings) {
         this.vrmlInfo = vrmlInfo;
+        this.settings = settings;
         this.pingTracking = pingTracking;
         this.timestamp = Date.now();
         this.clock = json.game_clock;
@@ -48,6 +50,14 @@ class GameData {
         this.distance_thrown = this.lastscore.distance_thrown;
         this.round = json.blue_round_score + json.orange_round_score + 1;
         this.totalRound = json.total_round_count;
+
+        if(this.settings !== null) {
+            this.roundWaitTime = this.settings["ROUND WAIT TIME"];
+            this.bestOf = this.settings["ROUND COUNT"];
+            this.roundPlayed = this.settings["ROUNDS PLAYED"];
+            this.orangeWinRound = this.settings["ORANGE ROUNDS WON"];
+            this.blueWinRound = this.settings["BLUE ROUNDS WON"];
+        }
 
         if (this.blueTeam.blueTeamPlayers === undefined && this.orangeTeam.orangeTeamPlayers === undefined) {
             return;

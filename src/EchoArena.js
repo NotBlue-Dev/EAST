@@ -14,6 +14,7 @@ class EchoArena {
         this.rounds = [];
         this.scoreData = [];
         this.vrmlInfo = vrmlInfo;
+        this.settings = null;
     }
     
     listen() {
@@ -72,8 +73,22 @@ class EchoArena {
     }
 
     request() {
+
+        fetch(`http://${this.ip}:${this.port}/get_rules`).then(resp => resp.json()).then(json => {
+            if(json.err_code == 0) {
+                this.settings = json;
+            } else {
+                this.settings = null;
+            }
+        }).catch(error => {
+            this.settings = null;
+            this.eventEmitter.send('echoArena.settings.failed', {
+                error
+            });
+        });
+
         fetch(`http://${this.ip}:${this.port}/session`).then(resp => resp.json()).then(json => {
-            const gameData = new GameData(json, this.vrmlInfo, this.customData, true);
+            const gameData = new GameData(json, this.vrmlInfo, this.customData, true, this.settings);
             events.forEach((event) => {
                 event.handle(gameData, this.eventEmitter);
             });

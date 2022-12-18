@@ -5,7 +5,7 @@ window.addEventListener("load", () => {
     const imgA = document.getElementById('logoA');
     let vrml = false;
     const imgB = document.getElementById('logoB');
-
+    const bestOfID = document.getElementById('bestOf');
     const nameA = document.getElementById('teamA');
     const nameB = document.getElementById('teamB');
 
@@ -59,9 +59,51 @@ window.addEventListener("load", () => {
         imgB.classList.add('hide');
     };
 
+
+    function createRoundBar(bestOf) {
+        //clear element with class round
+        let round = document.getElementsByClassName('round');
+        while(round.length > 0) {
+            round[0].parentNode.removeChild(round[0]);
+        }
+
+        let orange = document.getElementById('orange');
+        let blue = document.getElementById('blue');
+
+        for(let i = Math.ceil(bestOf / 2); i > 0; i--) {
+            let orangeRound = document.createElement('div');
+            orangeRound.id = `OrangeR${i}`;
+            orangeRound.classList.add('round');
+            orangeRound.classList.add('tbdO');
+
+            let blueRound = document.createElement('div');
+            blueRound.id = `BlueR${i}`;
+            blueRound.classList.add('round');
+            blueRound.classList.add('tbdB');
+
+            if(i == 1) {
+                orangeRound.style.marginRight = '9.8vw';
+            } else {
+                orangeRound.style.marginRight = '0.6vw';
+            }
+            blueRound.style.marginLeft = '0.6vw';
+
+            orange.insertAdjacentElement('beforebegin', orangeRound);
+            blue.insertAdjacentElement('beforebegin', blueRound);
+
+        }
+
+        bestOfID.innerHTML = bestOf;
+        
+    }
+
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
             mixed(arg);
+        }
+
+        if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
+            createRoundBar(arg.settings.bestOf);
         }
     });
 

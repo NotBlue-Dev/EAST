@@ -8,6 +8,8 @@ window.addEventListener("load", () => {
 
     const imgB = document.getElementById('OLOGO');
 
+    const bestOfID = document.getElementById('bestOf');
+
     const week = document.getElementById('week');
 
     const nameA = document.getElementById('OrangeName');
@@ -129,6 +131,11 @@ window.addEventListener("load", () => {
             nameA.innerHTML = arg.teamName[1];
             nameB.innerHTML = arg.teamName[0];
         }
+
+        if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
+            bestOfID.innerHTML = arg.settings.bestOf;
+        }
+
     });
 
     // for mixed

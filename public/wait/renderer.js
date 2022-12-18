@@ -6,6 +6,7 @@ window.addEventListener("load", () => {
     const imgA = document.getElementById('Blue');
     const TeamA = document.getElementById('BlueName');
     const imgB = document.getElementById('Orange');
+    const bestOfID = document.getElementById('bestOf');
     const TeamB = document.getElementById('OrangeName');
     const timer = document.getElementById('timer');
     
@@ -53,6 +54,11 @@ window.addEventListener("load", () => {
             TeamA.innerHTML = arg.teamName[1];
             TeamB.innerHTML = arg.teamName[0];
         }
+
+        if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
+            bestOfID.innerHTML = arg.settings.bestOf;
+        }
+
     });
 
     socket.on('vrml.hide', () => {

@@ -5,7 +5,7 @@ window.addEventListener("load", () => {
     const imgA = document.getElementById('LogoA');
     let vrml = false;
     const imgB = document.getElementById('LogoB');
-
+    const bestOfID = document.getElementById('bestOf');
     const nameA = document.getElementById('nameA');
 
     const nameB = document.getElementById('nameB');  
@@ -70,6 +70,52 @@ window.addEventListener("load", () => {
             document.getElementById(`R${round.currentRound}B_SCORE`).innerHTML = round.blue;
         }); 
     };
+
+    function createRound(bestOf) {
+        const top = document.getElementById('top');
+        const bottom = document.getElementById('bottom');
+
+        // clear before
+
+        while (top.firstChild) {
+            top.removeChild(top.firstChild);
+        }
+        while (bottom.firstChild) {
+            bottom.removeChild(bottom.firstChild);
+        }
+
+        if(bestOf >= 5) {
+            document.getElementById('scores').style.left = '68.5vw';
+        } else {
+            document.getElementById('scores').style.left = '73.5vw';
+        }
+
+        if(bestOf == 1) {
+            top.style.justifyContent = 'center';
+            bottom.style.justifyContent = 'center';
+        }
+
+        for(let i = 1; i <= bestOf; i++) {
+            const divB = document.createElement('div');
+            divB.id = `R${i}B`;
+            divB.classList.add('RoundB');
+            const aB = document.createElement('a');
+            aB.id = `R${i}B_SCORE`;
+            aB.innerHTML = `R${i}`;
+            divB.appendChild(aB);
+            top.appendChild(divB);
+
+            const divO = document.createElement('div');
+            divO.id = `R${i}O`;
+            divO.classList.add('RoundO');
+            const aO = document.createElement('a');
+            aO.id = `R${i}O_SCORE`;
+            aO.innerHTML = `R${i}`;
+            divO.appendChild(aO);
+            bottom.appendChild(divO);
+        }
+        bestOfID.innerHTML = bestOf;
+    }
 
     socket.on('game.roundOver', (arg) => {  
         fillRound(arg.rounds);
@@ -225,6 +271,10 @@ window.addEventListener("load", () => {
             arg.pings.orange.forEach(player => {
                 createOrange(player.name);
             });
+        }
+
+        if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
+            createRound(arg.settings.bestOf);
         }
     });
 

@@ -26,6 +26,9 @@ class RoundBetween {
             this.roundIsOver = true;
             this.play = false;
             this.betweenRound = true;
+            if(gameData.settings !== null) {
+                gameData.durBet = gameData.roundWaitTime + 16;
+            }
             this.timeout = setTimeout(() => {
                 this.betweenRound = false;
                 eventEmitter.send('game.play');

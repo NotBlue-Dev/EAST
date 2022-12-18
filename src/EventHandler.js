@@ -7,6 +7,7 @@ class EventHandler {
         this.timer = null;
         this.autoStream = null;
         this.vrml = false;
+        this.bestOf = 3;
         this.left = 0;
         this.halfTimeShown = 0;
         this.animRN = false;
@@ -46,6 +47,10 @@ class EventHandler {
 
         this.eventEmitter.on('obsWebsocket.connected', () => {
             this.autoStart();
+        });
+
+        this.eventEmitter.on('update.bestOf', (args) => {
+            this.bestOf = args.bestOf;
         });
 
         this.obsClient.on('StreamStarted', () => {
@@ -255,7 +260,8 @@ class EventHandler {
             setTimeout(() => {
                 showRound();
             }, gameEvent.delay * 1000);
-            if(this.roundData.blue - this.roundData.orange >= 2 || this.roundData.orange - this.roundData.blue >= 2) {
+    
+            if(this.roundData.blue - this.roundData.orange >= this.bestOf || this.roundData.orange - this.roundData.blue >= this.bestOf) {
                 this.endStream();
             }
             
