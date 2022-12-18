@@ -7,7 +7,6 @@ const EventHandler = require('./EventHandler');
 const events = require('./EchoArenaEvents.js');
 const path = require('path');
 const exec = require('child_process').exec;
-
 class OBSPlayer {
     constructor(rootPath, eventEmitter) {
         this.configLoader = new ConfigLoader(rootPath);
@@ -32,8 +31,6 @@ class OBSPlayer {
             "week":null,
             "season":null,
         };
-
-        
     }
 
     async start() {
@@ -325,6 +322,13 @@ class OBSPlayer {
 
         this.eventEmitter.on('echoArena.sessionID', (args) => {
             let self = this;
+            self.echoArena.killAll();
+            
+            self.connectEchoArena({
+                ip:self.globalConfig.echoArena.ip, 
+                port:self.globalConfig.echoArena.port
+            });
+
             exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout) {
                 if(stdout.indexOf('echovr.exe') === -1) {
                     self.spectateStarted = false;

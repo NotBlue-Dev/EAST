@@ -6,9 +6,10 @@ class EventHandler {
         this.config = config;
         this.timer = null;
         this.autoStream = null;
+        this.current = null;
         this.vrml = false;
         this.bestOf = 3;
-        this.left = 0;
+        this.left = 20;
         this.halfTimeShown = 0;
         this.animRN = false;
         // round win counter
@@ -29,6 +30,7 @@ class EventHandler {
                 {
                     "scene-name":this.config.end.ending.scene
                 });
+                this.scene = this.config.end.ending.scene;
             }
             if(this.config.end.endGame) {
                 this.dur = setTimeout(() => {
@@ -54,24 +56,18 @@ class EventHandler {
         });
 
         this.obsClient.on('StreamStarted', () => {
-            if(this.vrml) {
-                this.obsClient.send('SetCurrentScene',
-                {
-                    "scene-name":this.config.autoStart.wait
-                });
-                setTimeout(() => {
-                    this.obsClient.send('SetCurrentScene',
-                    {
-                        "scene-name":this.config.start.scene
-                    });
-                }, this.left);
-            } else {
+            this.obsClient.send('SetCurrentScene',
+            {
+                "scene-name":this.config.autoStart.wait
+            });
+            this.scene = this.config.autoStart.wait;
+            setTimeout(() => {
                 this.obsClient.send('SetCurrentScene',
                 {
                     "scene-name":this.config.start.scene
                 });
-            }
-            
+                this.scene = this.config.start.scene;
+            }, this.left);
         });
 
         this.eventEmitter.on('scenes.changed', (args) => {
@@ -126,10 +122,12 @@ class EventHandler {
                 this.obsClient.send('SetCurrentScene',{
                     "scene-name":event.scene
                 });
+                this.scene = event.scene;
                 setTimeout(() => {
                     this.obsClient.send('SetCurrentScene',{
                         "scene-name":this.config.autoStart.main
                     });
+                    this.scene = this.config.autoStart.main;
                 }, event.duration * 1000);
             }, event.delay * 1000);
         }
@@ -229,6 +227,23 @@ class EventHandler {
             this.obsClient.send('SetCurrentScene',{
                 "scene-name":this.config.autoStart.main
             });
+            this.scene = this.config.autoStart.main;
+        });
+
+        this.eventEmitter.on('spectate.started', () => {
+            this.obsClient.send('SetCurrentScene',{
+                "scene-name":this.config.autoStart.wait
+            });
+            this.scene = this.config.autoStart.wait;
+            setTimeout(() => {
+                if(this.scene === this.config.autoStart.wait) {
+                    this.obsClient.send('SetCurrentScene',
+                    {
+                        "scene-name":this.config.start.scene
+                    });
+                    this.scene = this.config.start.scene;
+                }
+            }, this.left);
         });
 
         this.eventEmitter.on('game.roundOver', (args) => {
@@ -252,6 +267,7 @@ class EventHandler {
                             this.obsClient.send('SetCurrentScene',{
                                 "scene-name":this.config.start.between
                             });
+                            this.scene = this.config.start.between;
                         }, gameEvent.duration * 1000);
                     }, (gameEvent.delay * 1000));
                 }

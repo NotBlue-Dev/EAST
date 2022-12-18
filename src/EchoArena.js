@@ -17,6 +17,12 @@ class EchoArena {
         this.settings = null;
     }
     
+    //make a function to kill all the processes
+
+    killAll() {
+        this.request = null;
+    }
+
     listen() {
         return this.testConnection().then(this.request.bind(this)).catch(console.error);
     }
@@ -94,7 +100,9 @@ class EchoArena {
             });
             this.rounds = gameData.roundData;
             this.scoreData = gameData.scoreData;
-            this.request();
+            if(this.request !== null) {
+                this.request();
+            }
         }).catch(error => {
             if (error.response) {
                 if (error.response.status === 404) {
@@ -115,12 +123,16 @@ class EchoArena {
             }
             if (this.fails < 5) {
                 setTimeout(() => {
-                    this.request();
+                    if(this.request !== null) {
+                        this.request();
+                    }
                 }, 500);
             } else {
                 this.eventEmitter.send('echoArena.disconnected');
                 setTimeout(() => {
-                    this.request();
+                    if(this.request !== null) {
+                        this.request();
+                    }
                 }, 2000);
             }
         });

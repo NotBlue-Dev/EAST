@@ -373,6 +373,7 @@ const initVrmlMatchMode = (document) => {
       autoConnect: obsWebsocketAutoConnectInput.checked,
       autoBuffer:obsWebsocketAutoBufferInput.checked,
     });
+    console.log(obsWebsocketUrlInput.value, obsWebsocketPortInput.value, obsWebsocketPasswordInput.value);
   };
 
   const editAutoOBS = () => {
