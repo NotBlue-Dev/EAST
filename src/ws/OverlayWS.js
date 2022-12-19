@@ -6,7 +6,7 @@ const path = require('path');
 class OverlayWS {
     constructor(config, eventEmitter, rootPath) {
         this.eventEmitter = eventEmitter || ((channel, args) => {
-            console.log(channel, args)
+            console.log(channel);
         })
         const app = express();
         this.rootPath = rootPath

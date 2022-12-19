@@ -50,6 +50,12 @@ window.addEventListener("load", () => {
         }
     };
 
+    socket.on('frontEnd.reset', () => {
+        clear();
+        nameA.innerHTML = '';
+        nameB.innerHTML = '';
+    });
+
     const fill = (arg) => {
         if(arg.week === null) {
             week.innerHTML = `MIXED GAME`;

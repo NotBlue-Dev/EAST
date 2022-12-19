@@ -119,10 +119,13 @@ window.addEventListener("load", () => {
 
     socket.on('game.roundOver', (arg) => {  
         fillRound(arg.rounds);
+        console.log("RoundOver : ");
+        console.log(arg);
     });
 
     socket.on('roundData', (arg) => {
         fillRound(arg);
+        console.log("RoundData : " + arg);
     });
     
     socket.on('vrml.hide', () => {
@@ -257,6 +260,12 @@ window.addEventListener("load", () => {
         e0.appendChild(e1);
         container.appendChild(e0);
     }
+
+    socket.on('fontEnd.reset', () => {
+        nameA.innerHTML = "";
+        nameB.innerHTML = "";
+        clear();
+    });
 
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {

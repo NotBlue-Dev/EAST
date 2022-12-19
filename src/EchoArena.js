@@ -52,10 +52,11 @@ class EchoArena {
                 mode: settings.camera,
                 num: 0
             });
-        }).catch(() => {
             setTimeout(() => {
-                this.setSettingsEchoVR();
-            }, 1500);
+                this.setSettingsEchoVR(settings);
+            }, 3000);
+        }).catch((err) => {
+            console.log("EchoVR can't be reached : " + err);
         });
     }
 

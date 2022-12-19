@@ -322,11 +322,12 @@ class OBSPlayer {
 
         this.eventEmitter.on('echoArena.sessionID', (args) => {
             let self = this;
-            self.echoArena.killAll();
+            this.echoArena.rounds = [];
+            this.echoArena.killAll();
             
-            self.connectEchoArena({
-                ip:self.globalConfig.echoArena.ip, 
-                port:self.globalConfig.echoArena.port
+            this.connectEchoArena({
+                ip:this.globalConfig.echoArena.ip, 
+                port:this.globalConfig.echoArena.port
             });
 
             exec('tasklist /FI "imagename eq echovr.exe"', function(err, stdout) {
@@ -340,10 +341,11 @@ class OBSPlayer {
             if(this.globalConfig.echoArena.autoStart && !this.spectateStarted) {
                 this.startEchoVR(this.globalConfig.echoArena.path, args.sessionID);
             }
-
             if(this.echoArena !== null) {
                 this.echoArena.setSettingsEchoVR(this.globalConfig.echoArena.settings);
             }
+
+            this.eventEmitter.send('frontEnd.reset');
         });
 
         this.eventEmitter.on('spectate.updateConfig', (args) => {

@@ -9,7 +9,7 @@ class EventHandler {
         this.current = null;
         this.vrml = false;
         this.bestOf = 3;
-        this.left = 20;
+        this.left = 60;
         this.halfTimeShown = 0;
         this.animRN = false;
         // round win counter
@@ -235,7 +235,9 @@ class EventHandler {
                 "scene-name":this.config.autoStart.wait
             });
             this.scene = this.config.autoStart.wait;
+            
             setTimeout(() => {
+                this.eventEmitter.send('frontEnd.reset');
                 if(this.scene === this.config.autoStart.wait) {
                     this.obsClient.send('SetCurrentScene',
                     {
@@ -243,7 +245,7 @@ class EventHandler {
                     });
                     this.scene = this.config.start.scene;
                 }
-            }, this.left);
+            }, this.left * 1000);
         });
 
         this.eventEmitter.on('game.roundOver', (args) => {

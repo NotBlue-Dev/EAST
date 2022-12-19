@@ -97,6 +97,8 @@ window.addEventListener("load", () => {
         
     }
 
+    let args = null;
+
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
             mixed(arg);
@@ -104,6 +106,17 @@ window.addEventListener("load", () => {
 
         if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
             createRoundBar(arg.settings.bestOf);
+        }
+
+        args = arg;
+    });
+
+
+    socket.on('fontEnd.reset', () => {
+        nameA.innerHTML = "";
+        nameB.innerHTML = "";
+        if(args !== null && args.settings.settingsFound) {
+            createRoundBar(args.settings.bestOf);
         }
     });
 
@@ -129,7 +142,6 @@ window.addEventListener("load", () => {
 
     socket.on('game.roundOver', (arg) => {
         if(arg.winner !== null) {
-            console.log(arg.winner,arg.rounds[arg.rounds.length - 1],arg.rounds[arg.rounds.length - 1].currentRound);
             if(arg.winner === 'orange') {
                 let current = document.getElementById(`OrangeR${arg.rounds[arg.rounds.length - 1].currentRound}`);
                 current.classList.add('winO');

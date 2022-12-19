@@ -6,7 +6,7 @@ window.addEventListener("load", () => {
     const content = document.getElementById('ping');
 
     socket.on('game.ping', (arg) => {
-        console.log(arg);
+
         const dataBlue = arg.pings.blue.map((ping) => {
             const color = ping.ping > 250 ? 'purple'
                         : ping.ping > 150 ? 'red'

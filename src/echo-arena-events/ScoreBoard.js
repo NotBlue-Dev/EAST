@@ -32,7 +32,6 @@ class ScoreBoard {
 
         this.blue = gameData.blueTeam.playerStats;
         this.orange = gameData.orangeTeam.playerStats;
-        console.log(this.blue);
         const send = (orange, blue) => {
             if(this.lastHalf === null || Math.floor(((Math.abs(this.lastHalf - Date.now())) / 1000) / 60) >= 1) {
                 eventEmitter.send('local.halfTimeStats', {

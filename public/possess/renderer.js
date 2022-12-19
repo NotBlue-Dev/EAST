@@ -197,6 +197,15 @@ window.addEventListener("load", () => {
         }
     });
 
+    socket.on('frontEnd.reset', () => {
+        while (orange.firstChild) {
+            orange.removeChild(orange.firstChild);
+        }
+        while (blue.firstChild) {
+            blue.removeChild(blue.firstChild);
+        }
+    });
+
     socket.on('game.possessionChange', (arg) => {
         let box = document.getElementById(`${arg.possession.player}_BOX`);
         let poss = document.getElementById(`${arg.possession.player}_POSS`);

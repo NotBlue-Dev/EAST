@@ -24,6 +24,12 @@ class RoundOver {
                 winner:winner,
             });
             
+            eventEmitter.on('frontEnd.reset', () => {
+                this.roundIsOver = false;
+                this.rounds = [];
+                
+            });
+
             eventEmitter.send('game.roundOver', {
                 rounds: this.rounds,
                 name:this.name,
