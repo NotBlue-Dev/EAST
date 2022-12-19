@@ -155,6 +155,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const join = document.getElementById('echo-arena-joinSessionButton');
   const idJoin = document.getElementById('echo-arena-joinSession');
   const BetweenRoundDur = document.getElementById('BetweenRoundDur');
+  const updateTeams = document.getElementById('updateTeams');
+  const blueCustom = document.getElementById('customBlueName');
+  const orangeCustom = document.getElementById('customOrangeName');
 
   body.style.overflow = "hidden";
   loader.style.display = "flex";
@@ -168,6 +171,14 @@ window.addEventListener('DOMContentLoaded', () => {
   ipcRenderer.on('echoArena.eventsLoaded', () => {
     loader.style.display = "none";
     body.style.overflow = "auto";
+  });
+
+  updateTeams.addEventListener('click', () => {
+    console.log('update');
+    ipcRenderer.send('update.Names', {
+      orange : orangeCustom.value,
+      blue : blueCustom.value
+    });
   });
 
   join.addEventListener('click', startEchoArena);
@@ -341,8 +352,7 @@ const initVrmlMatchMode = (document) => {
   });
 };
 
-  const blueCustom = document.getElementById('customBlueName');
-  const orangeCustom = document.getElementById('customOrangeName');
+
   const obsSceneCreate = document.getElementById('createScenes');
   const obsWebsocketUrlInput = document.getElementById('obs-websocket-url');
   const obsWebsocketPortInput = document.getElementById('obs-websocket-port');

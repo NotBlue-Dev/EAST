@@ -305,6 +305,10 @@ class OBSPlayer {
             this.eventEmitter.send('scenes.changed', this.globalConfig.autoStream);
         });
 
+        this.eventEmitter.on('update.Names', (args) => {
+            this.eventEmitter.send('updateNames', args);
+        });
+
         this.eventEmitter.on('obsWebsocket.autoConnect', (args) => {
             this.globalConfig.obs.autoConnect = args;
             this.configLoader.save(this.globalConfig);

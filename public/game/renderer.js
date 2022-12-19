@@ -117,6 +117,12 @@ window.addEventListener("load", () => {
         args = arg;
     });
 
+    socket.on('updateNames', (arg) => {
+        if(!vrml) {
+            nameA.innerHTML = arg.orange;
+            nameB.innerHTML = arg.blue;
+        }
+    });
 
     socket.on('fontEnd.reset', () => {
         nameA.innerHTML = "";

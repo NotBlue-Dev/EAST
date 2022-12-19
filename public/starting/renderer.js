@@ -111,6 +111,13 @@ window.addEventListener("load", () => {
         createPlayers(['','','',''], ['','','','']);
     });  
 
+    socket.on('updateNames', (arg) => {
+        if(!vrml) {
+            nameA.innerHTML = arg.orange;
+            nameB.innerHTML = arg.blue;
+        }
+    });
+
     socket.on('game.ping', (arg) => {
         if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
             clear();

@@ -73,6 +73,13 @@ window.addEventListener("load", () => {
         timer.innerHTML = '';
     });
 
+    socket.on('updateNames', (arg) => {
+        if(!vrml) {
+            TeamA.innerHTML = arg.blue;
+            TeamB.innerHTML = arg.orange;
+        }
+    });
+
     socket.on('game.teamChange', (arg) => {
         if(!vrml) {
             TeamA.innerHTML = arg.teams.teamName[1];
