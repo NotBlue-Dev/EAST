@@ -6,6 +6,8 @@ window.addEventListener("load", () => {
     let vrml = false;
     const imgB = document.getElementById('logoB');
     const bestOfID = document.getElementById('bestOf');
+    const scoreA = document.getElementById('scoreA');
+    const scoreB = document.getElementById('scoreB');
     const nameA = document.getElementById('teamA');
     const nameB = document.getElementById('teamB');
 
@@ -42,14 +44,14 @@ window.addEventListener("load", () => {
     
     socket.on('game.updateScore', (arg) => {
         if(arg.blue !== undefined && arg.orange !== undefined) {
-            document.getElementById('scoreB').innerHTML = arg.blue;
-            document.getElementById('scoreA').innerHTML = arg.orange;
+            scoreB.innerHTML = arg.blue;
+            scoreA.innerHTML = arg.orange;
         }
     });
 
     socket.on('game.scoreChanged', (arg) => {
-        document.getElementById('scoreB').innerHTML = arg.blue;
-        document.getElementById('scoreA').innerHTML = arg.orange;
+        scoreB.innerHTML = arg.blue;
+        scoreA.innerHTML = arg.orange;
     });
 
     const mixed = (arg) => {
@@ -106,6 +108,10 @@ window.addEventListener("load", () => {
 
         if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
             createRoundBar(arg.settings.bestOf);
+        }
+        if(scoreA.innerHTML != arg.scores.orange || scoreB.innerHTML != arg.scores.blue) {
+            scoreA.innerHTML = arg.scores.orange;
+            scoreB.innerHTML = arg.scores.blue;
         }
 
         args = arg;

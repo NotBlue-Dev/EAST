@@ -118,6 +118,10 @@ class OBSClient {
         return this.obsWebSocket.send(channel, arg).catch((error) => {console.log(error);});
     }
 
+    getCurrentScene() {
+        return this.send('GetCurrentScene');
+    }
+
     initialize() {
         this.obsWebSocket.on('ConnectionOpened', (data) => this.handleConnected('Connected',data));
         this.obsWebSocket.on('ConnectionClosed', (data) => this.handleDisconnected('Disconnected', data));

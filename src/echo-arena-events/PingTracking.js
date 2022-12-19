@@ -28,6 +28,10 @@ class PingTracking {
                 orangeWinRound : gameData.orangeWinRound,
                 blueWinRound : gameData.blueWinRound
             },
+            scores : {
+                blue: gameData.blueTeam.points,
+                orange: gameData.orangeTeam.points
+            },
             pings: {
                 blue: gameData.blueTeam.playerPing,
                 orange: gameData.orangeTeam.playerPing,

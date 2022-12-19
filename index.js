@@ -10,6 +10,4 @@ module.exports = {
     ConfigLoader
 };
 
-// load score even if no score update
-//get current scene with obsWS
 //update name of team/logo even if not connected to echo arena
