@@ -363,7 +363,7 @@
         },
         "start": {
             "scene": "[Echo Overlay] Starting",
-            "between": "DO NOT SWITCH SCENE",
+            "between": "[Echo Overlay] Between Round",
             "dur": "78"
         },
         "game": {

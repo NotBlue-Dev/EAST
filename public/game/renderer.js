@@ -124,7 +124,7 @@ window.addEventListener("load", () => {
         }
     });
 
-    socket.on('fontEnd.reset', () => {
+    socket.on('frontEnd.reset', () => {
         nameA.innerHTML = "";
         nameB.innerHTML = "";
         if(args !== null && args.settings.settingsFound) {

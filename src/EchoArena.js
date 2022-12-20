@@ -54,9 +54,12 @@ class EchoArena {
             });
             setTimeout(() => {
                 this.setSettingsEchoVR(settings);
-            }, 3000);
+            }, 5000);
         }).catch((err) => {
             console.log("EchoVR can't be reached : " + err);
+            setTimeout(() => {
+                this.setSettingsEchoVR(settings);
+            }, 5000);
         });
     }
 

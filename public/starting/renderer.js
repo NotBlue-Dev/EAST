@@ -50,12 +50,6 @@ window.addEventListener("load", () => {
         }
     };
 
-    socket.on('frontEnd.reset', () => {
-        clear();
-        nameA.innerHTML = '';
-        nameB.innerHTML = '';
-    });
-
     const fill = (arg) => {
         if(arg.week === null) {
             week.innerHTML = `MIXED GAME`;
@@ -119,7 +113,7 @@ window.addEventListener("load", () => {
     });
 
     socket.on('game.ping', (arg) => {
-        if(nameA.innerHTML === "" && nameB.innerHTML === "" && !vrml) {
+        if(nameA.innerHTML == "" && nameB.innerHTML == "" && !vrml) {
             clear();
 
             arg.pings.blue.forEach(player => {

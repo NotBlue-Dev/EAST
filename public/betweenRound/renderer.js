@@ -261,7 +261,7 @@ window.addEventListener("load", () => {
         container.appendChild(e0);
     }
 
-    socket.on('fontEnd.reset', () => {
+    socket.on('frontEnd.reset', () => {
         nameA.innerHTML = "";
         nameB.innerHTML = "";
         clear();

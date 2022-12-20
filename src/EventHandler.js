@@ -60,11 +60,16 @@ class EventHandler {
                 "scene-name":this.config.autoStart.wait
             });
             setTimeout(() => {
-                this.obsClient.send('SetCurrentScene',
-                {
-                    "scene-name":this.config.start.scene
+                this.obsClient.getCurrentScene().then((data) => {
+                    this.scene = data.name;
                 });
-            }, this.left);
+                if(this.scene === this.config.autoStart.wait) {
+                    this.obsClient.send('SetCurrentScene',
+                    {
+                        "scene-name":this.config.start.scene
+                    });
+                }
+            }, this.left * 1000);
         });
 
         this.eventEmitter.on('scenes.changed', (args) => {
@@ -251,11 +256,13 @@ class EventHandler {
                     setTimeout(() => {
                         showRound();
                     }, 1000);
+                    console.log('animRN')
                 } else {
                     this.eventEmitter.send('animation.triggerRoundOver', {
                         rounds:args.rounds, 
                         winner:args.winner
                     });
+                    console.log('ici')
                     this.halfTimeShown = 0;
                     this.switchWindowEvent(gameEvent);
                     setTimeout(() => {
@@ -263,8 +270,10 @@ class EventHandler {
                             this.obsClient.send('SetCurrentScene',{
                                 "scene-name":this.config.start.between
                             });
+                            console.log('switch')
                         }, gameEvent.duration * 1000);
                     }, (gameEvent.delay * 1000));
+                    console.log(gameEvent.delay, gameEvent.duration);
                 }
             };
             
