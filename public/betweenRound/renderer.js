@@ -15,13 +15,18 @@ window.addEventListener("load", () => {
     const teamPlayerB = document.getElementById('playersBlue');
 
     const fill = (arg) => {
-        const season = document.getElementById('season');
-        season.innerHTML =  `SEASON ${arg.season}`;
+        if(arg === null ) {
+            vrml = false;
+            return;
+        }
         if(arg.teams.length === 0) {
             vrml = false;
             return;
         } 
         vrml = true;
+
+        const season = document.getElementById('season');
+        season.innerHTML =  `SEASON ${arg.season}`;
 
         let orange = arg.teams.home;
         let blue = arg.teams.away;
@@ -153,6 +158,7 @@ window.addEventListener("load", () => {
         let e15 = document.createElement("div");
         e15.setAttribute("class", "nameo");
         e15.appendChild(document.createTextNode(playername));
+        e15.id = playername;
         e1.appendChild(e15);
         let e2 = document.createElement("div");
         e2.setAttribute("class", "data");
@@ -256,6 +262,7 @@ window.addEventListener("load", () => {
         let e15 = document.createElement("div");
         e15.setAttribute("class", "name");
         e15.appendChild(document.createTextNode(playername));
+        e15.id = playername;
         e1.appendChild(e15);
         e0.appendChild(e1);
         container.appendChild(e0);
@@ -265,6 +272,7 @@ window.addEventListener("load", () => {
         nameA.innerHTML = "";
         nameB.innerHTML = "";
         clear();
+        createRound(3);
     });
 
     socket.on('game.ping', (arg) => {
@@ -288,10 +296,15 @@ window.addEventListener("load", () => {
     });
 
     socket.on('game.teamChange', (arg) => {
-        if(!vrml) {
-            mixed(arg);
-        }
 
+        console.log('team change', arg);
+        if(!vrml) {
+            nameA.innerHTML = arg.teams.teamName[1];
+            nameB.innerHTML = arg.teams.teamName[0];
+            imgA.classList.add('hide');
+            imgB.classList.add('hide');
+        }
+        
         clear();
 
         arg.teams.blue.forEach(player => {
@@ -309,18 +322,29 @@ window.addEventListener("load", () => {
     socket.on('vrml.matchDataLoaded', fill);
     
     socket.on('game.scoreBoard', (arg) => {
-        if(document.getElementById('playersOrange').childElementCount === 0) {
+        if(document.getElementById('playersOrange').childElementCount === 0 || document.getElementById('playersBlue').childElementCount === 0) {
+            clear();
             arg.orange.forEach(player => {
                 createOrange(player.name);
             });
-        }
 
-        if(document.getElementById('playersBlue').childElementCount === 0) {
             arg.blue.forEach(player => {
                 createBlue(player.name);
             });
         }
         
+        arg.orange.forEach(player => {
+            if(!document.getElementById(player.name)) {
+                createOrange(player.name);
+            }
+        });
+
+        arg.blue.forEach(player => {
+            if(!document.getElementById(player.name)) {
+                createBlue(player.name);
+            }
+        });
+
         arg.blue.forEach(player => {
             let pts = document.getElementById(`${player.name}_PTS`);
             pts.innerHTML = player.stats.points;

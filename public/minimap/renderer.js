@@ -3,7 +3,7 @@
 // eslint-disable-next-line no-undef
 let socket = io();
 
-// Most of the code on this page is made by Spark
+// Most of the code on this page is made by NTSFranz who made Spark
 window.addEventListener('load', function() {
     const disc = document.getElementById("disc");
     const players = document.getElementsByClassName('player');

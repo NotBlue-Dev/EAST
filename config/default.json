@@ -4,6 +4,9 @@
         "autoLoad": false,
         "region":"EU"
     },
+    "tournament": {
+        "teams":[]
+    },
     "echoArena": {
         "ip": "127.0.0.1",
         "port": 6721,
@@ -187,7 +190,7 @@
                 "scene":[
                     {
                         "name": "Between Round",
-                        "refresh":true
+                        "refresh":false
                     }
                 ]
             },

@@ -10,4 +10,4 @@ module.exports = {
     ConfigLoader
 };
 
-//update name of team/logo even if not connected to echo arena
+//tournament mode

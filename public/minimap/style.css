@@ -67,4 +67,5 @@ body {
 	top: 86.5px;
 	left: 281.5px;
 	transition: all .3s;
+	z-index: 1;
 }
