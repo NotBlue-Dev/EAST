@@ -18,7 +18,9 @@ class OBSPlayer {
         this.overlayWS = new OverlayWS(this.globalConfig.overlayWs, this.eventEmitter, rootPath);
         this.scenes = [];
         this.eventHandler = null;
+        this.sessionID = null;
         this.echoArena = null;
+        this.arenaSwitched = 1;
         this.vrmlInfo = null;
         this.vrmlInfoWS = [];
 
@@ -225,6 +227,7 @@ class OBSPlayer {
 
     startEchoVR(executablePath, sessionID) {
         let self = this;
+        this.sessionID = sessionID;
         exec(`start /d "${executablePath}" echovr.exe -spectatorstream ${sessionID !== null ? `-lobbyid "${sessionID}"` : ""} ${this.globalConfig.echoArena.settings.anonymous ? "-noovr" : ""} ${this.globalConfig.echoArena.port != 6721 ? `-httpport ${this.globalConfig.echoArena.port} ` : ""} `, (error) => { 
             if(error !== null) {
                 self.eventEmitter.send('spectate.error', error);
@@ -254,6 +257,26 @@ class OBSPlayer {
             this.Allinfo.season = data;
         });
 
+        //ATEST
+
+        this.eventEmitter.on('echo.nextArena', () => {
+            if(this.arenaSwitched >= this.globalConfig.tournament.games) {
+                let self = this;
+            
+                exec('taskkill /F /IM echovr.exe', (error) => {
+                    if(error !== null) {
+                        self.eventEmitter.send('spectate.error', error);
+                        console.log(error);
+                    }
+                    self.eventEmitter.send('spectate.stopped');
+                });
+                
+                let nextArena = this.globalConfig.tournament.arena[(this.globalConfig.tournament.arena.indexOf(this.sessionID) + 1) % this.globalConfig.tournament.arena.length];
+                this.startEchoVR(this.globalConfig.echoArena.executablePath, nextArena);
+                this.arenaSwitched++;
+            }
+        });
+
         this.eventEmitter.on('vrml.region', (args) => {
             this.globalConfig.vrml.region = args.region;
             this.loadTeamList(args.region);
@@ -266,6 +289,21 @@ class OBSPlayer {
 
         this.eventEmitter.on('obsWebsocket.autoBuffer', (args) => {
             this.globalConfig.obs.autoBuffer = args;
+            this.configLoader.save(this.globalConfig);
+        });
+
+        this.eventEmitter.on('tournament.games', (args) => {
+            this.globalConfig.tournament.games = args;
+            this.configLoader.save(this.globalConfig);
+        });
+
+        this.eventEmitter.on('tournament.enable', (args) => {
+            this.globalConfig.tournament.enabled = args;
+            this.configLoader.save(this.globalConfig);
+        });
+
+        this.eventEmitter.on('tournament.arena', (args) => {
+            this.globalConfig.tournament.arena = args;
             this.configLoader.save(this.globalConfig);
         });
 
@@ -326,6 +364,7 @@ class OBSPlayer {
 
         this.eventEmitter.on('echoArena.sessionID', (args) => {
             let self = this;
+            this.sessionID = args.sessionID;
             this.echoArena.rounds = [];
             this.echoArena.killAll();
             

@@ -12,6 +12,7 @@ class EventHandler {
         this.left = 60;
         this.halfTimeShown = 0;
         this.animRN = false;
+        this.currentArena = null;
         // round win counter
         this.roundData = {
             orange:0,
@@ -40,6 +41,8 @@ class EventHandler {
     }
 
     initListener() {
+        
+
         this.eventEmitter.on('game.emptyTeam', () => {
             if(this.roundData.orange !== 0 && this.roundData.blue !== 0) {
                 this.endStream();
@@ -263,13 +266,20 @@ class EventHandler {
                     });
                     this.halfTimeShown = 0;
                     this.switchWindowEvent(gameEvent);
-                    setTimeout(() => {
+                    if(this.bestOf >= Math.ceil(this.bestOf / 2) && this.config.tournament.enabled) {
                         setTimeout(() => {
-                            this.obsClient.send('SetCurrentScene',{
-                                "scene-name":this.config.start.between
-                            });
-                        }, gameEvent.duration * 1000);
-                    }, (gameEvent.delay * 1000));
+                            this.eventEmitter.send('echo.nextArena');
+                        }, 15000);
+                    } else {
+                        setTimeout(() => {
+                            setTimeout(() => {
+                                this.obsClient.send('SetCurrentScene',{
+                                    "scene-name":this.config.start.between
+                                });
+                            }, gameEvent.duration * 1000);
+                        }, (gameEvent.delay * 1000));
+                    }
+
                 }
             };
             

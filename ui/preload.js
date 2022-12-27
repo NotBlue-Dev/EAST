@@ -143,6 +143,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaConnectButton = document.getElementById('echo-arena-connect');
   const echoArenaSession = document.getElementById('echo-arena-session');
 
+  const tournamentMode = document.getElementById('tournament-mode');
+  const tournamentGames = document.getElementById('tournament-games');
+  const session1 = document.getElementById('session-id1');
+  const session2 = document.getElementById('session-id2');
   const loader = document.getElementById('loader');
   const anonymous = document.getElementById('anonymous');
   const echoPath = document.getElementById('echo-path');
@@ -153,6 +157,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const mute = document.getElementById('muteTeams');
   const camera = document.getElementById('cameraMode');
   const join = document.getElementById('echo-arena-joinSessionButton');
+  const joinS1 = document.getElementById('join-Session1');
+  const joinS2 =  document.getElementById('join-Session2');
   const idJoin = document.getElementById('echo-arena-joinSession');
   const BetweenRoundDur = document.getElementById('BetweenRoundDur');
   const updateTeams = document.getElementById('updateTeams');
@@ -161,6 +167,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
   body.style.overflow = "hidden";
   loader.style.display = "flex";
+
+  tournamentMode.addEventListener('change', () => {
+    ipcRenderer.send('tournament.enable', tournamentMode.checked);
+  });
+
+  tournamentGames.addEventListener('change', () => {
+    ipcRenderer.send('tournament.games', tournamentGames.value);
+  });
+
+  session1.addEventListener('change', () => {
+    if(session1.value !== "sessionID" && session2.value !== "sessionID" && session1.value !== "" && session2.value !== "") {
+      ipcRenderer.send('tournament.arena', [session1.value, session2.value]);
+    }
+  });
+
+  session2.addEventListener('change', () => {
+    if(session1.value !== "sessionID" && session2.value !== "sessionID" && session1.value !== "" && session2.value !== "") {
+      ipcRenderer.send('tournament.arena', [session1.value, session2.value]);
+    }
+  });
 
   const startEchoArena = () => {
     ipcRenderer.send('spectate.start', {
@@ -182,6 +208,22 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   join.addEventListener('click', startEchoArena);
+
+  joinS1.addEventListener('click', () => {
+    if(session1.value !== "sessionID" && session2.value !== "sessionID" && session1.value !== "" && session2.value !== "") {
+      ipcRenderer.send('spectate.start', {
+        id:session1.value
+      });
+    }
+  });
+
+  joinS2.addEventListener('click', () => {
+    if(session1.value !== "sessionID" && session2.value !== "sessionID" && session1.value !== "" && session2.value !== "") {
+      ipcRenderer.send('spectate.start', {
+        id:session2.value
+      });
+    }
+  });
 
   const updateSpectate = () => {
     ipcRenderer.send('spectate.updateConfig', {
@@ -457,7 +499,7 @@ const initVrmlMatchMode = (document) => {
       port: overlayPortInput.value
     });
   };
-
+  
   const edit = () => {
     ipcRenderer.send('overlayWs.config', {
       autoLaunch: overlayAutoLaunchInput.checked,
@@ -481,7 +523,10 @@ const initVrmlMatchMode = (document) => {
   ipcRenderer.on('config.loaded', (event, data) => {
     blueCustom.value = data.mixed.blue;
     orangeCustom.value = data.mixed.orange;
-
+    session1.value = data.tournament.arena[0];
+    session2.value = data.tournament.arena[1];
+    tournamentGames.value = data.tournament.games;
+    tournamentMode.checked = data.tournament.enabled;
     obsPath.value = data.obs.path;
     obsSoftAuto.checked = data.obs.autoStart;
     if(obsSoftAuto.checked) {
@@ -542,6 +587,7 @@ const initVrmlMatchMode = (document) => {
     const main = document.getElementById('main-scene');
     const wait = document.getElementById('wait-scene');
     const autostream = document.getElementById('autostream');
+
     const launch = document.getElementById('launch-time');
     const start = document.getElementById('start-scene[0]');
     const end = document.getElementById('end-scene[0]');

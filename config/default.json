@@ -5,6 +5,9 @@
         "region":"EU"
     },
     "tournament": {
+        "enabled":true,
+        "arena":[],
+        "games":0,
         "teams":[]
     },
     "echoArena": {
