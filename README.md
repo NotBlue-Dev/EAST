@@ -9,8 +9,6 @@
 EAST is an open source project to help streamers around the echo arena community to cast.\
 This project includes an auto scene manager, overlays for echo, auto spectate and VRML/Mixed support\
 
-/!\ NA VRML teams are going to be included before next season /!\
-
 ## Preview
 
 ### Waiting
@@ -41,7 +39,7 @@ Download and install :
 - (SETUP.EXE) EAST latest release (https://github.com/NotBlue-Dev/EAST/releases)
 - OBS (https://obsproject.com/fr/download)
 - ECHOVR (https://www.oculus.com/echo-vr/?locale=fr_FR)
-- OBS WEBSOCKET 4.9.1 (https://github.com/obsproject/obs-websocket/releases/tag/4.9.1)
+- OBS WEBSOCKET 4.9.1 (https://github.com/obsproject/obs-websocket/releases/tag/4.9.1-compat)
 - VLC (https://www.videolan.org/vlc/index.fr.html)
 
 Then
