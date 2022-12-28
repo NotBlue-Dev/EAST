@@ -8,7 +8,12 @@
         "enabled":true,
         "arena":[],
         "games":0,
-        "teams":[]
+        "teams":[
+            {
+                "teamName":"New Team",
+                "players":["","","",""]
+            }
+        ]
     },
     "echoArena": {
         "ip": "127.0.0.1",

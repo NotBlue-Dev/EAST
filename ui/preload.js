@@ -520,6 +520,103 @@ const initVrmlMatchMode = (document) => {
     launchOverlayServerButton.disabled = false;
   });
 
+  const teamSelectTournament = document.getElementById('teamsTournament');
+  const teamTournamentName = document.getElementById('team-name');
+  const playerHolder = document.getElementById('playersTour');
+  const addPlayer = document.getElementById('addPlayer');
+  const addTeam = document.getElementById('addTeam');
+  const removeTeam = document.getElementById('removeTeam');
+
+  const updateTournament = () => {
+    const option = Array.from(teamSelectTournament.options).find((option) => option.innerHTML === teamSelectTournament.value);
+    ipcRenderer.send('tournament.updateTeam', {
+      oldName: option.innerHTML,
+      team: teamTournamentName.value,
+      players: Array.from(document.querySelectorAll('#playerTournament')).map((input) => input.value)
+    });
+    option.innerHTML = teamTournamentName.value;
+    option.value = teamTournamentName.value;
+  };
+
+  const createPlayer = (player) => {
+    const div = document.createElement('div');
+    div.classList.add('inline');
+    const input = document.createElement('input');
+    input.classList.add('txt');
+    input.id = 'playerTournament';
+    input.value = player;
+    input.addEventListener('change', () => {
+      updateTournament();
+    });
+    const button = document.createElement('button');
+    button.id = 'removePlayer';
+    button.innerHTML = '-';
+    button.addEventListener('click', () => {
+      div.remove();
+      updateTournament();
+    });
+    div.appendChild(input);
+    div.appendChild(button);
+    playerHolder.appendChild(div);
+  };
+
+  addPlayer.addEventListener('click', () => {
+    if(playerHolder.children.length < 5) {
+      createPlayer('');
+    }
+  });
+
+  teamSelectTournament.addEventListener('change', () => {
+    let empty = Array.from(teamSelectTournament.options).find((option) => option.innerHTML === '');
+    console.log(empty);
+    if(empty) {
+      empty.remove();
+    }
+    const option = Array.from(teamSelectTournament.options).find((option) => option.value === teamSelectTournament.value);
+    teamTournamentName.value = option.innerHTML;
+    ipcRenderer.send('tournament.getTeam', option.innerHTML);
+  });
+
+  ipcRenderer.on('tournament.team', (event, data) => {
+    playerHolder.innerHTML = '';
+    data.players.forEach(player => {
+      createPlayer(player);
+    });
+  });
+
+  teamTournamentName.addEventListener('change', () => {
+    updateTournament();
+  });
+
+  const newTeam = () => {
+    teamTournamentName.value = 'New team';
+    ipcRenderer.send('tournament.addTeam', {
+      teamName: teamTournamentName.value,
+      players: ['', '', '', '']
+    });
+    const option = document.createElement('option');
+    option.innerHTML = "New team";
+    option.value = "New team";
+    option.selected = true;
+    teamSelectTournament.appendChild(option);
+    playerHolder.innerHTML = '';
+    for(let i = 0; i < 4; i++) {
+      createPlayer('');
+    }
+  };
+
+  addTeam.addEventListener('click', () => {
+    newTeam();
+  });
+
+  removeTeam.addEventListener('click', () => {
+    const option = Array.from(teamSelectTournament.options).find((option) => option.innerHTML === teamSelectTournament.value);
+    ipcRenderer.send('tournament.removeTeam', option.value);
+    option.innerHTML = '';
+    option.value = '';
+    newTeam();
+  });
+
   ipcRenderer.on('config.loaded', (event, data) => {
     blueCustom.value = data.mixed.blue;
     orangeCustom.value = data.mixed.orange;
@@ -537,6 +634,23 @@ const initVrmlMatchMode = (document) => {
     echoArenaUrlInput.value = data.echoArena.ip;
     echoArenaPortInput.value = data.echoArena.port;
     echoArenaAutoConnectInput.checked = data.echoArena.autoConnect;
+
+    data.tournament.teams.map((team) => {
+      const opt = document.createElement('option');
+      opt.value = team.teamName;
+      opt.innerHTML = team.teamName;
+      //if it's the first team, select it
+      if(teamSelectTournament.options.length === 0) {
+        opt.selected = true;
+        teamTournamentName.value = team.teamName;
+        playerHolder.innerHTML = '';
+        team.players.forEach((player) => {
+          createPlayer(player);
+        });
+      }
+      teamSelectTournament.appendChild(opt);
+      return 0;
+    });
 
     echoPath.value = data.echoArena.path;
     spectateMe.checked = data.echoArena.autoStart;

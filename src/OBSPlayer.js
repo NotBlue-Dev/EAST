@@ -297,6 +297,37 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig);
         });
 
+        this.eventEmitter.on('tournament.removeTeam', (args) => {
+            let team = this.globalConfig.tournament.teams.find((team) => team.teamName === args);
+            if(team != undefined) {
+                this.globalConfig.tournament.teams.splice(this.globalConfig.tournament.teams.indexOf(team), 1);
+                this.configLoader.save(this.globalConfig);
+            }
+        });
+
+        this.eventEmitter.on('tournament.addTeam', (args) => {
+            console.log(args);
+            this.globalConfig.tournament.teams.push(args);
+            console.log(this.globalConfig.tournament.teams);
+            this.configLoader.save(this.globalConfig);
+        });
+
+        this.eventEmitter.on('tournament.updateTeam', (args) => {
+            console.log(args);
+            let team = this.globalConfig.tournament.teams.find((team) => team.teamName === args.oldName);
+            console.log(team);
+            if(team != undefined) {
+                team.teamName = args.team;
+                team.players = args.players;
+                this.configLoader.save(this.globalConfig);
+            }
+        });
+
+        this.eventEmitter.on('tournament.getTeam', (args) => {
+            let team = this.globalConfig.tournament.teams.find((team) => team.teamName === args);
+            this.eventEmitter.send('tournament.team', team);
+        });
+
         this.eventEmitter.on('tournament.enable', (args) => {
             this.globalConfig.tournament.enabled = args;
             this.configLoader.save(this.globalConfig);
