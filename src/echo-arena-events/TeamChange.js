@@ -3,15 +3,18 @@ class TeamChange {
         this.name = 'Team change';
         this.blue = [];
         this.orange = [];
+        this.lastTeamChange = Date.now();
         this.rostersA = [];
         this.customizable = true;
     }
 
     handle(gameData, eventEmitter) {
-        if (JSON.stringify(gameData.blueTeam.teamData) === JSON.stringify(this.blue) && (JSON.stringify(gameData.orangeTeam.teamData) === JSON.stringify(this.orange))) {
+        if (Date.now() - this.lastTeamChange > 15000) {
+            this.lastTeamChange = Date.now();
+        } else if (JSON.stringify(gameData.blueTeam.teamData) === JSON.stringify(this.blue) && (JSON.stringify(gameData.orangeTeam.teamData) === JSON.stringify(this.orange))) {
             return; 
         }
-        
+
         this.blue = gameData.blueTeam.teamData;
         this.orange = gameData.orangeTeam.teamData;
 
@@ -30,6 +33,8 @@ class TeamChange {
             },
             name:this.name
         });
+
+        console.log('Team change');
     }
 }
 

@@ -262,10 +262,10 @@ class OBSPlayer {
         let orangeTeam = Object.keys(obj).reduce((a, b) => (obj[a].orange > obj[b].orange ? a : b));
 
         if(obj[blueTeam].blue === 0 && obj[blueTeam].orange === 0) {
-            blueTeam = "NotFound";
+            blueTeam = this.globalConfig.mixed.blue;
         }
         if(obj[orangeTeam].blue === 0 && obj[orangeTeam].orange === 0) {
-            orangeTeam = "NotFound";
+            orangeTeam = this.globalConfig.mixed.orange;
         }
 
         this.custom.mixed = {
@@ -432,6 +432,11 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig);
         });
 
+        this.eventEmitter.on('game.restart', () => {
+            this.echoArena.rounds = [];
+            this.eventEmitter.send('frontEnd.reset');
+        });
+
         this.eventEmitter.on('echoArena.sessionID', (args) => {
             let self = this;
             this.sessionID = args.sessionID;
@@ -566,7 +571,7 @@ class OBSPlayer {
         this.eventEmitter.on('obsWebsocket.connect', (args) => {
             this.connectObsWebsocket(args).then(() => {
                 this.eventEmitter.send('obsWebsocket.connected', args);
-                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream);
+                this.eventHandler = new EventHandler(this.eventEmitter, this.obsClient, this.globalConfig.autoStream, this.globalConfig);
                 this.globalConfig.obs = {
                     ...this.globalConfig.obs,
                     ...args,

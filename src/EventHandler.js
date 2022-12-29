@@ -1,9 +1,10 @@
 class EventHandler {
     
-    constructor(eventEmitter, obsClient, config) {
+    constructor(eventEmitter, obsClient, config, global) {
         this.obsClient = obsClient;
         this.eventEmitter = eventEmitter;
         this.config = config;
+        this.global = global;
         this.timer = null;
         this.autoStream = null;
         this.current = null;
@@ -264,19 +265,33 @@ class EventHandler {
                     });
                     this.halfTimeShown = 0;
                     this.switchWindowEvent(gameEvent);
-                    if(this.bestOf >= Math.ceil(this.bestOf / 2) && this.config.tournament.enabled) {
+                    
+                    //fix pour VRFL 
+                    setTimeout(() => {
                         setTimeout(() => {
-                            this.eventEmitter.send('echo.nextArena');
-                        }, 15000);
-                    } else {
-                        setTimeout(() => {
-                            setTimeout(() => {
-                                this.obsClient.send('SetCurrentScene',{
-                                    "scene-name":this.config.start.between
-                                });
-                            }, gameEvent.duration * 1000);
-                        }, (gameEvent.delay * 1000));
-                    }
+                            this.obsClient.send('SetCurrentScene',{
+                                "scene-name":this.config.start.between
+                            });
+                        }, gameEvent.duration * 1000);
+                    }, (gameEvent.delay * 1000));
+
+                    /*
+                     * code normal (faut split auto team du tournament)
+                     *
+                     *  if(this.bestOf >= Math.ceil(this.bestOf / 2) && this.global.tournament.enabled) {
+                     *      setTimeout(() => {
+                     *          this.eventEmitter.send('echo.nextArena');
+                     *      }, 15000);
+                     *  } else {
+                     *      setTimeout(() => {
+                     *          setTimeout(() => {
+                     *              this.obsClient.send('SetCurrentScene',{
+                     *                  "scene-name":this.config.start.between
+                     *              });
+                     *          }, gameEvent.duration * 1000);
+                     *      }, (gameEvent.delay * 1000));
+                     *  }
+                     */
 
                 }
             };

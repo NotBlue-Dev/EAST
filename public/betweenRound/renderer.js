@@ -76,6 +76,13 @@ window.addEventListener("load", () => {
         }); 
     };
 
+    socket.on('updateNames', (arg) => {
+        if(!vrml) {
+            nameA.innerHTML = arg.orange;
+            nameB.innerHTML = arg.blue;
+        }
+    });
+
     function createRound(bestOf) {
         const top = document.getElementById('top');
         const bottom = document.getElementById('bottom');
@@ -133,6 +140,11 @@ window.addEventListener("load", () => {
         console.log("RoundData : " + arg);
     });
     
+    socket.on('game.restart', () => {
+        clear();
+        createRound(3);
+    });
+
     socket.on('vrml.hide', () => {
         vrml = false;
         imgA.classList.add('hide');

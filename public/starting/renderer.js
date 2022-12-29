@@ -51,7 +51,7 @@ window.addEventListener("load", () => {
     };
 
     const fill = (arg) => {
-        if(arg.week === null) {
+        if(arg === null || arg.week === null) {
             week.innerHTML = `MIXED GAME`;
         } else {
             week.innerHTML = `VRML Week ${arg.week}`;
