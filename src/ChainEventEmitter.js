@@ -27,7 +27,9 @@ class ChainEventEmitter {
         // eslint-disable-next-line array-callback-return
         this.emitters.map((eventEmitter) => {
             eventEmitter.send(channel, args);
-            myLogger.log(`channel : ${channel} ${args !== undefined ? JSON.stringify(args) : ""}`);
+            if(channel !== "game.ping") {
+                myLogger.log(`channel : ${channel} ${args !== undefined ? JSON.stringify(args) : ""}`);
+            }
         });
     }
 }

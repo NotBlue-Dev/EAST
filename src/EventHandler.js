@@ -41,8 +41,6 @@ class EventHandler {
     }
 
     initListener() {
-        
-
         this.eventEmitter.on('game.emptyTeam', () => {
             if(this.roundData.orange !== 0 && this.roundData.blue !== 0) {
                 this.endStream();

@@ -20,6 +20,7 @@ class OBSPlayer {
         this.eventHandler = null;
         this.sessionID = null;
         this.echoArena = null;
+        this.custom = null;
         this.arenaSwitched = 1;
         this.vrmlInfo = null;
         this.vrmlInfoWS = [];
@@ -237,6 +238,45 @@ class OBSPlayer {
         });
     }
 
+    setTournamentTeams(args) {
+        let obj = {};
+        this.globalConfig.tournament.teams.forEach((team) => {
+            let countB = 0;
+            let countO = 0;
+            team.players.forEach((player) => {
+                if(args.blue.includes(player)) {
+                    countB++;
+                }
+                if(args.orange.includes(player)) {
+                    countO++;
+                }
+            });
+            obj[team.teamName] = {
+                blue:countB,
+                orange:countO
+            };
+        });
+
+        let blueTeam = Object.keys(obj).reduce((a, b) => (obj[a].blue > obj[b].blue ? a : b));
+
+        let orangeTeam = Object.keys(obj).reduce((a, b) => (obj[a].orange > obj[b].orange ? a : b));
+
+        if(obj[blueTeam].blue === 0 && obj[blueTeam].orange === 0) {
+            blueTeam = "NotFound";
+        }
+        if(obj[orangeTeam].blue === 0 && obj[orangeTeam].orange === 0) {
+            orangeTeam = "NotFound";
+        }
+
+        this.custom.mixed = {
+            blue:blueTeam,
+            orange:orangeTeam
+        };
+        this.echoArena.customData = this.custom;
+        this.eventEmitter.send('updateNames', this.custom.mixed);
+        console.log(this.custom.mixed);
+    }
+
     initializeListenersUsedByWS() {
         if(this.obsConnectionState) {
             this.obsClient.refreshAll();
@@ -313,13 +353,12 @@ class OBSPlayer {
         });
 
         this.eventEmitter.on('tournament.updateTeam', (args) => {
-            console.log(args);
             let team = this.globalConfig.tournament.teams.find((team) => team.teamName === args.oldName);
-            console.log(team);
             if(team != undefined) {
                 team.teamName = args.team;
                 team.players = args.players;
                 this.configLoader.save(this.globalConfig);
+                this.custom.tournament = this.globalConfig.tournament.teams;
             }
         });
 
@@ -420,6 +459,10 @@ class OBSPlayer {
             }
 
             this.eventEmitter.send('frontEnd.reset');
+
+            if(this.globalConfig.tournament.enabled) {
+                this.setTournamentTeams(args);
+            }
         });
 
         this.eventEmitter.on('spectate.updateConfig', (args) => {
@@ -570,6 +613,12 @@ class OBSPlayer {
             this.globalConfig.mixed.orange = args.orange;
             this.configLoader.save(this.globalConfig);
             this.eventEmitter.send('mixed.customTeamChanged', this.globalConfig.mixed);
+        });
+
+        this.eventEmitter.on('game.teamChange', (args) => {
+            if(this.globalConfig.tournament.enabled) {
+                this.setTournamentTeams(args);
+            }
         });
 
         this.eventEmitter.on('overlayWs.config', (args) => {
@@ -759,11 +808,12 @@ class OBSPlayer {
         
     connectEchoArena(config) {
         return new Promise(() => {
-            let custom = {
+            this.custom = {
                 mixed:this.globalConfig.mixed, 
-                bet:this.globalConfig.autoStream.start.dur
+                bet:this.globalConfig.autoStream.start.dur,
+                tournament:this.globalConfig.tournament.teams,
             };
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, custom);
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.custom);
             this.echoArena.listen();
         });
     }

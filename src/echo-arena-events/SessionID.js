@@ -11,8 +11,12 @@ class sessionID {
         }
 
         this.sessionID = gameData.sessionID;
-        eventEmitter.send('echoArena.sessionID', { name:this.name,
-        sessionID:this.sessionID });
+        eventEmitter.send('echoArena.sessionID', { 
+            name:this.name,
+            sessionID:this.sessionID,
+            blue:gameData.blueTeam.teamData,
+            orange:gameData.orangeTeam.teamData, 
+        });
     }
 }
 

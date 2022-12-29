@@ -11,6 +11,7 @@ class GameData {
         this.durBet = customData.bet;
         this.sessionID = json.sessionid;
         this.roundData = [];
+        this.tournamentTeams = customData.tournament;
         this.betweenRound = false;
         this.blueTeam = {
             teamName:customData.mixed.blue,

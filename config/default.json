@@ -10,8 +10,16 @@
         "games":0,
         "teams":[
             {
-                "teamName":"New Team",
-                "players":["","","",""]
+                "teamName":"1",
+                "players":["a","b","c","d"]
+            },
+            {
+                "teamName":"2",
+                "players":["e","f","g","h"]
+            },
+            {
+                "teamName":"3",
+                "players":["h","i","a","z"]
             }
         ]
     },
