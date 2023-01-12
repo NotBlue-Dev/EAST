@@ -144,6 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const echoArenaSession = document.getElementById('echo-arena-session');
 
   const tournamentMode = document.getElementById('tournament-mode');
+  const customMode = document.getElementById('custom-mode');
   const tournamentGames = document.getElementById('tournament-games');
   const session1 = document.getElementById('session-id1');
   const session2 = document.getElementById('session-id2');
@@ -170,6 +171,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
   tournamentMode.addEventListener('change', () => {
     ipcRenderer.send('tournament.enable', tournamentMode.checked);
+  });
+
+  customMode.addEventListener('change', () => {
+    ipcRenderer.send('tournament.custom', customMode.checked);
   });
 
   tournamentGames.addEventListener('change', () => {
@@ -624,6 +629,7 @@ const initVrmlMatchMode = (document) => {
     session2.value = data.tournament.arena[1];
     tournamentGames.value = data.tournament.games;
     tournamentMode.checked = data.tournament.enabled;
+    customMode.checked = data.tournament.customTeams;
     obsPath.value = data.obs.path;
     obsSoftAuto.checked = data.obs.autoStart;
     if(obsSoftAuto.checked) {

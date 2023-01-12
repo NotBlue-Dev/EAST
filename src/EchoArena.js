@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const events = require('./EchoArenaEvents.js');
 const fetch = require('node-fetch');
 const GameData = require("./gameData");
@@ -41,9 +42,10 @@ class EchoArena {
             this.requestEchoVR("minimap_visibility", {
                 enabled: !settings.map
             });
+            //FIXED?
             this.requestEchoVR("team_muted", {
-                blueTeamMuted: settings.mute, 
-                orangeTeamMuted: settings.mute
+                blue_team_muted: settings.mute, 
+                orange_team_muted: settings.mute
             });
             this.requestEchoVR("nameplates_visibility", {
                 enabled: !settings.plate
@@ -54,7 +56,7 @@ class EchoArena {
             });
             setTimeout(() => {
                 this.setSettingsEchoVR(settings);
-            }, 5000);
+            }, 30000);
         }).catch((err) => {
             console.log("EchoVR can't be reached : " + err);
             setTimeout(() => {

@@ -372,6 +372,11 @@ class OBSPlayer {
             this.configLoader.save(this.globalConfig);
         });
 
+        this.eventEmitter.on('tournament.custom', (args) => {
+            this.globalConfig.tournament.customTeams = args;
+            this.configLoader.save(this.globalConfig);
+        });
+
         this.eventEmitter.on('tournament.arena', (args) => {
             this.globalConfig.tournament.arena = args;
             this.configLoader.save(this.globalConfig);
@@ -465,7 +470,7 @@ class OBSPlayer {
 
             this.eventEmitter.send('frontEnd.reset');
 
-            if(this.globalConfig.tournament.enabled) {
+            if(this.globalConfig.tournament.customTeams) {
                 this.setTournamentTeams(args);
             }
         });
@@ -621,7 +626,7 @@ class OBSPlayer {
         });
 
         this.eventEmitter.on('game.teamChange', (args) => {
-            if(this.globalConfig.tournament.enabled) {
+            if(this.globalConfig.tournament.customTeams) {
                 this.setTournamentTeams(args);
             }
         });

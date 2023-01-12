@@ -204,7 +204,7 @@
           </article>
 
           <article>
-            <h2>Custom</h2>
+            <h2>Mixed</h2>
             <article class="block">
               <label for="teams">Custom Name Blue team</label>
               <div class="inline">
@@ -219,38 +219,16 @@
               <div class="inline">
                 <button id="updateTeams">Update Names</button>
               </div>
-
-
             </article>
           </article>
 
           <article>
-            <h2>Tournament Mode</h2>
+            <h2>Custom teams</h2>
             <article class="block">
-              <label for="tournament-mode">Tournament Mode</label>
+              <label for="custom-mode">Name teams from custom teams</label>
               <div class="inline">
-                <input type="checkbox" id="tournament-mode" /><a>Enable</a>
+                <input type="checkbox" id="custom-mode" /><a>Enable</a>
               </div>
-
-              <div class="inline">
-                <label for="tournament-mode">Number of games</label>
-              </div>
-              <a class="inline">first game in Arena 1, second in Arena 2, third start again at 1</a>
-              <div class="inline">
-                <input type="text" class="txt" id="tournament-games" value="3" />
-              </div>
-
-              <label for="session-id1">Arena 1</label>
-              <div class="inline">
-                <input type="text" class="txt" id="session-id1" value="sessionID" />
-                <button id="join-Session2">Join</button>
-              </div>
-              <label for="session-id2">Arena 2</label>
-              <div class="inline">
-                <input type="text" class="txt" id="session-id2" value="sessionID" />
-                <button id="join-Session1">Join</button>
-              </div>
-
               <!-- make add a team with players to a team list -->
               <label for="teamsTournament">Teams</label>
               <div class="inline">
@@ -291,7 +269,35 @@
                 <button id="addTeam">Create new team</button>
                 <button id="removeTeam">Remove team</button>
               </div>
+            </article>
+          </article>
 
+          <article>
+            <h2>Tournament Mode</h2>
+            <article class="block">
+              <label for="tournament-mode">Tournament Mode</label>
+              <div class="inline">
+                <input type="checkbox" id="tournament-mode" /><a>Enable</a>
+              </div>
+
+              <div class="inline">
+                <label for="tournament-mode">Number of games</label>
+              </div>
+              <a class="inline">first game in Arena 1, second in Arena 2, third start again at 1</a>
+              <div class="inline">
+                <input type="text" class="txt" id="tournament-games" value="3" />
+              </div>
+
+              <label for="session-id1">Arena 1</label>
+              <div class="inline">
+                <input type="text" class="txt" id="session-id1" value="sessionID" />
+                <button id="join-Session2">Join</button>
+              </div>
+              <label for="session-id2">Arena 2</label>
+              <div class="inline">
+                <input type="text" class="txt" id="session-id2" value="sessionID" />
+                <button id="join-Session1">Join</button>
+              </div>
             </article>
           </article>
         </section>

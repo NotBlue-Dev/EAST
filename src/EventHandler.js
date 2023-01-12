@@ -10,7 +10,7 @@ class EventHandler {
         this.current = null;
         this.vrml = false;
         this.bestOf = 3;
-        this.left = 60;
+        this.left = 45;
         this.halfTimeShown = 0;
         this.animRN = false;
         this.currentArena = null;
@@ -275,23 +275,21 @@ class EventHandler {
                         }, gameEvent.duration * 1000);
                     }, (gameEvent.delay * 1000));
 
-                    /*
-                     * code normal (faut split auto team du tournament)
-                     *
-                     *  if(this.bestOf >= Math.ceil(this.bestOf / 2) && this.global.tournament.enabled) {
-                     *      setTimeout(() => {
-                     *          this.eventEmitter.send('echo.nextArena');
-                     *      }, 15000);
-                     *  } else {
-                     *      setTimeout(() => {
-                     *          setTimeout(() => {
-                     *              this.obsClient.send('SetCurrentScene',{
-                     *                  "scene-name":this.config.start.between
-                     *              });
-                     *          }, gameEvent.duration * 1000);
-                     *      }, (gameEvent.delay * 1000));
-                     *  }
-                     */
+                    if(this.bestOf >= Math.ceil(this.bestOf / 2)) {
+                        if(this.global.tournament.enabled) {
+                            setTimeout(() => {
+                                this.eventEmitter.send('echo.nextArena');
+                            }, 15000);
+                        }
+                    } else {
+                        setTimeout(() => {
+                            setTimeout(() => {
+                                this.obsClient.send('SetCurrentScene',{
+                                    "scene-name":this.config.start.between
+                                });
+                            }, gameEvent.duration * 1000);
+                        }, (gameEvent.delay * 1000));
+                    }
 
                 }
             };

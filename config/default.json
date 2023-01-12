@@ -8,6 +8,7 @@
         "enabled":true,
         "arena":[],
         "games":0,
+        "customTeams":true,
         "teams":[
             {
                 "teamName":"1",
