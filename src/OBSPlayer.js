@@ -663,6 +663,7 @@ class OBSPlayer {
         });
 
         this.eventEmitter.on('vrml.isVrmlMatch', (args) => {
+            console.log('load data');
             this.loadMatchDataFromTeam(args.teamId);
         });
         
@@ -684,7 +685,6 @@ class OBSPlayer {
             this.eventEmitter.send('vrml.matchDataNotFound', {
                 teamId: teamId
             });
-            
         });
         
     }
@@ -761,17 +761,20 @@ class OBSPlayer {
 
         for(let i = 0; i < this.Allinfo.times.length; i++) {
             if(this.Allinfo.times[i] !== 'TBD') {
-                const data = {
-                    A:this.vrmlClient.getTeamPlace(json[i].homeTeam.teamID), 
-                    B:this.vrmlClient.getTeamPlace(json[i].awayTeam.teamID)
-                };
+
+                /*
+                 * const data = {
+                 *     A:this.vrmlClient.getTeamPlace(json[i].homeTeam.teamID), 
+                 *     B:this.vrmlClient.getTeamPlace(json[i].awayTeam.teamID)
+                 * };
+                 */
                 this.Allinfo.teams.push({
                     name: json[i].homeTeam.teamName,
                     rank: json[i].homeTeam.divisionLogo,
                     logo: json[i].homeTeam.teamLogo,
                     link: json[i].homeTeam.teamID,
                     rosters: [],
-                    place:data.A.team.rank,
+                    // place:data.A.team.rank,
                     color: null
                 });
     
@@ -781,10 +784,10 @@ class OBSPlayer {
                     logo: json[i].awayTeam.teamLogo,
                     link: json[i].awayTeam.teamID,
                     rosters: [],
-                    place:data.B.team.rank,
+                    // place:data.B.team.rank,
                     color: null
                 });
-            
+                console.log(this.Allinfo.teams);
                 this.getPlayers();
 
                 return {
@@ -804,15 +807,21 @@ class OBSPlayer {
     getPlayers() {
         for (let u = 0; u < this.Allinfo.teams.length; u++) {
             const element = this.Allinfo.teams[u];
-            const json = this.vrmlClient.getTeam(element.link);
-            json.team.players.map(player => {
-                element.rosters.push(player.playerName.toLowerCase());
-                return 0;
+            this.vrmlClient.getTeam(element.link).then((json) => {
+                json.team.players.map(player => {
+                    element.rosters.push(player.playerName.toLowerCase());
+                    return 0;
+                });
+                if(u >= 2) {
+                    this.infoState = true;
+                    // eslint-disable-next-line no-useless-return
+                    return;
+                }
+            }).catch((err) => {
+                console.log(err);
             });
-            if(u >= 2) {
-                this.infoState = true;
-                return;
-            }
+            
+            
         }
     }
         

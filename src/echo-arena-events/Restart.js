@@ -11,7 +11,7 @@ class Restart {
             return;
         }
 
-        if (this.Restart === false) {
+        if (!this.Restart) {
             this.Restart = true;
             eventEmitter.send('game.restart', {
                 name:this.name

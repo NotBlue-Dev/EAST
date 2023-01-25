@@ -67,6 +67,7 @@ window.addEventListener('load', function() {
     }
 
     socket.on('game.minimap', (arg) => {
+        console.log(arg.blue, arg.orange);
         // if a player miss it will be created
         createPlayers(arg.orange, 'orange');
         createPlayers(arg.blue, 'blue');

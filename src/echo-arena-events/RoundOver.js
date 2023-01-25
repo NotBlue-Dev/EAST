@@ -13,7 +13,7 @@ class RoundOver {
             return;
         }
 
-        if (this.roundIsOver === false) {
+        if (!this.roundIsOver) {
             this.roundIsOver = true;
 
             const winner = (gameData.blueTeam.points == gameData.orangeTeam.points) ? null : (gameData.blueTeam.points > gameData.orangeTeam.points) ? 'blue' : 'orange';

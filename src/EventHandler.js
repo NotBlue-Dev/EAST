@@ -265,15 +265,6 @@ class EventHandler {
                     });
                     this.halfTimeShown = 0;
                     this.switchWindowEvent(gameEvent);
-                    
-                    //fix pour VRFL 
-                    setTimeout(() => {
-                        setTimeout(() => {
-                            this.obsClient.send('SetCurrentScene',{
-                                "scene-name":this.config.start.between
-                            });
-                        }, gameEvent.duration * 1000);
-                    }, (gameEvent.delay * 1000));
 
                     if(this.bestOf >= Math.ceil(this.bestOf / 2)) {
                         if(this.global.tournament.enabled) {
@@ -322,7 +313,6 @@ class EventHandler {
             clearTimeout(this.dur);
         });
     }
-
 }
 
 module.exports = EventHandler;

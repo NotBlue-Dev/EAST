@@ -625,8 +625,8 @@ const initVrmlMatchMode = (document) => {
   ipcRenderer.on('config.loaded', (event, data) => {
     blueCustom.value = data.mixed.blue;
     orangeCustom.value = data.mixed.orange;
-    session1.value = data.tournament.arena[0];
-    session2.value = data.tournament.arena[1];
+    session1.value = data.tournament.arena[0] == undefined ? "" : data.tournament.arena[0];
+    session2.value = data.tournament.arena[1] == undefined ? "" : data.tournament.arena[1];
     tournamentGames.value = data.tournament.games;
     tournamentMode.checked = data.tournament.enabled;
     customMode.checked = data.tournament.customTeams;

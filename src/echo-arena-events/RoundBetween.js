@@ -22,7 +22,7 @@ class RoundBetween {
             eventEmitter.send('game.play');
         }
 
-        if (this.roundIsOver === false) {
+        if (!this.roundIsOver) {
             this.roundIsOver = true;
             this.play = false;
             this.betweenRound = true;
