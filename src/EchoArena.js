@@ -6,7 +6,7 @@ const axios = require('axios');
 class EchoArena {
     constructor({
         ip, port
-        }, eventEmitter, vrmlInfo, customData) {
+        }, eventEmitter, vrmlInfo, customData, autoRestart) {
         this.eventEmitter = eventEmitter;
         this.ip = ip;
         this.port = port;
@@ -14,8 +14,10 @@ class EchoArena {
         this.fails = 0;
         this.rounds = [];
         this.scoreData = [];
+        this.restarted = false;
         this.vrmlInfo = vrmlInfo;
         this.settings = null;
+        this.autoRestart = autoRestart;
     }
     
     //make a function to kill all the processes
@@ -42,7 +44,7 @@ class EchoArena {
             this.requestEchoVR("minimap_visibility", {
                 enabled: !settings.map
             });
-            //FIXED?
+            
             this.requestEchoVR("team_muted", {
                 blue_team_muted: settings.mute, 
                 orange_team_muted: settings.mute
@@ -85,7 +87,6 @@ class EchoArena {
     }
 
     request() {
-
         fetch(`http://${this.ip}:${this.port}/get_rules`).then(resp => resp.json()).then(json => {
             if(json.err_code == 0) {
                 this.settings = json;
@@ -109,6 +110,7 @@ class EchoArena {
             if(this.request !== null) {
                 this.request();
             }
+            this.restarted = false;
         }).catch(error => {
             if (error.response) {
                 if (error.response.status === 404) {
@@ -122,9 +124,17 @@ class EchoArena {
                 this.eventEmitter.send('echoArena.refused');
                 this.fails++;
             } else {
-                this.eventEmitter.send('echoArena.error', {
-                    error
-                });
+                if(error.code == "ECONNREFUSED") {
+                    this.eventEmitter.send('echoArena.refused');
+                    if(this.autoRestart && !this.restarted) {
+                        this.eventEmitter.send('spectate.restart');
+                        this.restarted = true;
+                    }
+                } else {
+                    this.eventEmitter.send('echoArena.error', {
+                        error
+                    });
+                }
                 this.fails++;
             }
             if (this.fails < 5) {

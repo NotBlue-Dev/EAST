@@ -9,9 +9,7 @@ class TeamChange {
     }
 
     handle(gameData, eventEmitter) {
-        if (Date.now() - this.lastTeamChange > 15000) {
-            this.lastTeamChange = Date.now();
-        } else if (JSON.stringify(gameData.blueTeam.teamData) === JSON.stringify(this.blue) && (JSON.stringify(gameData.orangeTeam.teamData) === JSON.stringify(this.orange))) {
+        if (JSON.stringify(gameData.blueTeam.teamData) === JSON.stringify(this.blue) && (JSON.stringify(gameData.orangeTeam.teamData) === JSON.stringify(this.orange))) {
             return; 
         }
 
@@ -33,8 +31,6 @@ class TeamChange {
             },
             name:this.name
         });
-
-        console.log('Team change');
     }
 }
 

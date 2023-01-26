@@ -30,6 +30,7 @@
         "autoConnect": false,
         "path":"",
         "autoStart":false,
+        "autoRestart":true,
         "settings": {
             "ui":true,
             "map":true,

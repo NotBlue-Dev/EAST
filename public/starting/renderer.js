@@ -4,9 +4,9 @@ let socket = io();
 window.addEventListener("load", () => {
     let vrml = false;
 
-    const imgA = document.getElementById('BLOGO');
+    const imgA = document.getElementById('OLOGO');
 
-    const imgB = document.getElementById('OLOGO');
+    const imgB = document.getElementById('BLOGO');
 
     const bestOfID = document.getElementById('bestOf');
 
@@ -63,10 +63,10 @@ window.addEventListener("load", () => {
         } 
         vrml = true;
 
-        let orange = arg.teams.home;
-        let blue = arg.teams.away;
+        let orange = arg.teams.away;
+        let blue = arg.teams.home;
         if (orange.color !== null && blue.color !== null && orange.color !== undefined && blue.color !== undefined) {
-            if(arg.teams.home.color === 'blue') {
+            if(arg.teams.home.color === 'orange') {
                 blue = arg.teams.home;
                 orange = arg.teams.away;
             } else {
@@ -80,8 +80,8 @@ window.addEventListener("load", () => {
         nameB.innerHTML = blue.name;
         imgA.classList.remove('hide');
         imgB.classList.remove('hide');
-        imgA.src = `https://vrmasterleague.com/${blue.logo}`;
-        imgB.src = `https://vrmasterleague.com/${orange.logo}`;
+        imgA.src = `https://vrmasterleague.com/${orange.logo}`;
+        imgB.src = `https://vrmasterleague.com/${blue.logo}`;
         
         clear();
 
@@ -135,8 +135,8 @@ window.addEventListener("load", () => {
                 teamPlayerA.appendChild(div);
             });
 
-            nameA.innerHTML = arg.teamName[1];
-            nameB.innerHTML = arg.teamName[0];
+            nameA.innerHTML = arg.teamName[0];
+            nameB.innerHTML = arg.teamName[1];
         }
 
         if(arg.settings.settingsFound && bestOfID.innerHTML != arg.settings.bestOf) {
@@ -149,13 +149,13 @@ window.addEventListener("load", () => {
     socket.on('game.teamChange', (arg) => {
 
         if(!vrml) {
-            nameA.innerHTML = arg.teams.teamName[1];
-            nameB.innerHTML = arg.teams.teamName[0];
+            nameA.innerHTML = arg.teams.teamName[0];
+            nameB.innerHTML = arg.teams.teamName[1];
         }
 
         clear();
         
-        createPlayers(arg.teams.blue, arg.teams.orange);
+        createPlayers(arg.teams.orange, arg.teams.blue);
     });
 
     socket.emit('overlay.ready', { 'overlay': 'starting' });

@@ -19,12 +19,12 @@ class OBSPlayer {
         this.scenes = [];
         this.eventHandler = null;
         this.sessionID = null;
+        this.restarting = false;
         this.echoArena = null;
         this.custom = null;
         this.arenaSwitched = 1;
         this.vrmlInfo = null;
         this.vrmlInfoWS = [];
-
         this.config = this.globalConfig.echoArena;
         this.vrmlClient = new VRMLClient();
         this.infoState = false;
@@ -235,6 +235,7 @@ class OBSPlayer {
                 console.log(error);
             }
             self.eventEmitter.send('spectate.started');
+            this.restarting = false;
         });
     }
 
@@ -428,8 +429,28 @@ class OBSPlayer {
         });
 
         this.eventEmitter.on('spectate.start', (args) => {
-            this.startEchoVR(this.globalConfig.echoArena.path, args.id);
-            this.spectateStarted = true;
+            if(args !== undefined && args.id !== undefined && args.id !== "" && args.id !== null) {
+                this.sessionID = args.id;
+            }
+            
+            if(!this.spectateStarted) {
+                this.startEchoVR(this.globalConfig.echoArena.path, this.sessionID);
+                this.spectateStarted = true;
+            }
+        });
+
+        this.eventEmitter.on('spectate.restart', () => {
+            if(!this.restarting) {
+                exec('taskkill /F /IM EchoVR.exe', (error) => {
+                    if (error) {
+                        console.error(`exec error: ${error}`);
+                    }
+                    this.startEchoVR(this.globalConfig.echoArena.path, this.sessionID);
+                    this.spectateStarted = true;
+                    this.restarting = true;
+                });
+                
+            }
         });
 
         this.eventEmitter.on('echoArena.updateDurBetweenRound', (args) => {
@@ -832,7 +853,7 @@ class OBSPlayer {
                 bet:this.globalConfig.autoStream.start.dur,
                 tournament:this.globalConfig.tournament.teams,
             };
-            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.custom);
+            this.echoArena = new EchoArena(config, this.eventEmitter, this.vrmlInfo, this.custom, this.config.autoRestart);
             this.echoArena.listen();
         });
     }
